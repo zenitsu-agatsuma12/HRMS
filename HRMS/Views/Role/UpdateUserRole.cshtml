@@ -1,0 +1,36 @@
+﻿@model UserRoleViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Update User Role</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Tables</li>
+          <li class="breadcrumb-item active">Data</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+
+        <form method="post" asp-action="UpdateUserRole">
+            <input type="hidden" asp-for="UserId" />
+            <div class="form-group">
+                <label asp-for="FullName"></label>
+                <input type="text" asp-for="FullName" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="RoleName"></label>
+                <select asp-for="RoleName" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name", Model.RoleName))" class="form-control"></select>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Role</button>
+        </form>
+    </section>
+</main>

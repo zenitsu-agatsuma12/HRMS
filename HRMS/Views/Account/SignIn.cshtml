@@ -1,0 +1,78 @@
+﻿@using Microsoft.EntityFrameworkCore
+@inject SignInManager<ApplicationUser> _signInManager
+@inject UserManager<ApplicationUser> _userManager
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+ <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="d-none d-lg-block">HRMSssss</span>
+      </a>
+ @if (User.Identity.IsAuthenticated)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null && user.ActiveStatus == true)
+            {
+                <i class="bi bi-list toggle-sidebar-btn"></i>
+            }
+        }
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+@if (User.IsInRole("HR"))
+    {
+        var inaciveCount = await _userManager.Users.Where(status => status.ActiveStatus == false).CountAsync();
+        ViewBag.NumberOfInActive = inaciveCount;
+        if(ViewBag.NumberOfInActive!=0){
+             <li class="nav-item dropdown">
+                <a class="nav-link nav-icon" asp-controller="Employee" asp-action="InactiveList">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge bg-primary badge-number">@ViewBag.NumberOfInActive</span>
+                </a><!-- End Notification Icon -->
+             </li><!-- End Notification Nav -->
+          }
+        
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-chat-left-text"></i>
+            <span class="badge bg-success badge-number">3</span>
+          </a><!-- End Messages Icon -->
+        </li><!-- End Messages Nav -->
+    }
+        <li class="nav-item dropdown pe-3">
+        @if (_signInManager.IsSignedIn(User))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">logout @User.Identity.Name </a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">login</a>
+            </li>
+        }
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->

@@ -1,0 +1,28 @@
+﻿@model HRMS.Models.Department
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<main id="main" class="main">
+    <section class="section">
+        <h1>Details</h1>
+
+        <div>
+            <h4>Department</h4>
+            <hr />
+            <dl class="row">
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.DeptName)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.DeptName)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <a asp-action="Update" asp-route-DeptId="@Model?.DeptId">Edit</a> |
+            <a asp-action="List">Back to List</a>
+        </div>
+    </section>
+</main>

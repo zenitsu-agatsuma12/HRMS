@@ -1,0 +1,53 @@
+﻿@model HRMS.Models.SSSPayment
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<main id="main" class="main">
+    <section class="section">
+        <h1>Details</h1>
+
+        <div>
+            <h4>SSSPayment</h4>
+            <hr />
+            <dl class="row">
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.FullName)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.FullName)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.SSSNumber)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.SSSNumber)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Payment)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Payment)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Month)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Month)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Year)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Year)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.No">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </section>
+</main>

@@ -1,0 +1,56 @@
+﻿@model HRMS.Models.PagIbigPayment
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<main id="main" class="main">
+    <section class="section">
+        <h1>Create</h1>
+
+        <h4>SSSPayment</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="FullName" class="control-label"></label>
+                        <input asp-for="FullName" class="form-control" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PagIbigNumber" class="control-label"></label>
+                        <input asp-for="PagIbigNumber" class="form-control" />
+                        <span asp-validation-for="PagIbigNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Payment" class="control-label"></label>
+                        <input asp-for="Payment" class="form-control" />
+                        <span asp-validation-for="Payment" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Month" class="control-label"></label>
+                        <input asp-for="Month" class="form-control" value="@DateTime.Now.ToString("MMMM")" readonly />
+                        <span asp-validation-for="Month" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Year" class="control-label"></label>
+                        <input asp-for="Year" class="form-control" value="@DateTime.Now.ToString("yyyy")" readonly />
+                        <span asp-validation-for="Year" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </section>
+</main>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

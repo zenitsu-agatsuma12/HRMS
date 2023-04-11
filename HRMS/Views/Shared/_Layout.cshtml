@@ -1,0 +1,271 @@
+﻿@using HRMS.Repository
+@using Microsoft.EntityFrameworkCore
+@inject IEmployeePerformanceDBRepository _repo
+@inject SignInManager<ApplicationUser> _signInManager
+@inject UserManager<ApplicationUser> _userManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] Human Resource Management System</title>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HRMS.styles.css" asp-append-version="true" />*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <!-- Favicons -->
+    <link href="~/img/favicon.png" rel="icon">
+    <link href="~/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="~/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="~/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="~/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="~/css/style.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin - v2.2.2
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+@if (!_signInManager.IsSignedIn(User))
+{
+    <body class="toggle-sidebar">
+    </body>
+}
+else if (_signInManager.IsSignedIn(User))
+{
+    var statusCheck = _userManager.Users.FirstOrDefault(e => e.Email == User.Identity.Name);
+    if(User.Identity.Name !=null && statusCheck.ActiveStatus == false)
+    {
+       <body class="toggle-sidebar">
+       </body> 
+    }
+}
+
+<body>
+   
+   <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="d-none d-lg-block">HRMS</span>
+      </a>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+@if (User.IsInRole("Administrator"))
+    {
+        //return the number of new SignIn and Register
+        var inaciveCount = await _userManager.Users.Where(status => status.ActiveStatus == false).CountAsync();
+        ViewBag.NumberOfInActive = inaciveCount;
+        if(ViewBag.NumberOfInActive!=0){
+             <li class="nav-item dropdown">
+                <a class="nav-link nav-icon" asp-controller="Employee" asp-action="InactiveList">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge bg-primary badge-number">@ViewBag.NumberOfInActive</span>
+                </a>
+             </li>
+          }
+
+
+        //return the number Of Message
+
+        var countMessage = _repo.ListOfEmployeePerformance(null).Where(e => e.Status == true).Count();
+        ViewBag.countMessage=countMessage;
+        if(ViewBag.countMessage!=0){
+            <li class="nav-item dropdown">
+                <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="List">
+                <i class="bi bi-chat-left-text"></i>
+                <span class="badge bg-success badge-number">@ViewBag.countMessage</span>
+              </a>
+            </li>
+        }
+    }
+        <li class="nav-item dropdown pe-3">
+        @if (_signInManager.IsSignedIn(User))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">logout @User.Identity.Name </a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">login</a>
+            </li>
+        }
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+   <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+         @if (_signInManager.IsSignedIn(User))
+            {
+                @if (User.IsInRole("Administrator"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Dashboard" asp-action="Index"><i class="bi bi-grid-fill"></i> Dashboard</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Employee" asp-action="List"><i class="bi bi-people-fill"></i> Employees</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Department" asp-action="List"><i class="bi bi-briefcase-fill"></i> Department</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Position" asp-action="List"><i class="bi bi-briefcase"></i> Position</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="DepartmentPosition" asp-action="List"><i class="bi bi-person-vcard-fill"></i> Designation</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="List"><i class="bi bi-bar-chart-fill"></i> Performance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Role" asp-action="List"><i class="bi bi-gem"></i> Roles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                            <i class="bi bi-credit-card"></i> <span> Benefits  </span><i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                            <li>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="SSSPayment" asp-action="List">SSS Payment</a>
+                            </li>
+                            <li>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="PhilHealthPayment" asp-action="List">PhilHealth Payment</a>
+                            </li>
+                            <li>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="PagIbigPayment" asp-action="List">PagIbig Payment</a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                else if (User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Profile" asp-action="Details"><i class="bi bi-person-circle"></i> Profile</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Department" asp-action="List"><i class="bi bi-people-fill"></i> Department</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="ProfileList" ><i class="bi bi-bar-chart-fill"></i> Reviews</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                            <i class="bi bi-credit-card"></i> <span> Benefits Payment </span><i class="bi bi-chevron-down ms-left"></i>
+                        </a>
+                        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                            <li>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="SSSPayment" asp-action="List">SSS Payment</a>
+                            </li>
+                            <li>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="PhilHealthPayment" asp-action="List">PhilHealth Payment</a>
+                            </li>
+                            <li>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="PagIbigPayment" asp-action="List">PagIbig Payment</a>
+                            </li>
+                        </ul>
+                    </li>
+                } @*End Of Manager Role*@
+
+                @*Start Of Employee Role*@
+                else if (User.IsInRole("Employee"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Profile" asp-action="Details"><i class="bi bi-person-circle"></i> Profile</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Department" asp-action="List"><i class="bi bi-people-fill"></i> Department</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="ProfileList"><i class="bi bi-bar-chart-fill"></i> Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                            <i class="bi bi-credit-card"></i> <span> Benefits Payment </span><i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                            <li>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="SSSPayment" asp-action="List">SSS Payment</a>
+                            </li>
+                            <li>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="PhilHealthPayment" asp-action="List">PhilHealth Payment</a>
+                            </li>
+                            <li>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="PagIbigPayment" asp-action="List">PagIbig Payment</a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+            }
+     
+
+  </aside><!-- End Sidebar-->
+
+    <div class="section">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+   
+    @await RenderSectionAsync("Scripts", required: false)
+       
+    
+</body>
+</html>

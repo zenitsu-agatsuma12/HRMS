@@ -1,0 +1,40 @@
+version: "1.0"
+services:
+  hrmsdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Pa$$w0rd!
+  hrmsapi:
+    image: hrmsapi
+    build:
+      context: .
+      dockerfile: HRMSAPI/Dockerfile
+    ports:
+      - 5001:80
+    environment:
+      - ConnectionStrings__Server=hrmsdb
+      - ConnectionStrings__DB=HRMSDB
+      - ConnectionStrings__Username=sa
+      - ConnectionStrings__Password=Pa$$w0rd!
+    depends_on:
+      - hrmsdb
+      - hrmsweb
+    restart: on-failure
+  hrmsweb:
+    image: hrmsweb
+    build:
+      context: .
+      dockerfile: HRMS/Dockerfile
+    ports:
+      - 6001:80
+    environment:
+      - ConnectionStrings__Server=hrmsdb
+      - ConnectionStrings__DB=HRMSDB
+      - ConnectionStrings__Username=sa
+      - ConnectionStrings__Password=Pa$$w0rd!
+    depends_on:
+      - hrmsdb
+    restart: on-failure

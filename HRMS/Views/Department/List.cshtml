@@ -1,0 +1,77 @@
+﻿@model IEnumerable<HRMS.Models.Department>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+
+ <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Department Table</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a>Home</a></li>
+          <li class="breadcrumb-item">Tables</li>
+          <li class="breadcrumb-item active">Data</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+            </br>
+            <p>
+                <a class="btn btn-primary" role="button" asp-action="Create"><i class="fa fa-plus"></i> Add Department</a>
+            </p>
+              <!-- Table with stripped rows -->
+              <table class="table datatable">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Department Name</th>
+                    <th></th>
+                     
+                  </tr>
+                </thead>
+                <tbody>
+                 @foreach (var item in Model) {
+                        <tr>
+                             <td>
+                                @Html.DisplayFor(modelItem => item.DeptId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeptName)
+                            </td>
+                            <td>
+                                <a class="btn btn-success" role="button" asp-action="Update" asp-route-DeptId="@item.DeptId">Edit</a> 
+                                <a class="btn btn-danger" role="button" asp-action="Delete" asp-route-DeptId="@item.DeptId">Delete</a>
+                            </td>
+                        </tr>
+                }
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+@section scripts{
+    <script>
+        $(function () {
+            $("#basic-text1").on('keyup', function (e) {
+                $("form").submit();
+            });
+        });
+    </script>
+}
+

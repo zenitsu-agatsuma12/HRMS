@@ -1,0 +1,72 @@
+﻿@model List<EmployeePerformance>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+ <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Performance Review</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Tables</li>
+          <li class="breadcrumb-item active">Data</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+            </br>  
+              <!-- Table with stripped rows -->
+              <table class="table datatable">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Employe Name</th>
+                    <th scope="col">About</th>
+                    <th></th>
+               
+                  </tr>
+                </thead>
+                <tbody>
+                 @{int i= 0;}
+                 @foreach (var item in Model) {
+                        <tr>
+                            <td>
+                                @(++i)
+                            </td>
+                             <td>
+                                @Html.DisplayFor(modelItem => item.userID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.About)
+                            </td>
+              
+                            <td>
+                                <a asp-action="Details" asp-route-No="@item.No">Open</a>
+                            </td>
+                         
+                        </tr>
+                }
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+
+

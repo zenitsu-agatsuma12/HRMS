@@ -1,0 +1,275 @@
+﻿@model EditEmployeeViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+<main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Employee Profile</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Users</li>
+          <li class="breadcrumb-item active">Profile</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section profile">
+        <div class="col-xl-12">
+
+          <div class="card">
+            <div class="card-body pt-3">
+              <!-- Bordered Tabs -->
+              <ul class="nav nav-tabs nav-tabs-bordered">
+
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Employee Details</button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                </li>
+                 <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-benefits">Manage Benefits</button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                </li>
+              </ul>
+
+              <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                  <h5 class="card-title">Profile Details</h5>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                    <div class="col-lg-9 col-md-8">@Html.DisplayFor(model => model.FullName)</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Department</div>
+                    <div class="col-lg-9 col-md-8">@Html.DisplayFor(model => model.Department.DeptName)</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Position</div>
+                    <div class="col-lg-9 col-md-8">@Html.DisplayFor(model => model.Position.Name)</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">SSS number</div>
+                    <div class="col-lg-9 col-md-8">@Model.SSSNumber</div>
+                  
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Philhealth</div>
+                    <div class="col-lg-9 col-md-8">@Model.PhilHealthId</div>
+        
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">PagIbig</div>
+                    <div class="col-lg-9 col-md-8">@Model.PagIbigId</div>
+                
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Date Of Birth</div>
+                    <div class="col-lg-9 col-md-8">@Model.DateOfBirth</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Address</div>
+                    <div class="col-lg-9 col-md-8">@Model.Street @Model.Barangay @Model.City</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Email Address</div>
+                    <div class="col-lg-9 col-md-8">@Model.Email</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Phone Number</div>
+                    <div class="col-lg-9 col-md-8">@Model.Phone</div>
+                  </div>
+
+                </div>
+
+                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+                  <!-- Profile Edit Form -->
+                  <form asp-controller="Employee" asp-action="Update" method="post" class="row g-3">
+
+                    <div asp-validation-summary="All" class="text-danger" >
+                        </div>
+                        <div>
+                        <input asp-for="Id" class="form-control" hidden/>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputEmail5" class="form-label">First Name</label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputPassword5" class="form-label">Middle Name</label>
+                        <input asp-for="MiddleName" class="form-control" />
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputPassword5" class="form-label">Last Name</label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="inputName5" class="form-label">Gender</label>
+                        <select asp-for="Gender" name="Gender" class="form-control">
+                            <option value="">Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="inputName5" class="form-label">Phone</label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="inputName5" class="form-label">Date Of Birth</label>
+                        <input asp-for="DateOfBirth" class="form-control" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputName5" class="form-label">Department</label>
+                        <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentList"></select>
+                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputName5" class="form-label">Position</label>
+                        <select asp-for="PositionId" class="form-control" asp-items="ViewBag.PositionList"></select>
+                        <span asp-validation-for="PositionId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputName5" class="form-label">Employment Type</label>
+                        <select asp-for="EmployeeType" name="EmployeeType" class="form-control">
+                            <option value="" disabled>Employment Type</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Partime">Partime</option>
+                            <option value="Job Order">Job Order</option>
+                            <option value="Contract Of Service">Contract Of Service</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputName5" class="form-label">SSS</label>
+                        <input asp-for="SSSNumber" class="form-control" />
+                        <span asp-validation-for="PhilHealthId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputName5" class="form-label">Philhealth</label>
+                        <input asp-for="PhilHealthId" class="form-control" />
+                        <span asp-validation-for="PhilHealthId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputName5" class="form-label">PagIbig</label>
+                        <input asp-for="PagIbigId" class="form-control" />
+                        <span asp-validation-for="PagIbigId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputName5" class="form-label">Street</label>
+                        <input asp-for="Street" class="form-control" />
+                        <span asp-validation-for="Street" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="inputName5" class="form-label">Barangay</label>
+                        <input asp-for="Barangay" class="form-control" />
+                        <span asp-validation-for="Barangay" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputName5" class="form-label">City</label>
+                        <input asp-for="City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputName5" class="form-label">State</label>
+                        <input asp-for="State" class="form-control" />
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="inputName5" class="form-label">Postal Code</label>
+                        <input asp-for="PostalCode" class="form-control" />
+                        <span asp-validation-for="PostalCode" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputName5" class="form-label">Date Hired</label>
+                        <input asp-for="DateHired" class="form-control" />
+                        <span asp-validation-for="DateHired" class="text-danger"></span>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+                  </form><!-- End Profile Edit Form -->
+
+                </div>
+
+                <div class="tab-pane fade profile-benefits pt-3" id="profile-benefits">
+                  <!-- Change Benefits Form -->
+                  <form>
+
+                       <div class="col-md-3">
+                        <a class="btn btn-primary form-control" role="button" asp-controller="SSSPayment" asp-action="Create" asp-route-employeeName="@Model.FullName" asp-route-sss="@Model.SSSNumber"><i class="bi bi-person-vcard-fill float-left"></i> Add SSS Payment</a>
+                      </div>
+                      </br>
+                        <div class="col-md-3">
+                       <a class="btn btn-primary form-control" role="button" asp-controller="PhilhealthPayment" asp-action="Create" asp-route-employeeName="@Model.FullName" asp-route-philhealth="@Model.PhilHealthId"><i class="bi bi-person-vcard-fill"></i> Add Philhealth Payment</a>
+                      </div>
+                      </br>
+                        <div class="col-md-3">
+                        <a class="btn btn-primary form-control" role="button" asp-controller="PagIbigPayment" asp-action="Create" asp-route-employeeName="@Model.FullName" asp-route-pagibig="@Model.PagIbigId"><i class="bi bi-person-vcard-fill"></i> Add PagIbig Payment</a>
+                      </div>
+                  </form><!-- End Benefits Form -->
+
+                </div>
+
+                <div class="tab-pane fade pt-3" id="profile-change-password">
+                  <!-- Change Password Form -->
+                  <form>
+
+                    <div class="row mb-3">
+                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="password" type="password" class="form-control" id="currentPassword">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="newpassword" type="password" class="form-control" id="newPassword">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                      </div>
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary">Change Password</button>
+                    </div>
+                  </form><!-- End Change Password Form -->
+
+                </div>
+
+              </div><!-- End Bordered Tabs -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+      
+</main>
+ 

@@ -1,0 +1,142 @@
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hrms
+
+# SQL Server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrmsdb
+  namespace: hrms
+spec:
+  selector:
+    matchLabels:
+      app: hrmsdb
+  template:
+    metadata:
+      labels:
+        app: hrmsdb
+    spec:
+      containers:
+      - name: hrmsdb
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: MSSQL_SA_PASSWORD
+          value: Pa$$w0rd!
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hrmsdb
+  namespace: hrms
+  labels:
+    app: hrmsdb
+spec:
+  selector:
+    app: hrmsdb
+  ports:
+  - name: tcp
+    port: 1433
+    targetPort: 1433
+  type: NodePort
+# Web App
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrmsweb
+  namespace: hrms
+spec:
+  selector:
+    matchLabels:
+      app: hrmsweb
+  template:
+    metadata:
+      labels:
+        app: hrmsweb
+    spec:
+      containers:
+      - name: hrmsweb
+        image: alvaynce/hrms_web:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: ConnectionStrings__Server
+          value: hrmsdb
+        - name: ConnectionStrings__DB
+          value: HRMSDB
+        - name: ConnectionStrings__Username
+          value: sa
+        - name: ConnectionStrings__Password
+          value: Pa$$w0rd!
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hrmsweb
+  namespace: hrms
+  labels:
+    app: hrmsweb
+spec:
+  selector:
+    app: hrmsweb
+  ports:
+  - name: tcp
+    port: 5001
+    targetPort: 80
+  type: NodePort
+# Web API
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrmsapi
+  namespace: hrms
+spec:
+  selector:
+    matchLabels:
+      app: hrmsapi
+  template:
+    metadata:
+      labels:
+        app: hrmsapi
+    spec:
+      containers:
+      - name: hrmsapi
+        image: alvaynce/hrms_api:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: ConnectionStrings__Server
+          value: hrmsdb
+        - name: ConnectionStrings__DB
+          value: HRMSDB
+        - name: ConnectionStrings__Username
+          value: sa
+        - name: ConnectionStrings__Password
+          value: Pa$$w0rd!
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hrmsapi
+  namespace: hrms
+  labels:
+    app: hrmsapi
+spec:
+  selector:
+    app: hrmsapi
+  ports:
+  - name: tcp
+    port: 6001
+    targetPort: 80
+  type: NodePort
