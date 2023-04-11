@@ -64,7 +64,7 @@ spec:
     spec:
       containers:
       - name: hrmsweb
-        image: alvaynce/hrms_web:1.0
+        image: alvaynce/hrms_web:2.0
         imagePullPolicy: Always
         ports:
         - containerPort: 80
