@@ -42,6 +42,10 @@ namespace HRMSAPI.Controllers
         public IActionResult Add([FromBody] AddPagIbigPaymentDTO addDTO)
         {
             var employee = _userManager.Users.FirstOrDefault(e => e.PagIbigId == addDTO.PagIbigNumber);
+            if (employee == null)
+            {
+                return BadRequest("Not Existing PagIbig Number");
+            }
             if (addDTO != null)
             {
                 if (ModelState.IsValid)
@@ -63,6 +67,25 @@ namespace HRMSAPI.Controllers
         }
 
         //Update Payment
+       /* [HttpPut]
+        public IActionResult UpdatePayment([FromBody]EditPagIbigPaymentDTO editPagIbigPaymentDTO, [FromRoute]int no)
+        {
+            if (editPagIbigPaymentDTO == null)
+                return BadRequest("No resource found");
+            if (ModelState.IsValid)
+            {
+                var editPayment = new PagIbigPayment()
+                {
+                    No = editPagIbigPaymentDTO.No,
+                    Payment = editPagIbigPaymentDTO.Payment,
+                    Month = editPagIbigPaymentDTO.Month,
+                    Year = editPagIbigPaymentDTO.Year
+                };
+                var result = _repo.UpdatePagIbigPayment(editPayment, no);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        } */
 
 
         //Delete Payment

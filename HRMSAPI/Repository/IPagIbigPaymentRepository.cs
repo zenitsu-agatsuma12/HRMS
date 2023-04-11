@@ -11,7 +11,7 @@ namespace HRMSAPI.Repository
         // GetId
         PagIbigPayment GetPagIbigPaymentById(int No);
         // Update
-        PagIbigPayment UpdatePagIbigPayment(PagIbigPayment newPagIbigPayment);
+        PagIbigPayment UpdatePagIbigPayment(PagIbigPayment newPagIbigPayment, int no);
         // Delete
         PagIbigPayment DeletePagIbigPayment(int No);
     }

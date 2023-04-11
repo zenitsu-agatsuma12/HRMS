@@ -42,6 +42,10 @@ namespace HRMSAPI.Controllers
         public IActionResult Add([FromBody] AddSSSPaymentDTO addDTO)
         {
             var employee = _userManager.Users.FirstOrDefault(e => e.SSSNumber == addDTO.SSSNumber);
+            if (employee == null)
+            {
+                return BadRequest("Not Existing SSS Number");
+            }
             if (addDTO != null)
             {
                 if (ModelState.IsValid)

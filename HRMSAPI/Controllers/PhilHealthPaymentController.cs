@@ -42,6 +42,10 @@ namespace HRMSAPI.Controllers
         public IActionResult Add([FromBody] AddPhilHealthPaymentDTO addDTO)
         {
             var employee = _userManager.Users.FirstOrDefault(e => e.PhilHealthId == addDTO.PhilHealthNumber);
+            if (employee == null)
+            {
+                return BadRequest("Not Existing PhilHealth Number");
+            }
             if (addDTO != null)
             {
                 if (ModelState.IsValid)

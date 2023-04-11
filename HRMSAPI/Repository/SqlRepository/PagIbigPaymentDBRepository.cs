@@ -41,7 +41,7 @@ namespace HRMSAPI.Repository.SqlRepository
             return _dbcontext.PagIbigPayments.ToList();
         }
 
-        public PagIbigPayment UpdatePagIbigPayment(PagIbigPayment newPagIbigPayment)
+        public PagIbigPayment UpdatePagIbigPayment(PagIbigPayment newPagIbigPayment, int no)
         {
             _dbcontext.Update(newPagIbigPayment);
             _dbcontext.SaveChanges() ;
