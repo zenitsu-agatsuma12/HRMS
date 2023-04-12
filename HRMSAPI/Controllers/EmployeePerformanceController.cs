@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRMSAPI.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeePerformanceController : ControllerBase
@@ -21,11 +21,17 @@ namespace HRMSAPI.Controllers
             _repo = repo;
             _userManager = userManager;
         }
+
+        // List of Employee Performance
+        [Authorize(Roles = "Administrator, Manager, Employee")]
         [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(_repo.ListOfEmployeePerformance(null));
         }
+
+        //Get Performance By Id
+        [Authorize(Roles = "Administrator, Manager, Employee")]
         [HttpGet("{id}")]
         public IActionResult GetId([FromRoute]int id)
         {
@@ -38,6 +44,7 @@ namespace HRMSAPI.Controllers
         }
 
         // For Adding 
+        [Authorize(Roles = "Administrator, Manager")]
         [HttpPost]
         public IActionResult Add([FromBody]AddEmployeePerformanceDTO addDTO)
         {
@@ -49,11 +56,12 @@ namespace HRMSAPI.Controllers
                     var addEmpPer = new EmployeePerformance()
                     {
                         userID = addDTO.userID,
-                        EmployeeName = employee.FullName,
+                        EmployeeName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName,
                         About = addDTO.About,
                         PerformanceReview = addDTO.PerformanceReview,
                         ReviewBy = "Admin",
-                        DateReview = addDTO.DateReview
+                        Status = false,
+                        DateReview = addDTO.DateReview      
                     };
                     var newData = _repo.AddEmployeePerformance(addEmpPer);
                     return Ok(newData);
@@ -61,8 +69,9 @@ namespace HRMSAPI.Controllers
             }
             return BadRequest("No resource found!");
         }
-        
+
         // For Updating
+        [Authorize(Roles = "Administrator, Manager")]
         [HttpPut("{no}")]
         public async Task<IActionResult> UpdateAsync([FromBody]EditEmployeePerformanceDTO editDTO, [FromRoute] int no)
         {
@@ -71,11 +80,12 @@ namespace HRMSAPI.Controllers
             if (empPerId != null)
             {
                 empPerId.No = no;
-                empPerId.EmployeeName = empUser.FullName;
+                empPerId.EmployeeName = empUser.FirstName+" "+ empUser.MiddleName+" "+ empUser.LastName;
                 empPerId.About = editDTO.About;
                 empPerId.PerformanceReview = editDTO.PerformanceReview;
                 empPerId.DateReview = editDTO.DateReview;
                 empPerId.userID = empUser.Id;
+                empPerId.Status = false;
                 empPerId.ReviewBy = "Admin";
             }
             var result =  _repo.UpdateEmployeePerformance(no, empPerId);
@@ -86,6 +96,9 @@ namespace HRMSAPI.Controllers
                 return BadRequest("No resource found");
             
         }
+
+        // For Delete
+        [Authorize(Roles = "Administrator, Manager")]
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {

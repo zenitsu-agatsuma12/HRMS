@@ -21,9 +21,10 @@ namespace HRMSAPI.Models
         [DisplayName("Performance Review")]
         public string PerformanceReview { get; set; }
         public string ReviewBy { get; set; }
+        public bool Status { get; set; }
         public DateTime DateReview { get; set; }
 
-        public EmployeePerformance() { }
+            
 
     }
 }

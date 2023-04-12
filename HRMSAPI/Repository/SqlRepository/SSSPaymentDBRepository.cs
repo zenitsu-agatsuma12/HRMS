@@ -42,12 +42,13 @@ namespace HRMSAPI.Repository.SqlRepository
             return _dbcontext.SSSPayments.ToList();
         }
 
-        public SSSPayment UpdateSSSPayment( SSSPayment newSSSPayment)
+        public SSSPayment UpdateSSSPayment( SSSPayment newSSSPayment, int no)
         {
             _dbcontext.SSSPayments.Update(newSSSPayment);
             _dbcontext.SaveChanges();
             return newSSSPayment;
         }
+
 
     }
 }

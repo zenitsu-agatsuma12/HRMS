@@ -1,3 +1,4 @@
+using HRMS.Data;
 using HRMSAPI.Data;
 using HRMSAPI.Models;
 using HRMSAPI.Repository;
@@ -103,7 +104,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
+app.Automigrate();
 app.UseAuthentication();
 
 app.UseRouting();

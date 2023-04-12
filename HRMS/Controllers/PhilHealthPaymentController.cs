@@ -16,12 +16,14 @@ namespace HRMS.Controllers
             _userManager = userManager;
         }
 
+        // List Of Payment
         public IActionResult List()
         {
             var list = _repo.ListOfPhilHealthPayment();
             return View(list);
         }
 
+        
         [HttpGet]
         public IActionResult Create(string employeeName, string philhealth)
         {

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HRMSAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PagIbigPaymentController : ControllerBase
@@ -23,6 +23,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Get All List of Payments
+        [Authorize(Roles = "Administrator, Manager, Employee")]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -30,6 +31,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Get Payment By Id
+        [Authorize(Roles = "Administrator, Manager, Employee")]
         [HttpGet("{no}")]
         public IActionResult GetById([FromRoute] int no)
         {
@@ -38,6 +40,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Add Payment
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public IActionResult Add([FromBody] AddPagIbigPaymentDTO addDTO)
         {
@@ -53,7 +56,7 @@ namespace HRMSAPI.Controllers
                     var addPayment = new PagIbigPayment()
                     {
                         PagIbigNumber = addDTO.PagIbigNumber,
-                        FullName = employee.FullName,
+                        FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName,
                         Payment = addDTO.Payment,
                         Month = addDTO.Month,
                         Year = addDTO.Year
@@ -67,37 +70,52 @@ namespace HRMSAPI.Controllers
         }
 
         //Update Payment
-       /* [HttpPut]
-        public IActionResult UpdatePayment([FromBody]EditPagIbigPaymentDTO editPagIbigPaymentDTO, [FromRoute]int no)
+        [Authorize(Roles = "Administrator")]
+        [HttpPut("{no}")]
+        public async Task<IActionResult> UpdatePaymentAsync([FromBody]EditPagIbigPaymentDTO editPagIbigPaymentDTO, [FromRoute]int no)
         {
-            if (editPagIbigPaymentDTO == null)
-                return BadRequest("No resource found");
-            if (ModelState.IsValid)
-            {
-                var editPayment = new PagIbigPayment()
-                {
-                    No = editPagIbigPaymentDTO.No,
-                    Payment = editPagIbigPaymentDTO.Payment,
-                    Month = editPagIbigPaymentDTO.Month,
-                    Year = editPagIbigPaymentDTO.Year
-                };
-                var result = _repo.UpdatePagIbigPayment(editPayment, no);
-                return Ok(result);
-            }
-            return BadRequest(ModelState);
-        } */
-
-
-        //Delete Payment
-        [HttpDelete]
-        public IActionResult DeletePayment(int id)
-        {
-            var payment = _repo.GetPagIbigPaymentById(id);
+            var payment = _repo.GetPagIbigPaymentById(no);
             if (payment == null)
             {
                 return NotFound();
             }
-            return Ok(payment);
+
+            var employee = _userManager.Users.FirstOrDefault(e => e.PagIbigId == payment.PagIbigNumber);
+            if (employee == null)
+            {
+                return BadRequest("Not Existing PagIbig Number");
+            }
+
+            if (editPagIbigPaymentDTO != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    payment.No = no;
+                    payment.PagIbigNumber = employee.PagIbigId;
+                    payment.FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName;
+                    payment.Payment = editPagIbigPaymentDTO.Payment;
+                    payment.Month = editPagIbigPaymentDTO.Month;
+                    payment.Year = editPagIbigPaymentDTO.Year;
+                    
+                    _repo.UpdatePagIbigPayment(payment , no);
+                    return Ok(payment);
+                }
+                return BadRequest(ModelState);
+            }
+            return BadRequest("No resource found!");
+        }
+
+        //Delete Payment
+        [Authorize(Roles = "Administrator")]
+        [HttpDelete]
+        public IActionResult DeletePayment(int no)
+        {
+            var payment = _repo.GetPagIbigPaymentById(no);
+            if (payment == null)
+            {
+                return NotFound();
+            }
+            return Ok(_repo.DeletePagIbigPayment(no));
         }
     }
 }

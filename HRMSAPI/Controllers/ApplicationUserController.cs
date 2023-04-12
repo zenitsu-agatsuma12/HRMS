@@ -2,6 +2,7 @@
 using HRMSAPI.DTO;
 using HRMSAPI.Models;
 using HRMSAPI.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +15,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace HRMSAPI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")] 
     [Route("api/[controller]")]
     [ApiController]
     public class ApplicationUserController : ControllerBase

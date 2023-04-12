@@ -12,7 +12,7 @@ namespace HRMSAPI.Repository
         // GetId
         PhilHealthPayment GetPhilHealthPaymentById(int No);
         // Update
-        PhilHealthPayment UpdatePhilHealthPayment(PhilHealthPayment newPhilHealthPayment);
+        PhilHealthPayment UpdatePhilHealthPayment(PhilHealthPayment newPhilHealthPayment, int no);
         // Delete
         PhilHealthPayment DeletePhilHealthPayment(int No);
     }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace HRMSAPI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class PositionController : ControllerBase
@@ -20,15 +20,15 @@ namespace HRMSAPI.Controllers
             _repo = repo;
         }
 
+        // Get All Position List
         [HttpGet]
-
         public IActionResult GetAllPosition()
         {
             return Ok(_repo.ListOfPosition());
         }
 
+        // Get By Id
         [HttpGet("{id}")]
-
         public IActionResult GetById([FromRoute]int id)
         {
             var pos = _repo.GetPositionById(id);
@@ -37,8 +37,8 @@ namespace HRMSAPI.Controllers
             return Ok(pos);
         }
 
+        // Add Position
         [HttpPost]
-
         public IActionResult AddPosition(AddPositionDTO position)
         {
             if (position == null)
@@ -54,8 +54,8 @@ namespace HRMSAPI.Controllers
             return BadRequest(ModelState);
         }
 
+        // Edit or Update Position
         [HttpPut("{id}")]
-
         public IActionResult UpdatePosition([FromBody]Position position, [FromRoute] int id)
         {
             if (position == null)
@@ -67,8 +67,8 @@ namespace HRMSAPI.Controllers
             return Ok(position);
         }
 
+        // Delete Position
         [HttpDelete]
-
         public IActionResult DeletePosition(int id)
         {
             var pos = _repo.GetPositionById(id);

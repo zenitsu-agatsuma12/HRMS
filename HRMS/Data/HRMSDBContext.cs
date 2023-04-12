@@ -49,6 +49,11 @@ namespace HRMS.Data
 
             base.OnConfiguring(optionsBuilder);
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.SeedDefaultData();
+            base.OnModelCreating(modelBuilder);
+        }
 
 
         public DbSet<Employee> Employees { get; set; }
@@ -68,6 +73,7 @@ namespace HRMS.Data
         // Many to Many
         public DbSet<DepartmentPositioncs> DepartmentPositions { get; set; }
 
+       
     }
 }
 

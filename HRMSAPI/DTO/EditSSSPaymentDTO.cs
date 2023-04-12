@@ -2,7 +2,7 @@
 
 namespace HRMSAPI.DTO
 {
-    public class EditPagIbigPaymentDTO
+    public class EditSSSPaymentDTO
     {
         public int Payment { get; set; }
         public string Month { get; set; } = DateTime.Now.Month.ToString();

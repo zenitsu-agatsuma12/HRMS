@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRMSAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SSSPaymentController : ControllerBase
@@ -23,6 +22,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Get All List of Payments
+        [Authorize(Roles = "Administrator, Manager, Employee")]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -30,6 +30,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Get Payment By Id
+        [Authorize(Roles = "Administrator, Manager, Employee")]
         [HttpGet("{no}")]
         public IActionResult GetById([FromRoute] int no)
         {
@@ -38,6 +39,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Add Payment
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public IActionResult Add([FromBody] AddSSSPaymentDTO addDTO)
         {
@@ -53,7 +55,7 @@ namespace HRMSAPI.Controllers
                     var addPayment = new SSSPayment()
                     {
                         SSSNumber = addDTO.SSSNumber,
-                        FullName = employee.FullName,
+                        FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName,
                         Payment = addDTO.Payment,
                         Month = addDTO.Month,
                         Year = addDTO.Year
@@ -67,18 +69,52 @@ namespace HRMSAPI.Controllers
         }
 
         //Update Payment
-
-
-        //Delete Payment
-        [HttpDelete]
-        public IActionResult DeletePayment(int id)
+        [Authorize(Roles = "Administrator")]
+        [HttpPut("{no}")]
+        public async Task<IActionResult> UpdatePaymentAsync([FromBody] EditSSSPaymentDTO editSSSPaymentDTO, [FromRoute] int no)
         {
-            var payment = _repo.GetSSSPaymentById(id);
+            var payment = _repo.GetSSSPaymentById(no);
             if (payment == null)
             {
                 return NotFound();
             }
-            return Ok(payment);
+
+            var employee = _userManager.Users.FirstOrDefault(e => e.SSSNumber == payment.SSSNumber);
+            if (employee == null)
+            {
+                return BadRequest("Not Existing PagIbig Number");
+            }
+
+            if (editSSSPaymentDTO != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    payment.No = no;
+                    payment.SSSNumber = employee.SSSNumber;
+                    payment.FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName;
+                    payment.Payment = editSSSPaymentDTO.Payment;
+                    payment.Month = editSSSPaymentDTO.Month;
+                    payment.Year = editSSSPaymentDTO.Year;
+
+                    _repo.UpdateSSSPayment(payment, no);
+                    return Ok(payment);
+                }
+                return BadRequest(ModelState);
+            }
+            return BadRequest("No resource found!");
+        }
+
+        //Delete Payment
+        [Authorize(Roles = "Administrator")]
+        [HttpDelete]
+        public IActionResult DeletePayment(int no)
+        {
+            var payment = _repo.GetSSSPaymentById(no);
+            if (payment == null)
+            {
+                return NotFound();
+            }
+            return Ok(_repo.DeleteSSSPayment(no));
         }
     }
 }

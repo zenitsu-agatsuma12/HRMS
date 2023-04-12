@@ -12,7 +12,7 @@ namespace HRMSAPI.Repository
         // GetId
         SSSPayment GetSSSPaymentById(int No);
         // Update
-        SSSPayment UpdateSSSPayment( SSSPayment newSSSPayment);
+        SSSPayment UpdateSSSPayment( SSSPayment newSSSPayment, int no);
         // Delete
         SSSPayment DeleteSSSPayment(int No);
     }

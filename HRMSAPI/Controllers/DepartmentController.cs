@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRMSAPI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class DepartmentController : ControllerBase

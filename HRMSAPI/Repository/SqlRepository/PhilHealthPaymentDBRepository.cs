@@ -41,7 +41,7 @@ namespace HRMSAPI.Repository.SqlRepository
            return _dbcontext.PhilHealthPayments.ToList();
         }
 
-        public PhilHealthPayment UpdatePhilHealthPayment(PhilHealthPayment newPhilHealthPayment)
+        public PhilHealthPayment UpdatePhilHealthPayment(PhilHealthPayment newPhilHealthPayment, int no)
         {
            _dbcontext.Update(newPhilHealthPayment);
            _dbcontext.SaveChanges();

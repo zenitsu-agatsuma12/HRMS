@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRMSAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PhilHealthPaymentController : ControllerBase
@@ -23,6 +22,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Get All List of Payments
+        [Authorize(Roles = "Administrator, Manager, Employee")]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -30,6 +30,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Get Payment By Id
+        [Authorize(Roles = "Administrator, Manager, Employee")]
         [HttpGet("{no}")]
         public IActionResult GetById([FromRoute]int no)
         {
@@ -38,6 +39,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Add Payment
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public IActionResult Add([FromBody] AddPhilHealthPaymentDTO addDTO)
         {
@@ -53,7 +55,7 @@ namespace HRMSAPI.Controllers
                     var addPayment = new PhilHealthPayment()
                     {
                         PhilHealthNumber = addDTO.PhilHealthNumber,
-                        FullName = employee.FullName,
+                        FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName,
                         Payment = addDTO.Payment,
                         Month = addDTO.Month,
                         Year = addDTO.Year
@@ -67,9 +69,43 @@ namespace HRMSAPI.Controllers
         }
 
         //Update Payment
+        [Authorize(Roles = "Administrator")]
+        [HttpPut("{no}")]
+        public async Task<IActionResult> UpdatePaymentAsync([FromBody] EditPhilHealthPaymentDTO editPhilHealthPaymentDTO, [FromRoute] int no)
+        {
+            var payment = _repo.GetPhilHealthPaymentById(no);
+            if (payment == null)
+            {
+                return NotFound();
+            }
 
+            var employee = _userManager.Users.FirstOrDefault(e => e.PhilHealthId == payment.PhilHealthNumber);
+            if (employee == null)
+            {
+                return BadRequest("Not Existing PagIbig Number");
+            }
+
+            if (editPhilHealthPaymentDTO != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    payment.No = no;
+                    payment.PhilHealthNumber = employee.PhilHealthId;
+                    payment.FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName;
+                    payment.Payment = editPhilHealthPaymentDTO.Payment;
+                    payment.Month = editPhilHealthPaymentDTO.Month;
+                    payment.Year = editPhilHealthPaymentDTO.Year;
+
+                    _repo.UpdatePhilHealthPayment(payment, no);
+                    return Ok(payment);
+                }
+                return BadRequest(ModelState);
+            }
+            return BadRequest("No resource found!");
+        }
 
         //Delete Payment
+        [Authorize(Roles = "Administrator")]
         [HttpDelete]
         public IActionResult DeletePayment(int no)
         {
@@ -78,7 +114,7 @@ namespace HRMSAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(payment);
+            return Ok(_repo.DeletePhilHealthPayment(no));
         }
     }
 }

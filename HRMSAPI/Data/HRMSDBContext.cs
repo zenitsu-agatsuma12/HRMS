@@ -1,4 +1,5 @@
-﻿using HRMSAPI.Models;
+﻿using HRMS.Data;
+using HRMSAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +65,14 @@ namespace HRMSAPI.Data
 
         // Many to Many
         public DbSet<DepartmentPositioncs> DepartmentPositions { get; set; }
+
+        // Seed Data
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.SeedDefaultData();
+            base.OnModelCreating(modelBuilder);
+        }
 
     }
 }

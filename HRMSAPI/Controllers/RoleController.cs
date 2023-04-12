@@ -1,6 +1,7 @@
 ﻿using HRMSAPI.DTO;
 using HRMSAPI.Models;
 using HRMSAPI.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRMSAPI.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class RoleController : ControllerBase
@@ -35,7 +37,7 @@ namespace HRMSAPI.Controllers
                     userwithroles.Add(new UserRoleDTO
                     {
                         UserId = user.Id,
-                        FullName = user.FullName,
+                        FullName = user.FirstName + " " + user.MiddleName + " " + user.LastName,
                         RoleName = role.Name
                     });
                 }
@@ -48,11 +50,6 @@ namespace HRMSAPI.Controllers
 
         public async Task<IActionResult> GetRoleById([FromRoute]string id)
         {
-            /* var user = await _userManager.FindByIdAsync(id);
-            var userwithrole = await _userManager.GetRolesAsync(user);
-            var role = await _roleManager.FindByIdAsync(user.Id);
-            return Ok(role);*/
-
             var user = await _userManager.FindByIdAsync(id);
             var userFullName = user.FullName;
             var userwithrole = await _userManager.GetRolesAsync(user);
