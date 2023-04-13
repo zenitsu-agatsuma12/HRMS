@@ -4,6 +4,7 @@ using HRMSAPI.Models;
 using HRMSAPI.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +22,17 @@ namespace HRMSAPI.Controllers
     public class ApplicationUserController : ControllerBase
     {
         IEmployeeRepository _repo;
+        IDataProtectionProvider _dataProtectionProvider;
 
         private UserManager<ApplicationUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
 
-        public ApplicationUserController(IEmployeeRepository repo, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public ApplicationUserController(IEmployeeRepository repo, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IDataProtectionProvider dataProtectionProvider)
         {
             _repo = repo;
             _userManager = userManager;
             _roleManager = roleManager;
+            _dataProtectionProvider = dataProtectionProvider;
         }
 
         [HttpGet]
@@ -51,6 +54,7 @@ namespace HRMSAPI.Controllers
             return Ok(employee);
         }
 
+
         // For Adding
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] AddApplicationUserDTO appDTO)
@@ -60,6 +64,7 @@ namespace HRMSAPI.Controllers
 
             if (ModelState.IsValid)
             {
+                var protector = _dataProtectionProvider.CreateProtector("Email", "SSSNumber", "PagIbigId", "PhilHealthId", "UserName");
                 var emp = new ApplicationUser()
                 {
                     FirstName = appDTO.FirstName,
@@ -69,12 +74,12 @@ namespace HRMSAPI.Controllers
                     Gender = appDTO.Gender,
                     DateOfBirth = appDTO.DateOfBirth,
                     Phone = appDTO.Phone,
-                    Email = appDTO.Email,
-                    UserName = appDTO.Email,
+                    Email = protector.Protect(appDTO.Email),
+                    UserName = protector.Protect(appDTO.Email),
                     EmployeeType = appDTO.EmployeeType,
-                    SSSNumber = appDTO.SSSNumber,
-                    PagIbigId = appDTO.PagIbigId,
-                    PhilHealthId = appDTO.PhilHealthId,
+                    SSSNumber = protector.Protect(appDTO.SSSNumber),
+                    PagIbigId = protector.Protect(appDTO.PagIbigId),
+                    PhilHealthId = protector.Protect(appDTO.PhilHealthId),
                     Street = appDTO.Street,
                     Barangay = appDTO.Barangay,
                     City = appDTO.City,
