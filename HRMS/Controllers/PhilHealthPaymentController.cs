@@ -1,5 +1,6 @@
 ﻿using HRMS.Models;
 using HRMS.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,16 +16,15 @@ namespace HRMS.Controllers
             _repo = repo;
             _userManager = userManager;
         }
-
-        // List Of Payment
+        [Authorize(Roles = "Employee, Manager, Administrator")]
         public IActionResult List()
         {
             var list = _repo.ListOfPhilHealthPayment();
             return View(list);
         }
 
-        
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create(string employeeName, string philhealth)
         {
             var email = User.Identity.Name;
@@ -40,6 +40,7 @@ namespace HRMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create(PhilHealthPayment philHealthPayment)
         {
             if(ModelState.IsValid)
@@ -50,6 +51,7 @@ namespace HRMS.Controllers
             return View();
         }
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Edit(int No)
         {
             PhilHealthPayment philHealthPayment = _repo.GetPhilHealthPaymentById(No);
@@ -57,12 +59,13 @@ namespace HRMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Edit(PhilHealthPayment philHealthPayment)
         {
             _repo.UpdatePhilHealthPayment(philHealthPayment);
             return RedirectToAction("List");
         }
-
+        [Authorize(Roles = "Administrator")]
         public IActionResult Delete(int No)
         {
             _repo.DeletePhilHealthPayment(No);

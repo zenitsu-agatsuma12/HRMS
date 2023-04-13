@@ -1,6 +1,7 @@
 ﻿using HRMS.Data;
 using HRMS.Models;
 using HRMS.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.Intrinsics.X86;
@@ -19,12 +20,14 @@ namespace HRMS.Controllers
                 this._userManager = userManager;
         }
 
+        [Authorize(Roles = "Administrator, Employee, Manager")]
         public IActionResult List()
         {
             var list = _repo.ListOfSSSPayment();
             return View(list);
         }
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create(string employeeName, string sss) 
         {
             var email = User.Identity.Name;
@@ -40,6 +43,7 @@ namespace HRMS.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create(SSSPayment sssPayment)
             { 
                 if (ModelState.IsValid)
@@ -50,6 +54,7 @@ namespace HRMS.Controllers
                 return View();
             }
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Edit(int No)
         {
             SSSPayment ssspayment = _repo.GetSSSPaymentById(No);
@@ -57,18 +62,21 @@ namespace HRMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Edit(SSSPayment newSSSPayment)
         {
             _repo.UpdateSSSPayment(newSSSPayment);
             return RedirectToAction("List");
         }
 
+        [Authorize(Roles = "Administrator")]
         public IActionResult Delete(int No)
         {
             _repo.DeleteSSSPayment(No);
             return RedirectToAction("List");
         }
 
+        [Authorize(Roles = "Administrator")]
         public IActionResult Details(int No)
         {
 

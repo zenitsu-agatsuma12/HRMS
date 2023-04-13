@@ -42,12 +42,12 @@
                 <div class="text-center">
                 </div>
               </form><!-- End floating Labels Form -->
-                @if (User.IsInRole("HR"))
+                @if (!User.IsInRole("Employee"))
                 {
                     <a class="btn btn-secondary" asp-action="List"  asp-controller="EmployeePerformance">Back</a>
                 }
                 else{
-                    <a class="btn btn-secondary" asp-action="Unread" asp-route-No="@Model.No" asp-controller="EmployeePerformance">Backss</a>
+                    <a class="btn btn-secondary" asp-action="Unread" asp-route-No="@Model.No" asp-controller="EmployeePerformance">Back</a>
                 }
             </div>
           </div>

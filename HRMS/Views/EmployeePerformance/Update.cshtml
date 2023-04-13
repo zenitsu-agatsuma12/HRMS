@@ -1,37 +1,72 @@
 ﻿@model HRMS.Models.EmployeePerformance
-
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
 @{
-    ViewData["Title"] = "Update";
 }
+
 
 <main id="main" class="main">
-    <section class="section">
-        <h1>Update</h1>
+     <section class="section profile">
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Performance Review</h5>
 
-        <h4>EmployeePerformance</h4>
-        <hr />
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Update">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    
-                    <div class="form-group">
-                        <label asp-for="PerformanceReview" class="control-label">Performance Review</label>
-                        <input asp-for="PerformanceReview" class="form-control" />
-                        <span asp-validation-for="PerformanceReview" class="text-danger"></span>
+              <!-- Floating Labels Form -->
+              <form asp-controller="EmployeePerformance" asp-action="Update" method="post" class="row g-3">
+                  <div asp-validation-summary="All" class="text-danger">
+                       <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="Status" hidden>
+                  </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="userID" readonly>
+                    <label for="floatingName">UserID</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="EmployeeName" readonly>
+                    <label for="floatingName">Employee Name</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingEmail" placeholder="About" asp-for="About" >
+                    <label for="floatingEmail">Subject / Topic</label>
+                  </div>
+                </div>
+                
+                <div class="col-12">
+                  <div class="form-floating">
+                    <textarea class="form-control" placeholder="Write a Review" id="floatingTextarea" style="height: 100px;" asp-for="PerformanceReview" ></textarea>
+                    <label for="floatingTextarea">Review</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingEmail" placeholder="Review by" asp-for="ReviewBy" readonly>
+                    <label for="floatingEmail">Review By:</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingEmail" placeholder="Review by" asp-for="No" hidden>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form><!-- End floating Labels Form -->
+                @if (!User.IsInRole("Employee"))
+                {
+                    <div class="text-center">
+                         <a class="btn btn-secondary" asp-action="List"  asp-controller="EmployeePerformance">Back</a>
                     </div>
-                    <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                    </div>
-                </form>
+                }
+                else{
+                    <a class="btn btn-secondary" asp-action="Unread" asp-route-No="@Model.No" asp-controller="EmployeePerformance">Back</a>
+                }
             </div>
-        </div>
-
-        <div>
-            <a asp-action="List">Back to List</a>
-        </div>
-    </section>
-</main>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+          </div>
+        </section>
+    </main

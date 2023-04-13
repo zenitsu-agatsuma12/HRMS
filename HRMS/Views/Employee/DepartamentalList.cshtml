@@ -1,0 +1,84 @@
+﻿@model IEnumerable<HRMS.Models.ApplicationUser>
+
+@{
+    ViewData["Employee"] = "List";
+}
+ <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Employee Table - @ViewBag.DepartmentName <span>Department</span></h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a>Home</a></li>
+          <li class="breadcrumb-item">Employee</li>
+          <li class="breadcrumb-item">Department</li>
+          <li class="breadcrumb-item active">List</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+            </br>
+            <p style="font-size:20px;">Manager: <span style="font-weight:bold;">@ViewBag.DepartmentHead</span></p>
+            
+
+            
+            
+              <!-- Table with stripped rows -->
+              <table id="employee-table" class="table datatable">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Position</th>
+                 @if(User.IsInRole("Manager")){
+                    <th scope="col">Review</th>
+                    <th scope="col">View</th>
+                 }
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                 @{int i=0;}
+                 @foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            @(++i)
+                        </td>
+
+                        <td>
+                            @item.FullName
+                        </td>
+
+                        <td>
+                            @item.Phone
+                        </td>
+                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Position.Name)
+                        </td>
+                         @if(User.IsInRole("Manager")){
+                            <td>   <a class="btn btn-primary" role="button" asp-controller="EmployeePerformance" asp-action="Create" asp-route-userID="@item.Id" asp-route-employeeName="@item.FullName"> <i class="bi bi-chat-left-text"></i></a> </td>
+                            <td>   <a class="btn btn-primary" role="button" asp-action="Details" asp-route-accountId="@item.Id"><i class="bi bi-folder"></i></a> </td> 
+                        }      
+                    </tr>
+                    }
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+

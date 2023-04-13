@@ -1,10 +1,12 @@
 ﻿using HRMS.Models;
 using HRMS.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class DashboardController : Controller
     {
         IDepartmentRepository _department;

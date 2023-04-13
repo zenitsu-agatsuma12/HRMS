@@ -26,9 +26,6 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeDBRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentDBRepository>();
 builder.Services.AddScoped<IDepartmentPositionRepository, DepartmentPositionDBRepository>();
 builder.Services.AddScoped<IEmployeePerformanceDBRepository, EmployeePerformanceDBRepository>();
-builder.Services.AddScoped<IPagIbigRepository, PagIbigDBRepository>();
-builder.Services.AddScoped<IPhilHealthRepository, PhilHealthDBRepository>();
-builder.Services.AddScoped<ISSSRepository, SSSDBRepository>();
 builder.Services.AddScoped<IPositionRepository, PositionDBRepository>();
 builder.Services.AddScoped<ISSSPaymentRepository, SSSPaymentDBRepository>();
 builder.Services.AddScoped<IPhilHealthPaymentDBRepository, PhilHealthPaymentDBRepository>();
@@ -41,10 +38,14 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 app.UseStaticFiles();
+
 app.Automigrate();
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

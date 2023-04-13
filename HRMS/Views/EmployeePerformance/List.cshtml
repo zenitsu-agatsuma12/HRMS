@@ -10,9 +10,9 @@
       <h1>Performance Review</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Tables</li>
-          <li class="breadcrumb-item active">Data</li>
+          <li class="breadcrumb-item"><a>Home</a></li>
+          <li class="breadcrumb-item">Reviews</li>
+          <li class="breadcrumb-item active">List</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -53,12 +53,16 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.ReviewBy)
                             </td>
-                 @if(User.IsInRole("HR"))
-                         {
+                 @if(!User.IsInRole("Employee"))
+                         {                             
                             <td>
-                                <a asp-action="Details" asp-route-No="@item.No">Details</a> |
-                                <a asp-action="Delete" asp-route-No="@item.No">Delete</a>
+                                <a class="btn btn-primary" role="button" asp-action="Update" asp-route-No="@item.No">Edit</a> |
+                                <a class="btn btn-danger" role="button" asp-action="Delete" asp-route-No="@item.No">Delete</a>
                             </td>
+                            if(item.Status==true){
+                                <td><span class="badge bg-success">New</span></td>
+                            }
+                            
                          }
                         </tr>
                 }

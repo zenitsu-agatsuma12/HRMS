@@ -29,7 +29,7 @@ namespace HRMS.Controllers
 
 
 
-
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> List(int searchOption = 0, string employeeSearch = "")
         {
             var employees = _userManager.Users.Include(d => d.Department).Where(status => status.ActiveStatus == true).Include(p => p.Position).ToList();
@@ -49,6 +49,7 @@ namespace HRMS.Controllers
             return View(employees.ToList());
         }
 
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> InactiveList(int searchOption = 0, string employeeSearch = "")
         {
             var inaciveCount = await _userManager.Users.Where(status => status.ActiveStatus==false).CountAsync();
@@ -70,6 +71,7 @@ namespace HRMS.Controllers
             return View(employees.ToList());
         }
 
+        [Authorize(Roles = "Administrator, Employee, Manager")]
         public IActionResult Details(string accountId)
         {
             ViewBag.DepartmentList = _repo.GetDepartmentList();
@@ -88,6 +90,7 @@ namespace HRMS.Controllers
                 Email = employee.Email,
                 Phone = employee.Phone,
                 DepartmentId = employee.DepartmentId,
+                PositionId = employee.PositionId,
                 EmployeeType = employee.EmployeeType,
                 SSSNumber = employee.SSSNumber,
                 PhilHealthId = employee.PhilHealthId,
@@ -104,6 +107,7 @@ namespace HRMS.Controllers
         }
 
         //Update Accout
+        [Authorize(Roles = "Administrator, Employee, Manager")]
         [HttpGet]
         public async Task<IActionResult> Update(string accountId)
         {
@@ -136,6 +140,8 @@ namespace HRMS.Controllers
             };
             return View(employeeViewModel);
         }
+
+        [Authorize(Roles = "Administrator, Employee, Manager")]
         [HttpPost]
         public async Task<IActionResult> Update(EditEmployeeViewModel employee)
         {
@@ -168,7 +174,15 @@ namespace HRMS.Controllers
             var result = await _userManager.UpdateAsync(oldValue);
             if (result.Succeeded)
             {
-                return RedirectToAction("List");
+                if (User.IsInRole("Administrator"))
+                {
+                    return RedirectToAction("List");
+                }
+                else
+                {
+                    return RedirectToAction("Profile","Details");
+                }
+                
             }
             foreach (var error in result.Errors)
             {
@@ -178,8 +192,25 @@ namespace HRMS.Controllers
 
         }
 
+
         //Drop Delete Employee
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(string accountId)
+        {
+            var oldValue = await _userManager.FindByIdAsync(accountId);
+            var result = await _userManager.DeleteAsync(oldValue);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("InactiveList");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View();
+        }
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> DeleteFromActive(string accountId)
         {
             var oldValue = await _userManager.FindByIdAsync(accountId);
             {
@@ -197,6 +228,7 @@ namespace HRMS.Controllers
             }
             return View();
         }
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteFormInActive(string accountId)
         {
             var oldValue = await _userManager.FindByIdAsync(accountId);
@@ -217,6 +249,7 @@ namespace HRMS.Controllers
         }
 
         //Create
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -224,6 +257,7 @@ namespace HRMS.Controllers
             ViewBag.PositionList = _repo.GetPositionList();
             return View();
         }
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Create(RegisterEmployeeViewModel employeeViewModel)
         {
@@ -280,7 +314,33 @@ namespace HRMS.Controllers
             return View(employeeViewModel);
         }
 
-        // Create Pefromance Review
+        // Employe Performance Review
+        public async Task<IActionResult> DepartamentalList()
+        {
+            var email = User.Identity.Name;
+            var employee = _userManager.Users.Include(d => d.Department).FirstOrDefault(e => e.Email == email);
+            var employeeList = _userManager.Users.Include(d => d.Department)
+                                                .Include(p => p.Position)
+                                                .Where(status => status.ActiveStatus == true)
+                                                .Where(e => e.DepartmentId == employee.DepartmentId)
+                                                .ToList();
+            var manager = await _userManager.GetUsersInRoleAsync("Manager");
+            var managerName = manager.Where(d => d.DepartmentId == employee.DepartmentId).FirstOrDefault();
+            if(managerName == null)
+            {
+                ViewBag.DepartmentHead = "Unassigned";
+            }
+            else
+            {
+                ViewBag.DepartmentHead = managerName.FullName;
+            }
+            ViewBag.DepartmentName = employee.Department.DeptName;
+
+            return View(employeeList.ToList());
+           
+                
+              
+        }
 
     }
 }

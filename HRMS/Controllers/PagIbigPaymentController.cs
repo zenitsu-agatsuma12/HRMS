@@ -1,5 +1,6 @@
 ﻿using HRMS.Models;
 using HRMS.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,13 +16,14 @@ namespace HRMS.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Administrator, Employee, Manager")]
         public IActionResult List()
         {
             var list = _repo.ListOfPagIbigPayment();
             return View(list);
         }
         [HttpGet]
-
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create(string employeeName, string pagibig)
         {
             var email = User.Identity.Name;
@@ -36,6 +38,7 @@ namespace HRMS.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create(PagIbigPayment pagIbigPayment)
         {
             if (ModelState.IsValid)
@@ -47,19 +50,20 @@ namespace HRMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Edit(int No)
         {
             PagIbigPayment pagIbigPayment = _repo.GetPagIbigPaymentById(No);
             return View(pagIbigPayment);
         }
         [HttpPost]
-
+        [Authorize(Roles = "Administrator")]
         public IActionResult Edit(PagIbigPayment pagIbigPayment)
         {
             _repo.UpdatePagIbigPayment(pagIbigPayment);
             return RedirectToAction("List");
         }
-
+        [Authorize(Roles = "Administrator")]
         public IActionResult Delete(int No)
         {
             _repo.DeletePagIbigPayment(No);

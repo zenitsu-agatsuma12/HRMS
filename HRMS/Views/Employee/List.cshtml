@@ -6,12 +6,12 @@
  <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Employee Table</h1>
+      <h1>List of Active Accounts</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Tables</li>
-          <li class="breadcrumb-item active">Data</li>
+          <li class="breadcrumb-item"><a>Home</a></li>
+          <li class="breadcrumb-item">Employee</li>
+          <li class="breadcrumb-item active">List</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -55,7 +55,7 @@
                     <th scope="col">Department</th>
                     <th scope="col">Position</th>
                     <th scope="col">Review</th>
-                    <th scope="col">Edit</th>
+                  @*<th scope="col">Edit</th>*@
                     <th scope="col">View</th>
                     <th scope="col">Status</th>
                     
@@ -85,9 +85,9 @@
                         </td>
          
                             <td>   <a class="btn btn-primary" role="button" asp-controller="EmployeePerformance" asp-action="Create" asp-route-userID="@item.Id" asp-route-employeeName="@item.FullName"> <i class="bi bi-chat-left-text"></i></a> </td>
-                            <td>   <a class="btn btn-primary" role="button" asp-action="Update" asp-route-accountId="@item.Id"><i class="fa fa-edit"></i> </a> </td>
+                           @*<td>   <a class="btn btn-primary" role="button" asp-action="Update" asp-route-accountId="@item.Id"><i class="fa fa-edit"></i> </a> </td>*@
                             <td>   <a class="btn btn-primary" role="button" asp-action="Details" asp-route-accountId="@item.Id"><i class="bi bi-folder"></i></a> </td>  
-                            <td>   <a class="btn btn-success" role="button" asp-action="Delete" asp-route-accountId="@item.Id"><i class="bi bi-check-circle"></i></a></td>
+                            <td>   <a class="btn btn-success" role="button" asp-action="DeleteFromActive" asp-route-accountId="@item.Id"><i class="bi bi-check-circle"></i></a></td>
                     </tr>
                     }
                 </tbody>

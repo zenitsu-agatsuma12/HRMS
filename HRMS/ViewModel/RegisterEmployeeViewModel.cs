@@ -36,6 +36,7 @@ namespace HRMS.ViewModel
         [Required]
         [RegularExpression("(09)[0-9]{9}", ErrorMessage = "This is not a valid phone number")]
         [DisplayName("Phone Number")]
+        [MaxLength(11)]
         public string Phone { get; set; }
 
         // Foreign Key
@@ -53,16 +54,21 @@ namespace HRMS.ViewModel
         public string EmployeeType { get; set; }
 
         //Benefits
+        [Required]
         [RegularExpression("[0-9]{13}", ErrorMessage = "This is not a valid SSS Number")]
         [Display(Name = "SSS Number")]
-        public string? SSSNumber { get; set; }
-
+        [MaxLength(13)]
+        public string SSSNumber { get; set; }
+        [Required]
         [RegularExpression("[0-9]{12}", ErrorMessage = "This is not a valid PagIbig Number")]
         [Display(Name = "PagIbig Number")]
-        public string? PagIbigId { get; set; }
+        [MaxLength(12)]
+        public string PagIbigId { get; set; }
+        [Required]
         [RegularExpression("[0-9]{12}", ErrorMessage = "This is not a valid PhilHealth Number")]
         [Display(Name = "Philhealth Number")]
-        public string? PhilHealthId { get; set; }
+        [MaxLength(12)]
+        public string PhilHealthId { get; set; }
 
 
         //Address

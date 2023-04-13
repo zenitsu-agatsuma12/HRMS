@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRMS.Controllers
 {
-  //  [Authorize(Roles = "Human Resource")]
+    [Authorize(Roles = "Administrator")]
     public class DepartmentController : Controller
     {
         IDepartmentRepository _repo;

@@ -2,11 +2,13 @@
 using HRMS.Models;
 using HRMS.Repository;
 using HRMS.Repository.SqlRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRMS.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class DepartmentPositionController : Controller
     {
 

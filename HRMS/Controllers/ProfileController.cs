@@ -39,6 +39,7 @@ namespace HRMS.Controllers
                 Email = employee.Email,
                 Phone = employee.Phone,
                 DepartmentId = employee.DepartmentId,
+                PositionId = employee.PositionId,
                 EmployeeType = employee.EmployeeType,
                 SSSNumber = employee.SSSNumber,
                 PhilHealthId = employee.PhilHealthId,

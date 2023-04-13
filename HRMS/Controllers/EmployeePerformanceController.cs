@@ -2,6 +2,7 @@
 using HRMS.Models;
 using HRMS.Repository;
 using HRMS.Repository.SqlRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,30 +24,69 @@ namespace HRMS.Controllers
 
         public IActionResult List()
         {
-            
-            var value = _repo.ListOfEmployeePerformance(null);
-            foreach (var item in value)
+            var email = User.Identity.Name;
+            var employee = _userManager.Users.FirstOrDefault(x => x.Email == email);
+            if (User.IsInRole("Administrator"))
             {
-                var fullName = _userManager.Users.FirstOrDefault(x => x.Id == item.userID);
-                item.userID = fullName.FullName;
+                var value = _repo.ListOfEmployeePerformance(null);
+                foreach (var item in value)
+                {
+                    var fullName = _userManager.Users.FirstOrDefault(x => x.Id == item.userID);
+                    item.userID = fullName.FullName;
+                }
+                return View(value);
             }
+            
+            else if (User.IsInRole("Manager"))
+            {
+                var value = _repo.ListOfEmployeePerformanceReviewBy(employee.FullName);
 
-            return View(value);
+                if (value != null)
+                {
+                    foreach (var item in value)
+                    {
+                        var userReview = _userManager.Users.FirstOrDefault(e => e.Id == item.userID);
+                        item.userID = userReview.FullName;
+                    }
+                    return View(value);
+                }
+            }
+            return View();
         }
         public IActionResult ProfileList()
         {
             var email = User.Identity.Name;
             var employee = _userManager.Users.FirstOrDefault(x => x.Email == email);
-            var value = _repo.ListOfEmployeePerformance(employee.Id);
+            if (User.IsInRole("Employee"))
+            {
+                var value = _repo.ListOfEmployeePerformance(employee.Id);
+                foreach (var item in value)
+                {
+                    item.userID = employee.FullName;
+                }
+
+                return View(value);
+            }
+            
+            return View();
+        }
+        
+        public IActionResult ManagerReviewList()
+        {
+            var email = User.Identity.Name;
+            var manager = _userManager.Users.FirstOrDefault(x => x.Email == email);
+            var value = _repo.ListOfEmployeePerformance(null).Where(r => r.ReviewBy == manager.FullName);  
             foreach (var item in value)
             {
-                item.userID = employee.FullName; 
+                var employee = _userManager.Users.FirstOrDefault(e => e.Id == item.userID);
+                item.userID = employee.FullName;
             }
 
             return View(value);
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager")]
         public async Task<IActionResult> CreateAsync(string employeeName, string userID)
         {
 
@@ -64,6 +104,7 @@ namespace HRMS.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "Administrator, Manager")]
         public IActionResult Create(EmployeePerformance newEmployeePerformance)
         {
 
@@ -91,6 +132,27 @@ namespace HRMS.Controllers
            
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Manager")]
+        public IActionResult Update(int no)
+        {
+            var employee = _repo.GetEmployeePerformanceById(no);
+            return View(employee);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Manager")]
+        public IActionResult Update(int no,EmployeePerformance newPerformance)
+        {
+            var result = _repo.UpdateEmployeePerformance(no,newPerformance);
+            return RedirectToAction("List");
+        }
+        [Authorize(Roles = "Administrator, Manager")]
+        public IActionResult Delete(int no)
+        {
+            _repo.DeleteEmployeePerformance(no);
+            return RedirectToAction("List");
+
+        }
         public IActionResult Details(int no)
         {
             return View(_repo.GetEmployeePerformanceById(no));

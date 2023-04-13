@@ -19,6 +19,8 @@
                             <input type="password" class="form-control" asp-for="Password" placeholder="Password" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
+                        <div asp-validation-summary="All" class="text-danger" >
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary mt-3">Login</button>
 

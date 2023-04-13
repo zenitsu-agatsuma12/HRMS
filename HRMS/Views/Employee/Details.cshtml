@@ -8,8 +8,8 @@
       <h1>Employee Profile</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Users</li>
+          <li class="breadcrumb-item"><a>Home</a></li>
+          <li class="breadcrumb-item">Employee</li>
           <li class="breadcrumb-item active">Profile</li>
         </ol>
       </nav>
@@ -25,16 +25,22 @@
                 <li class="nav-item">
                   <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Employee Details</button>
                 </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
-                </li>
-                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-benefits">Manage Benefits</button>
-                </li>
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
-                </li>
+                @if(!User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                    </li>
+                     <li class="nav-item">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-benefits">Manage Benefits</button>
+                    </li>
+                }
+                else if(User.IsInRole("Employee"))
+                {
+                    <li class="nav-item">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                    </li>
+                }
+                
               </ul>
 
               <div class="tab-content pt-2">
@@ -98,12 +104,6 @@
 
                   <!-- Profile Edit Form -->
                   <form asp-controller="Employee" asp-action="Update" method="post" class="row g-3">
-
-                    <div asp-validation-summary="All" class="text-danger" >
-                        </div>
-                        <div>
-                        <input asp-for="Id" class="form-control" hidden/>
-                    </div>
                     <div class="col-md-4">
                         <label for="inputEmail5" class="form-label">First Name</label>
                         <input asp-for="FirstName" class="form-control" />
@@ -202,6 +202,11 @@
                         <label for="inputName5" class="form-label">Date Hired</label>
                         <input asp-for="DateHired" class="form-control" />
                         <span asp-validation-for="DateHired" class="text-danger"></span>
+                    </div>
+                     <div>
+                        <input asp-for="Id" class="form-control" hidden/>
+                    </div>
+                    <div asp-validation-summary="All" class="text-danger" >
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Submit</button>

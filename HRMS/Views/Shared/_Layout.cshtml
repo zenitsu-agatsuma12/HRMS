@@ -42,13 +42,6 @@
 
     <!-- Template Main CSS File -->
     <link href="~/css/style.css" rel="stylesheet">
-
-    <!-- =======================================================
-    * Template Name: NiceAdmin - v2.2.2
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
 </head>
 @if (!_signInManager.IsSignedIn(User))
 {
@@ -71,7 +64,7 @@ else if (_signInManager.IsSignedIn(User))
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">HRMS</span>
       </a>
@@ -80,11 +73,6 @@ else if (_signInManager.IsSignedIn(User))
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li><!-- End Search Icon-->
 @if (User.IsInRole("Administrator"))
     {
         //return the number of new SignIn and Register
@@ -116,8 +104,16 @@ else if (_signInManager.IsSignedIn(User))
         <li class="nav-item dropdown pe-3">
         @if (_signInManager.IsSignedIn(User))
         {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">logout @User.Identity.Name </a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @User.Identity.Name
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li>
+                        <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Change Password</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                    </li>
+                </ul>
             </li>
         }
         else
@@ -126,7 +122,7 @@ else if (_signInManager.IsSignedIn(User))
                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">login</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
             </li>
         }
           </ul><!-- End Profile Dropdown Items -->
@@ -194,11 +190,11 @@ else if (_signInManager.IsSignedIn(User))
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link collapsed" asp-area="" asp-controller="Department" asp-action="List"><i class="bi bi-people-fill"></i> Department</a>
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Employee" asp-action="DepartamentalList"><i class="bi bi-people-fill"></i> Department</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="ProfileList" ><i class="bi bi-bar-chart-fill"></i> Reviews</a>
+                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="List" ><i class="bi bi-bar-chart-fill"></i> Write Review</a>
                     </li>
 
                     <li class="nav-item">
@@ -217,9 +213,7 @@ else if (_signInManager.IsSignedIn(User))
                             </li>
                         </ul>
                     </li>
-                } @*End Of Man
-
-                ager Role*@
+                } @*End Of Manager Role*@
 
                 @*Start Of Employee Role*@
                 else if (User.IsInRole("Employee"))
@@ -229,7 +223,7 @@ else if (_signInManager.IsSignedIn(User))
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link collapsed" asp-area="" asp-controller="Department" asp-action="List"><i class="bi bi-people-fill"></i> Department</a>
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Employee" asp-action="DepartamentalList"><i class="bi bi-people-fill"></i> Department</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="ProfileList"><i class="bi bi-bar-chart-fill"></i> Reviews</a>

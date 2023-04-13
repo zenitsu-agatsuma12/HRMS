@@ -7,11 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRMS.Controllers
 {
-  //  [Authorize(Roles = "Human Resource")]
+    [Authorize(Roles = "Administrator")]
     public class RoleController : Controller
     {
         private UserManager<ApplicationUser> _userManager { get; }
-        // login user details 
         private SignInManager<ApplicationUser> _signInManager { get; }
         public RoleManager<IdentityRole> _roleManager { get; }
 
@@ -66,8 +65,8 @@ namespace HRMS.Controllers
             foreach (var role in roles)
             {
                 var users = await _userManager.GetUsersInRoleAsync(role.Name);
-
-                foreach (var user in users)
+                var userList = users.Where(u => u.ActiveStatus == true);
+                foreach (var user in userList)
                 {
                     usersWithRoles.Add(new UserRoleViewModel
                     {

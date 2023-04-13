@@ -6,12 +6,12 @@
  <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>List of Inactive / New Register </h1>
+      <h1>List of Inactive Accounts</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Tables</li>
-          <li class="breadcrumb-item active">Data</li>
+          <li class="breadcrumb-item"><a>Home</a></li>
+          <li class="breadcrumb-item">Employee</li>
+          <li class="breadcrumb-item active">List</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -57,6 +57,7 @@
                     <th scope="col">Edit</th>
                     <th scope="col">View</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Delete</th>
                     
                   </tr>
                 </thead>
@@ -86,6 +87,7 @@
                                  <td>   <a class="btn btn-primary" role="button" asp-action="Update" asp-route-accountId="@item.Id"><i class="fa fa-edit"></i> </a> </td>
                                  <td>   <a class="btn btn-primary" role="button"asp-action="Details" asp-route-accountId="@item.Id"><i class="bi bi-folder"></i></a> </td>
                                  <td>   <a class="btn btn-danger" role="button"asp-action="DeleteFormInActive" asp-route-accountId="@item.Id"><i class="bi bi-exclamation-octagon"></i></a></td>
+                                 <td>   <a class="btn btn-danger" role="button"asp-action="Delete" asp-route-accountId="@item.Id"><i class="bi bi-trash"></i></a></td>
                             </tr>
                     }
                 </tbody>
