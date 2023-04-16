@@ -1,5 +1,6 @@
 ﻿using HRMS.Data;
 using HRMSAPI.Models;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,14 @@ namespace HRMSAPI.Data
         public ILogger _logger { get; }
         public IWebHostEnvironment _env { get; }  
 
-        public HRMSDBContext(IConfiguration appConfig, ILogger<HRMSDBContext> logger, IWebHostEnvironment env)
+        public IDataProtectionProvider _dataprotectionProvider;
+
+        public HRMSDBContext(IConfiguration appConfig, ILogger<HRMSDBContext> logger, IWebHostEnvironment env, IDataProtectionProvider dataprotectionProvider)
         {
             _appConfig = appConfig;
             _logger = logger;
             _env = env;
+            _dataprotectionProvider = dataprotectionProvider;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -70,7 +74,7 @@ namespace HRMSAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.SeedDefaultData();
+            modelBuilder.SeedDefaultData(_dataprotectionProvider);
             base.OnModelCreating(modelBuilder);
         }
 

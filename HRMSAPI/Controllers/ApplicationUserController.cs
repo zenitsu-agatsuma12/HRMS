@@ -9,10 +9,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using System.ComponentModel;
 using System.IO;
 using System.Numerics;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace HRMSAPI.Controllers
 {
@@ -36,11 +39,20 @@ namespace HRMSAPI.Controllers
         }
 
         [HttpGet]
-
         public IActionResult GetAll()
         {
-            var employee = _userManager.Users.ToList();
-            return Ok(employee.ToList());
+            var employees = _userManager.Users.ToList();
+
+            var protector = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
+
+            foreach (var employee in employees)
+            {
+                employee.SSSNumber = protector.Unprotect(employee.SSSNumber);
+                employee.PagIbigId = protector.Unprotect(employee.PagIbigId);
+                employee.PhilHealthId = protector.Unprotect(employee.PhilHealthId);
+            }
+
+            return Ok(employees);
         }
 
         [HttpGet("{id}")]
@@ -51,8 +63,16 @@ namespace HRMSAPI.Controllers
             {
                 return BadRequest("No Resource Found!");
             }
+
+            var protector = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
+
+            employee.SSSNumber = protector.Unprotect(employee.SSSNumber);
+            employee.PagIbigId = protector.Unprotect(employee.PagIbigId);
+            employee.PhilHealthId = protector.Unprotect(employee.PhilHealthId);
+
             return Ok(employee);
         }
+
 
 
         // For Adding
@@ -64,7 +84,7 @@ namespace HRMSAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var protector = _dataProtectionProvider.CreateProtector("Email", "SSSNumber", "PagIbigId", "PhilHealthId", "UserName");
+                var protector = _dataProtectionProvider.CreateProtector( "SSSNumber", "PagIbigId", "PhilHealthId");
                 var emp = new ApplicationUser()
                 {
                     FirstName = appDTO.FirstName,
@@ -74,8 +94,8 @@ namespace HRMSAPI.Controllers
                     Gender = appDTO.Gender,
                     DateOfBirth = appDTO.DateOfBirth,
                     Phone = appDTO.Phone,
-                    Email = protector.Protect(appDTO.Email),
-                    UserName = protector.Protect(appDTO.Email),
+                    Email = appDTO.Email,
+                    UserName = appDTO.Email,
                     EmployeeType = appDTO.EmployeeType,
                     SSSNumber = protector.Protect(appDTO.SSSNumber),
                     PagIbigId = protector.Protect(appDTO.PagIbigId),

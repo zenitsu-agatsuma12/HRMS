@@ -1,5 +1,6 @@
 ﻿using HRMS.Models;
 using HRMS.ViewModel;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -9,7 +10,7 @@ namespace HRMS.Data
 {
     public static class SeedData
     {
-        public static void SeedDefaultData(this ModelBuilder modelBuilder)
+        public static void SeedDefaultData(this ModelBuilder modelBuilder, IDataProtectionProvider dataProtectionProvider)
         { 
 
             modelBuilder.Entity<Department>().HasData(
@@ -39,9 +40,11 @@ namespace HRMS.Data
                 );
 
             var userId= Guid.NewGuid().ToString();
-            var managerId= Guid.NewGuid().ToString();
+            // var managerId= Guid.NewGuid().ToString();
+            var protector = dataProtectionProvider.CreateProtector("Email");
+            var sssProtector = dataProtectionProvider.CreateProtector("SSSNumber");
 
-                  modelBuilder.Entity<ApplicationUser>().HasData(
+            modelBuilder.Entity<ApplicationUser>().HasData(
                  new ApplicationUser
                  {
                      Id = userId,
@@ -52,7 +55,10 @@ namespace HRMS.Data
                      DepartmentId=1,
                      Gender = "Male",
                      DateOfBirth = DateTime.Now,
-                     Email = "admin@admin.com",
+                     Email = protector.Protect("admin@admin.com"),
+                     SSSNumber = sssProtector.Protect("1111111111111"),
+                     PagIbigId = "111111111111",
+                     PhilHealthId = "111111111111",
                      NormalizedEmail = "ADMIN@ADMIN.COM",
                      EmailConfirmed = true,
                      UserName = "admin@admin.com",

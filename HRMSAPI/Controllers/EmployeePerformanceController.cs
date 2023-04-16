@@ -2,6 +2,7 @@
 using HRMSAPI.Models;
 using HRMSAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,13 @@ namespace HRMSAPI.Controllers
     public class EmployeePerformanceController : ControllerBase
     {
         IEmployeePerformanceDBRepository _repo;
+        IDataProtectionProvider _dataProtectionProvider;
         private UserManager<ApplicationUser> _userManager;
-        public EmployeePerformanceController(IEmployeePerformanceDBRepository repo , UserManager<ApplicationUser> userManager)
+        public EmployeePerformanceController(IEmployeePerformanceDBRepository repo , UserManager<ApplicationUser> userManager, IDataProtectionProvider dataProtectionProvider)
         {
             _repo = repo;
             _userManager = userManager;
+            _dataProtectionProvider = dataProtectionProvider;
         }
 
         // List of Employee Performance
@@ -60,7 +63,7 @@ namespace HRMSAPI.Controllers
                         About = addDTO.About,
                         PerformanceReview = addDTO.PerformanceReview,
                         ReviewBy = "Admin",
-                        Status = false,
+                        Status = true,
                         DateReview = addDTO.DateReview      
                     };
                     var newData = _repo.AddEmployeePerformance(addEmpPer);

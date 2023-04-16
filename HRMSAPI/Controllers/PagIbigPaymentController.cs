@@ -2,6 +2,7 @@
 using HRMSAPI.Models;
 using HRMSAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,13 @@ namespace HRMSAPI.Controllers
     {
         private UserManager<ApplicationUser> _userManager;
         IPagIbigPaymentRepository _repo;
+        IDataProtectionProvider _dataProtectionProvider;
 
-        public PagIbigPaymentController(UserManager<ApplicationUser> userManager, IPagIbigPaymentRepository repo)
+        public PagIbigPaymentController(UserManager<ApplicationUser> userManager, IPagIbigPaymentRepository repo, IDataProtectionProvider dataProtectionProvider)
         {
             _userManager = userManager;
             _repo = repo;
+            _dataProtectionProvider = dataProtectionProvider;
         }
 
         //Get All List of Payments
@@ -27,7 +30,8 @@ namespace HRMSAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_repo.ListOfPagIbigPayment());
+            var pagIbig = _repo.ListOfPagIbigPayment()
+            return Ok(pagIbig);
         }
 
         //Get Payment By Id

@@ -1,4 +1,5 @@
 ﻿using HRMS.Models;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +11,13 @@ namespace HRMS.Data
     {
         public IConfiguration _appConfig { get; }
         public ILogger _logger { get; }
+        private readonly IDataProtectionProvider _dataProtectionProvider;
 
-        public HRMSDBContext(IConfiguration appConfig, ILogger<HRMSDBContext> logger)
+        public HRMSDBContext(IConfiguration appConfig, ILogger<HRMSDBContext> logger, IDataProtectionProvider dataProtectionProvider)
         {
             _appConfig = appConfig;
             _logger = logger;
+            _dataProtectionProvider = dataProtectionProvider;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,7 +46,7 @@ namespace HRMS.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.SeedDefaultData();
+            modelBuilder.SeedDefaultData(_dataProtectionProvider);
             base.OnModelCreating(modelBuilder);
         }
       

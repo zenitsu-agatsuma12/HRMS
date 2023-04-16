@@ -460,9 +460,9 @@ namespace HRMS.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "665d8b21-f40c-4389-8a97-cfd721ec995c", "90a6bd17-f1f6-41c8-af3d-bd88eda54f65", "Administrator", "ADMINISTRATOR" },
-                    { "72502475-2c7b-4499-ac25-298def1dcf6d", "1dd1ad99-a649-489e-bb37-c4be052b7659", "Manager", "MANAGER" },
-                    { "d1c96cf4-08ac-4370-9679-b54863266f62", "fcb48312-545a-48f2-b1a2-7bb12494269d", "Employee", "EMPLOYEE" }
+                    { "381379e2-9d10-4cc8-9377-43f4f6d46739", "e110d2ed-7c12-4565-ada1-8d857e748828", "Manager", "MANAGER" },
+                    { "3d4576c5-4e44-434e-8178-d43514bff0a1", "8699e7cc-a770-4b08-acb7-92d3512eef3d", "Administrator", "ADMINISTRATOR" },
+                    { "cfeb45c6-72fb-4945-a4d9-95e61a86856f", "ea3540ee-d4e1-4c2c-9e08-08f9ed3131b7", "Employee", "EMPLOYEE" }
                 });
 
             migrationBuilder.InsertData(
@@ -487,22 +487,22 @@ namespace HRMS.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ActiveStatus", "Barangay", "City", "ConcurrencyStamp", "DateHired", "DateOfBirth", "DepartmentId", "Email", "EmailConfirmed", "EmployeeType", "FirstName", "FullName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "MiddleName", "NormalizedEmail", "NormalizedUserName", "PagIbigId", "PasswordHash", "PhilHealthId", "Phone", "PhoneNumber", "PhoneNumberConfirmed", "PositionId", "PostalCode", "SSSNumber", "SecurityStamp", "State", "Street", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "43052070-4841-4601-88ba-8465fde07b60", 0, true, "Admin", "Admin", "999f16bc-6f28-4471-b228-afbb91fde6ae", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 4, 13, 9, 53, 57, 565, DateTimeKind.Local).AddTicks(4504), 1, "admin@admin.com", true, null, "Admin", "Administrator", "Male", "Admin", false, null, "Admin", "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", null, "AQAAAAEAACcQAAAAEGtqT6b0qVKWSeX+8uZZTKpssgiiJ2CQ9a3Cpw4Fg2OBlXjU/kcwr4eZ8/9Q/Wsing==", null, "09111111111", null, false, null, 1, null, "", "Admin", "Admin", false, "admin@admin.com" });
+                values: new object[] { "68a5effc-4d91-4d07-ac3b-3be05737101d", 0, true, "Admin", "Admin", "087d2bc2-85a5-4344-9299-e00b22880690", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 4, 14, 11, 58, 12, 203, DateTimeKind.Local).AddTicks(259), 1, "CfDJ8O-sYlEO0wlMg3_WlSL3ULewnd6PatMU2QWALFb0c0DBU7Ew88wWVl74YI_nVSF_MDNBt14GGkElPZbwYZ6XTCOFFrMnjtwqlJThphuQqK02-wFa1XPxW6Jj6y5-0k9B9g", true, null, "Admin", "Administrator", "Male", "Admin", false, null, "Admin", "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "111111111111", "AQAAAAEAACcQAAAAEGTRQU90vKGSR4lkVvsxQgOyD3WD9pKes0J2y2jUXKucfBDPaaQ+aTuUqKuJleHb5g==", "111111111111", "09111111111", null, false, null, 1, "1111111111111", "", "Admin", "Admin", false, "admin@admin.com" });
 
             migrationBuilder.InsertData(
                 table: "Employees",
                 columns: new[] { "EmpId", "ActiveStatus", "Barangay", "City", "DateHired", "DateOfBirth", "DepartmentId", "Email", "EmployeeType", "FirstName", "Gender", "LastName", "MiddleName", "Password", "Phone", "PositionId", "PostalCode", "State", "Street", "UserName" },
                 values: new object[,]
                 {
-                    { 1, true, "Sabang", "Lipa City", new DateTime(2023, 4, 14, 9, 53, 57, 565, DateTimeKind.Local).AddTicks(4348), new DateTime(2023, 4, 14, 9, 53, 57, 565, DateTimeKind.Local).AddTicks(4335), 2, "alvin@gmail.com", "Regular", "Alvin", "Male", "Root", "Eleuterio", "alvin", "09952610728", 2, 4217, "Batangas", "P. Laygo St.", "alvin" },
-                    { 2, true, "Sabang", "Lipa City", new DateTime(2023, 4, 15, 9, 53, 57, 565, DateTimeKind.Local).AddTicks(4357), new DateTime(2023, 4, 14, 9, 53, 57, 565, DateTimeKind.Local).AddTicks(4355), 2, "earl@gmail.com", "Regular", "Earl Joseph", "Male", "Ferran", "Litong", "earl", "09657610728", 1, 4217, "Mindoro", "P. Laygo St.", "earl" },
-                    { 3, true, "Sabang", "Lipa City", new DateTime(2023, 4, 16, 9, 53, 57, 565, DateTimeKind.Local).AddTicks(4360), new DateTime(2023, 4, 14, 9, 53, 57, 565, DateTimeKind.Local).AddTicks(4359), 1, "cocomama@gmail.com", "Regular", "Coco", "Male", "Martin", "Mama", "coco", "09127610728", 2, 4217, "Mindoro", "P. Laygo St.", "coco" }
+                    { 1, true, "Sabang", "Lipa City", new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9955), new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9945), 2, "alvin@gmail.com", "Regular", "Alvin", "Male", "Root", "Eleuterio", "alvin", "09952610728", 2, 4217, "Batangas", "P. Laygo St.", "alvin" },
+                    { 2, true, "Sabang", "Lipa City", new DateTime(2023, 4, 16, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9967), new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9966), 2, "earl@gmail.com", "Regular", "Earl Joseph", "Male", "Ferran", "Litong", "earl", "09657610728", 1, 4217, "Mindoro", "P. Laygo St.", "earl" },
+                    { 3, true, "Sabang", "Lipa City", new DateTime(2023, 4, 17, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9970), new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9969), 1, "cocomama@gmail.com", "Regular", "Coco", "Male", "Martin", "Mama", "coco", "09127610728", 2, 4217, "Mindoro", "P. Laygo St.", "coco" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "665d8b21-f40c-4389-8a97-cfd721ec995c", "43052070-4841-4601-88ba-8465fde07b60" });
+                values: new object[] { "3d4576c5-4e44-434e-8178-d43514bff0a1", "68a5effc-4d91-4d07-ac3b-3be05737101d" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_AddressTypeId",
