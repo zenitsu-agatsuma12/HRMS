@@ -460,9 +460,9 @@ namespace HRMSAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "02710c27-e3ac-49fb-9927-e205487f7bff", "afd6c9ce-c080-47cb-91d9-b991606292a4", "Employee", "EMPLOYEE" },
-                    { "86de7f8b-8e6f-4d37-a6f3-5bd8c18346a0", "47d8d968-0adb-4721-b06b-35b3cb476fa0", "Manager", "MANAGER" },
-                    { "c33ca3a8-37cc-4372-acda-cd0c12d6ef14", "e83240dd-9178-4cb5-abe4-bcf3c0c930e4", "Administrator", "ADMINISTRATOR" }
+                    { "1d5686a6-2551-45c9-8d3d-42f1124cbae3", "2da4007b-9a15-49a0-bb9e-fef05d30abe5", "Employee", "EMPLOYEE" },
+                    { "d8a4508c-16d8-49eb-99cd-3077cb66c945", "554d53c2-4631-43e3-98ee-b5cb75f8f274", "Manager", "MANAGER" },
+                    { "e86eedc1-2d2c-4b97-a5c6-e103c22e7383", "977f32f6-1835-4f14-9a60-8f4f0a95dac2", "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -487,22 +487,22 @@ namespace HRMSAPI.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ActiveStatus", "Barangay", "City", "ConcurrencyStamp", "DateHired", "DateOfBirth", "DepartmentId", "Email", "EmailConfirmed", "EmployeeType", "FirstName", "FullName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "MiddleName", "NormalizedEmail", "NormalizedUserName", "PagIbigId", "PasswordHash", "PhilHealthId", "Phone", "PhoneNumber", "PhoneNumberConfirmed", "PositionId", "PostalCode", "SSSNumber", "SecurityStamp", "State", "Street", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "8ae86979-1015-44f8-92ba-11c8cb0f47f9", 0, true, "Admin", "Admin", "b3c68b35-a1b2-4dc0-87f1-baa50a23de2f", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 4, 16, 18, 11, 40, 609, DateTimeKind.Local).AddTicks(3515), 1, "admin@admin.com", true, null, "Admin", "Administrator", "Male", "Admin", false, null, "Admin", "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "CfDJ8BSaM12TzZVGhq8lATYqglJ1TN9KkP2XHY12XxBPTkQk0jEiWCQ_roKJVf61ybLm29QlHHNDLIroCyykuoDJei0rliMkZ5dSa-_Yp0khYzSFe5V_uY0k2PBEQi6KsdZDDA", "AQAAAAEAACcQAAAAEJmWlwwPr/EQybQKYvBShCQFCIiW6ywfd5i6PxQgz2lwU6/u3r+OSegXFavkhwLsaA==", "CfDJ8BSaM12TzZVGhq8lATYqglL4JfTNVVRVGqprUHA8rsRzoQ3W9ca8tSSXd66X_Ma5FLKcqCTxR4ccaUTnUAo0kWIzcYEvU6eZmB1yTCVCNBj7Zhm3eNIy0-nEJknjznajDg", "09111111111", null, false, null, 1, "CfDJ8BSaM12TzZVGhq8lATYqglKqXb_vfPLT6U0fhZ8wBtq1ylZF1Q-1VH4vda9b2hDvCNMmzjxyA4HRCX2mZaRTBpFlzQj-kZIhLzpK3stvRozjzBcfr4kmaEUiKtqZ0SCE9Q", "", "Admin", "Admin", false, "admin@admin.com" });
+                values: new object[] { "76f37a5e-c838-4c6a-b9e1-19569a407744", 0, true, "Admin", "Admin", "00fc1e3c-fef2-4640-a0a0-d656981bbab9", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 4, 16, 22, 32, 26, 676, DateTimeKind.Local).AddTicks(2613), 1, "admin@admin.com", true, null, "Admin", "Administrator", "Male", "Admin", false, null, "Admin", "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "CfDJ8BSaM12TzZVGhq8lATYqglJj3qoCkJQRQAyfQ4UU8t2HPbDVKFgtSKkToycZzbwIJBkRRpb5z2HroEzzemaVSG7iaWg3QoSxjrQJkEY5YBfHV1GiSFVULxi1HUKHG908_A", "AQAAAAEAACcQAAAAEGoMGjL6oO6Vxf0Doy5Olgbbwt51byC37WLWnlB/2f48QLDC/r08HgSiSsAU/rcWIw==", "CfDJ8BSaM12TzZVGhq8lATYqglKEqCtN32cUxXBV0X86ynnahwjzYEbihUpunhIajjaVSGO7QEeuhB07z_WQqhm3TNgQZ2rotnQGg1FVDnHP1lleJ2A3Z3Znl28l0kbE-j5VtA", "09111111111", null, false, null, 1, "CfDJ8BSaM12TzZVGhq8lATYqglIXqH5glWie0Oidwz-9yQ61gt-eXmQM4Kk6lmMFR04AdnBBk3Aayef9-nJZTZyEbyhY3onxzNKZ7ep9AIot8kXahTpgO8G-AuR6UbkKZ2zDHw", "", "Admin", "Admin", false, "admin@admin.com" });
 
             migrationBuilder.InsertData(
                 table: "Employees",
                 columns: new[] { "EmpId", "ActiveStatus", "Barangay", "City", "DateHired", "DateOfBirth", "DepartmentId", "Email", "EmployeeType", "FirstName", "Gender", "LastName", "MiddleName", "Password", "Phone", "PositionId", "PostalCode", "State", "Street", "UserName" },
                 values: new object[,]
                 {
-                    { 1, true, "Sabang", "Lipa City", new DateTime(2023, 4, 17, 18, 11, 40, 609, DateTimeKind.Local).AddTicks(3305), new DateTime(2023, 4, 17, 18, 11, 40, 609, DateTimeKind.Local).AddTicks(3296), 2, "alvin@gmail.com", "Regular", "Alvin", "Male", "Root", "Eleuterio", "alvin", "09952610728", 2, 4217, "Batangas", "P. Laygo St.", "alvin" },
-                    { 2, true, "Sabang", "Lipa City", new DateTime(2023, 4, 18, 18, 11, 40, 609, DateTimeKind.Local).AddTicks(3311), new DateTime(2023, 4, 17, 18, 11, 40, 609, DateTimeKind.Local).AddTicks(3311), 2, "earl@gmail.com", "Regular", "Earl Joseph", "Male", "Ferran", "Litong", "earl", "09657610728", 1, 4217, "Mindoro", "P. Laygo St.", "earl" },
-                    { 3, true, "Sabang", "Lipa City", new DateTime(2023, 4, 19, 18, 11, 40, 609, DateTimeKind.Local).AddTicks(3313), new DateTime(2023, 4, 17, 18, 11, 40, 609, DateTimeKind.Local).AddTicks(3313), 1, "cocomama@gmail.com", "Regular", "Coco", "Male", "Martin", "Mama", "coco", "09127610728", 2, 4217, "Mindoro", "P. Laygo St.", "coco" }
+                    { 1, true, "Sabang", "Lipa City", new DateTime(2023, 4, 17, 22, 32, 26, 676, DateTimeKind.Local).AddTicks(2352), new DateTime(2023, 4, 17, 22, 32, 26, 676, DateTimeKind.Local).AddTicks(2341), 2, "alvin@gmail.com", "Regular", "Alvin", "Male", "Root", "Eleuterio", "alvin", "09952610728", 2, 4217, "Batangas", "P. Laygo St.", "alvin" },
+                    { 2, true, "Sabang", "Lipa City", new DateTime(2023, 4, 18, 22, 32, 26, 676, DateTimeKind.Local).AddTicks(2360), new DateTime(2023, 4, 17, 22, 32, 26, 676, DateTimeKind.Local).AddTicks(2360), 2, "earl@gmail.com", "Regular", "Earl Joseph", "Male", "Ferran", "Litong", "earl", "09657610728", 1, 4217, "Mindoro", "P. Laygo St.", "earl" },
+                    { 3, true, "Sabang", "Lipa City", new DateTime(2023, 4, 19, 22, 32, 26, 676, DateTimeKind.Local).AddTicks(2363), new DateTime(2023, 4, 17, 22, 32, 26, 676, DateTimeKind.Local).AddTicks(2362), 1, "cocomama@gmail.com", "Regular", "Coco", "Male", "Martin", "Mama", "coco", "09127610728", 2, 4217, "Mindoro", "P. Laygo St.", "coco" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "c33ca3a8-37cc-4372-acda-cd0c12d6ef14", "8ae86979-1015-44f8-92ba-11c8cb0f47f9" });
+                values: new object[] { "e86eedc1-2d2c-4b97-a5c6-e103c22e7383", "76f37a5e-c838-4c6a-b9e1-19569a407744" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_AddressTypeId",

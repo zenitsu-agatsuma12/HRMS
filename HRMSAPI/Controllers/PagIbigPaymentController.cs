@@ -30,8 +30,14 @@ namespace HRMSAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var pagIbig = _repo.ListOfPagIbigPayment()
-            return Ok(pagIbig);
+            //Remove Comment if you want to decrypt
+            var paymentList = _repo.ListOfPagIbigPayment();
+            // var protector = _dataProtectionProvider.CreateProtector("PagIbigNumber");
+            // foreach (var payment in paymentList)
+            // {
+            //     payment.PagIbigNumber = protector.Unprotect(payment.PagIbigNumber);
+            // }
+            return Ok(paymentList);
         }
 
         //Get Payment By Id
@@ -39,7 +45,10 @@ namespace HRMSAPI.Controllers
         [HttpGet("{no}")]
         public IActionResult GetById([FromRoute] int no)
         {
+            //Remove Comment if you want to decrypt
             var paymentId = _repo.GetPagIbigPaymentById(no);
+            //var protector = _dataProtectionProvider.CreateProtector("PagIbigNumber");
+            //paymentId.PagIbigNumber = protector.Unprotect(paymentId.PagIbigNumber);
             return Ok(paymentId);
         }
 
@@ -48,7 +57,17 @@ namespace HRMSAPI.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] AddPagIbigPaymentDTO addDTO)
         {
-            var employee = _userManager.Users.FirstOrDefault(e => e.PagIbigId == addDTO.PagIbigNumber);
+            var users = _userManager.Users.ToList();
+            var protectId = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
+
+            foreach (var user in users)
+            {
+                user.SSSNumber = protectId.Unprotect(user.SSSNumber);
+                user.PagIbigId = protectId.Unprotect(user.PagIbigId);
+                user.PhilHealthId = protectId.Unprotect(user.PhilHealthId);
+            }
+            var employee = users.FirstOrDefault(e => e.PagIbigId == addDTO.PagIbigNumber);
+            var protector = _dataProtectionProvider.CreateProtector("PagIbigNumber");
             if (employee == null)
             {
                 return BadRequest("Not Existing PagIbig Number");
@@ -59,7 +78,7 @@ namespace HRMSAPI.Controllers
                 {
                     var addPayment = new PagIbigPayment()
                     {
-                        PagIbigNumber = addDTO.PagIbigNumber,
+                        PagIbigNumber = protector.Protect(addDTO.PagIbigNumber),
                         FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName,
                         Payment = addDTO.Payment,
                         Month = addDTO.Month,
@@ -83,8 +102,19 @@ namespace HRMSAPI.Controllers
             {
                 return NotFound();
             }
+            var users = _userManager.Users.ToList();
+            var protectId = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
+            var protectId2 = _dataProtectionProvider.CreateProtector("PagIbigNumber");
 
-            var employee = _userManager.Users.FirstOrDefault(e => e.PagIbigId == payment.PagIbigNumber);
+            foreach (var user in users)
+            {
+                user.SSSNumber = protectId.Unprotect(user.SSSNumber);
+                user.PagIbigId = protectId.Unprotect(user.PagIbigId);
+                user.PhilHealthId = protectId.Unprotect(user.PhilHealthId);  
+            }
+            payment.PagIbigNumber = protectId2.Unprotect(payment.PagIbigNumber);
+            var employee = users.FirstOrDefault(e => e.PagIbigId == payment.PagIbigNumber);
+            var protector2 = _dataProtectionProvider.CreateProtector("PagIbigNumber");
             if (employee == null)
             {
                 return BadRequest("Not Existing PagIbig Number");
@@ -95,7 +125,7 @@ namespace HRMSAPI.Controllers
                 if (ModelState.IsValid)
                 {
                     payment.No = no;
-                    payment.PagIbigNumber = employee.PagIbigId;
+                    payment.PagIbigNumber = protector2.Protect(employee.PagIbigId);
                     payment.FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName;
                     payment.Payment = editPagIbigPaymentDTO.Payment;
                     payment.Month = editPagIbigPaymentDTO.Month;
