@@ -57,6 +57,7 @@ namespace HRMSAPI.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] AddPagIbigPaymentDTO addDTO)
         {
+            // Decrypt Data
             var users = _userManager.Users.ToList();
             var protectId = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
 
@@ -66,6 +67,8 @@ namespace HRMSAPI.Controllers
                 user.PagIbigId = protectId.Unprotect(user.PagIbigId);
                 user.PhilHealthId = protectId.Unprotect(user.PhilHealthId);
             }
+
+            // Add and Encrypt
             var employee = users.FirstOrDefault(e => e.PagIbigId == addDTO.PagIbigNumber);
             var protector = _dataProtectionProvider.CreateProtector("PagIbigNumber");
             if (employee == null)
@@ -93,15 +96,16 @@ namespace HRMSAPI.Controllers
         }
 
         //Update Payment
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Administrator")]
         [HttpPut("{no}")]
         public async Task<IActionResult> UpdatePaymentAsync([FromBody]EditPagIbigPaymentDTO editPagIbigPaymentDTO, [FromRoute]int no)
         {
             var payment = _repo.GetPagIbigPaymentById(no);
             if (payment == null)
-            {
+            {  
                 return NotFound();
             }
+            // Decrypt the Data
             var users = _userManager.Users.ToList();
             var protectId = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
             var protectId2 = _dataProtectionProvider.CreateProtector("PagIbigNumber");
@@ -113,6 +117,8 @@ namespace HRMSAPI.Controllers
                 user.PhilHealthId = protectId.Unprotect(user.PhilHealthId);  
             }
             payment.PagIbigNumber = protectId2.Unprotect(payment.PagIbigNumber);
+
+            // Encrypt and Update
             var employee = users.FirstOrDefault(e => e.PagIbigId == payment.PagIbigNumber);
             var protector2 = _dataProtectionProvider.CreateProtector("PagIbigNumber");
             if (employee == null)
