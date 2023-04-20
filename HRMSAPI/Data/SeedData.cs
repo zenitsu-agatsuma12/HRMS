@@ -40,7 +40,6 @@ namespace HRMSAPI.Data
 
             var userId = Guid.NewGuid().ToString();
             var managerId = Guid.NewGuid().ToString();
-            var protector = dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
 
             modelBuilder.Entity<ApplicationUser>().HasData(
             new ApplicationUser
@@ -53,14 +52,14 @@ namespace HRMSAPI.Data
                 DepartmentId = 1,
                 Gender = "Male",
                 DateOfBirth = DateTime.Now,
-                Email = "admin@admin.com",
-                SSSNumber = protector.Protect("1111111111111"),
-                PagIbigId = protector.Protect("111111111111"),
-                PhilHealthId = protector.Protect("111111111111"),
-                NormalizedEmail = "ADMIN@ADMIN.COM",
+                Email = "administrator@pjli.com",
+                SSSNumber = "1111111111111",
+                PagIbigId = "111111111111",
+                PhilHealthId = "111111111111",
+                NormalizedEmail = "ADMINISTRATOR@PJLI.COM",
                 EmailConfirmed = true,
-                UserName = "admin@admin.com",
-                NormalizedUserName = "ADMIN@ADMIN.COM",
+                UserName = "administrator@pjli.com",
+                NormalizedUserName = "ADMINISTRATOR@PJLI.COM",
                 Phone = "09111111111",
                 Street = "Admin",
                 Barangay = "Admin",

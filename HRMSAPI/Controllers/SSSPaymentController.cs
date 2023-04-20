@@ -15,13 +15,11 @@ namespace HRMSAPI.Controllers
     {
         private UserManager<ApplicationUser> _userManager;
         ISSSPaymentRepository _repo;
-        IDataProtectionProvider _dataProtectionProvider;
 
-        public SSSPaymentController(UserManager<ApplicationUser> userManager, ISSSPaymentRepository repo, IDataProtectionProvider dataProtectionProvider)
+        public SSSPaymentController(UserManager<ApplicationUser> userManager, ISSSPaymentRepository repo)
         {
             _userManager = userManager;
             _repo = repo;
-            _dataProtectionProvider = dataProtectionProvider;
         }
 
         //Get All List of Payments
@@ -29,13 +27,7 @@ namespace HRMSAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            //Remove comment to Decrypt Data
             var paymentList = _repo.ListOfSSSPayment();
-            // var protector = _dataProtectionProvider.CreateProtector("SSSNumber");
-            // foreach (var payment in paymentList)
-            // {
-            //     payment.SSSNumber = protector.Unprotect(payment.SSSNumber);
-            // }
             return Ok(paymentList);
         }
 
@@ -44,31 +36,16 @@ namespace HRMSAPI.Controllers
         [HttpGet("{no}")]
         public IActionResult GetById([FromRoute] int no)
         {
-            //Remove comment to Decrypt
             var paymentId = _repo.GetSSSPaymentById(no);
-            //var protector = _dataProtectionProvider.CreateProtector("SSSNumber");
-            //paymentId.SSSNumber = protector.Unprotect(paymentId.SSSNumber);
             return Ok(paymentId);
         }
 
         //Add Payment
-        // [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public IActionResult Add([FromBody] AddSSSPaymentDTO addDTO)
         {
-            //Decrypt the Data
             var users = _userManager.Users.ToList();
-            var protectId = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
-
-            foreach (var user in users)
-            {
-                user.SSSNumber = protectId.Unprotect(user.SSSNumber);
-                user.PagIbigId = protectId.Unprotect(user.PagIbigId);
-                user.PhilHealthId = protectId.Unprotect(user.PhilHealthId);
-            }
-
-            //Add and Encrypt
-            var protector = _dataProtectionProvider.CreateProtector("SSSNumber");
             var employee = users.FirstOrDefault(e => e.SSSNumber == addDTO.SSSNumber);
             if (employee == null)
             {
@@ -80,7 +57,7 @@ namespace HRMSAPI.Controllers
                 {
                     var addPayment = new SSSPayment()
                     {
-                        SSSNumber = protector.Protect(addDTO.SSSNumber),
+                        SSSNumber = addDTO.SSSNumber,
                         FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName,
                         Payment = addDTO.Payment,
                         Month = addDTO.Month,
@@ -95,7 +72,7 @@ namespace HRMSAPI.Controllers
         }
 
         //Update Payment
-        // [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{no}")]
         public async Task<IActionResult> UpdatePaymentAsync([FromBody] EditSSSPaymentDTO editSSSPaymentDTO, [FromRoute] int no)
         {
@@ -105,22 +82,9 @@ namespace HRMSAPI.Controllers
                 return NotFound();
             }
 
-            // Decrypt the Data
             var users = _userManager.Users.ToList();
-            var protectId = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
-            var protectId2 = _dataProtectionProvider.CreateProtector("SSSNumber");
 
-            foreach (var user in users)
-            {
-                user.SSSNumber = protectId.Unprotect(user.SSSNumber);
-                user.PagIbigId = protectId.Unprotect(user.PagIbigId);
-                user.PhilHealthId = protectId.Unprotect(user.PhilHealthId);
-            }
-            payment.SSSNumber = protectId2.Unprotect(payment.SSSNumber);
-
-            //Update and Encrypt
             var employee = users.FirstOrDefault(e => e.SSSNumber == payment.SSSNumber);
-            var protector = _dataProtectionProvider.CreateProtector("SSSNumber");
             if (employee == null)
             {
                 return BadRequest("Not Existing PagIbig Number");
@@ -131,7 +95,7 @@ namespace HRMSAPI.Controllers
                 if (ModelState.IsValid)
                 {
                     payment.No = no;
-                    payment.SSSNumber = protector.Protect(employee.SSSNumber);
+                    payment.SSSNumber = employee.SSSNumber;
                     payment.FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName;
                     payment.Payment = editSSSPaymentDTO.Payment;
                     payment.Month = editSSSPaymentDTO.Month;

@@ -16,13 +16,12 @@ namespace HRMSAPI.Controllers
     public class EmployeePerformanceController : ControllerBase
     {
         IEmployeePerformanceDBRepository _repo;
-        IDataProtectionProvider _dataProtectionProvider;
         private UserManager<ApplicationUser> _userManager;
-        public EmployeePerformanceController(IEmployeePerformanceDBRepository repo , UserManager<ApplicationUser> userManager, IDataProtectionProvider dataProtectionProvider)
+        public EmployeePerformanceController(IEmployeePerformanceDBRepository repo , UserManager<ApplicationUser> userManager)
         {
             _repo = repo;
             _userManager = userManager;
-            _dataProtectionProvider = dataProtectionProvider;
+
         }
 
         // List of Employee Performance

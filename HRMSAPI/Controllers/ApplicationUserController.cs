@@ -25,36 +25,26 @@ namespace HRMSAPI.Controllers
     public class ApplicationUserController : ControllerBase
     {
         IEmployeeRepository _repo;
-        IDataProtectionProvider _dataProtectionProvider;
 
         private UserManager<ApplicationUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
 
-        public ApplicationUserController(IEmployeeRepository repo, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IDataProtectionProvider dataProtectionProvider)
+        public ApplicationUserController(IEmployeeRepository repo, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _repo = repo;
             _userManager = userManager;
             _roleManager = roleManager;
-            _dataProtectionProvider = dataProtectionProvider;
         }
 
+        // List all employees
         [HttpGet]
         public IActionResult GetAll()
         {
             var employees = _userManager.Users.ToList();
-
-            var protector = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
-
-            foreach (var employee in employees)
-            {
-                employee.SSSNumber = protector.Unprotect(employee.SSSNumber);
-                employee.PagIbigId = protector.Unprotect(employee.PagIbigId);
-                employee.PhilHealthId = protector.Unprotect(employee.PhilHealthId);
-            }
-
             return Ok(employees);
         }
 
+        //Get by Id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
@@ -63,16 +53,8 @@ namespace HRMSAPI.Controllers
             {
                 return BadRequest("No Resource Found!");
             }
-
-            var protector = _dataProtectionProvider.CreateProtector("SSSNumber", "PagIbigId", "PhilHealthId");
-
-            employee.SSSNumber = protector.Unprotect(employee.SSSNumber);
-            employee.PagIbigId = protector.Unprotect(employee.PagIbigId);
-            employee.PhilHealthId = protector.Unprotect(employee.PhilHealthId);
-
             return Ok(employee);
         }
-
 
 
         // For Adding
@@ -84,7 +66,6 @@ namespace HRMSAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var protector = _dataProtectionProvider.CreateProtector( "SSSNumber", "PagIbigId", "PhilHealthId");
                 var emp = new ApplicationUser()
                 {
                     FirstName = appDTO.FirstName,
@@ -97,9 +78,9 @@ namespace HRMSAPI.Controllers
                     Email = appDTO.Email,
                     UserName = appDTO.Email,
                     EmployeeType = appDTO.EmployeeType,
-                    SSSNumber = protector.Protect(appDTO.SSSNumber),
-                    PagIbigId = protector.Protect(appDTO.PagIbigId),
-                    PhilHealthId = protector.Protect(appDTO.PhilHealthId),
+                    SSSNumber = appDTO.SSSNumber,
+                    PagIbigId = appDTO.PagIbigId,
+                    PhilHealthId = appDTO.PhilHealthId,
                     Street = appDTO.Street,
                     Barangay = appDTO.Barangay,
                     City = appDTO.City,
