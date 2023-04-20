@@ -34,8 +34,8 @@ namespace HRMS.ViewModel
         [DisplayName("Phone Number")]
         [MaxLength(11)]
         public string Phone { get; set; }
+        public string? Email { get; set; }
 
-        public string? Email { get; set; }   
         // Foreign Key
         [DisplayName("Department")]
         public int? DepartmentId { get; set; }
@@ -49,20 +49,20 @@ namespace HRMS.ViewModel
 
         //Benefits
         [Required]
-        [RegularExpression("[0-9]{13}", ErrorMessage = "This is not a valid SSS Number")]
         [Display(Name = "SSS Number")]
-        [MaxLength(13)]
-        public string? SSSNumber { get; set; }
+        [MinLength(12)]
+        [MaxLength(12)]
+        public string SSSNumber { get; set; }
         [Required]
-        [RegularExpression("[0-9]{12}", ErrorMessage = "This is not a valid PagIbig Number")]
         [Display(Name = "PagIbig Number")]
-        [MaxLength(12)]
-        public string? PagIbigId { get; set; }
+        [MinLength(14)]
+        [MaxLength(14)]
+        public string PagIbigId { get; set; }
         [Required]
-        [RegularExpression("[0-9]{12}", ErrorMessage = "This is not a valid PhilHealth Number")]
         [Display(Name = "Philhealth Number")]
-        [MaxLength(12)]
-        public string? PhilHealthId { get; set; }
+        [MinLength(14)]
+        [MaxLength(14)]
+        public string PhilHealthId { get; set; }
 
 
         //Address
@@ -75,7 +75,10 @@ namespace HRMS.ViewModel
         [Required]
         public string State { get; set; }
         [Required]
-        public int PostalCode { get; set; }
+        [MinLength(4)]
+        [MaxLength(4)]
+        [RegularExpression("[0-9]{4}", ErrorMessage = "This is not a valid Postal Code")]
+        public string PostalCode { get; set; }
 
         //Account Status
         [Required]

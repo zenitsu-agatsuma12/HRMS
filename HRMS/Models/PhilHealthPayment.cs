@@ -9,10 +9,11 @@ namespace HRMS.Models
         public int No { get; set; }
         public string FullName { get; set; }
         public string? PhilHealthNumber { get; set; }
-
+        [Range(100, int.MaxValue, ErrorMessage = "Payment must be minimum of 100")]
         public int Payment { get; set; }
         public string Month { get; set; } = DateTime.Now.Month.ToString();
         public string Year { get; set; } = DateTime.Now.Year.ToString();
+        public bool status { get; set; }
 
         public PhilHealthPayment() { }
 

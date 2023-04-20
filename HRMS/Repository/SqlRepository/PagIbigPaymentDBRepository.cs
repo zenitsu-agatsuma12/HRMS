@@ -36,9 +36,20 @@ namespace HRMS.Repository.SqlRepository
             return _dbcontext.PagIbigPayments.AsNoTracking().ToList().FirstOrDefault(x =>x.No == No);
         }
 
-        public List<PagIbigPayment> ListOfPagIbigPayment()
+        public List<PagIbigPayment> ListOfPagIbigPayment(string searchValue)
         {
-            return _dbcontext.PagIbigPayments.ToList();
+            IQueryable<PagIbigPayment> payments = _dbcontext.PagIbigPayments;
+
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                payments = payments.Where(p => p.FullName.Contains(searchValue) ||
+                                                p.Payment.ToString().Contains(searchValue) ||
+                                                p.Month.Contains(searchValue) ||
+                                                p.Year.Contains(searchValue));
+            }
+
+            var model = payments.ToList();
+            return model;
         }
 
         public PagIbigPayment UpdatePagIbigPayment(PagIbigPayment newPagIbigPayment)

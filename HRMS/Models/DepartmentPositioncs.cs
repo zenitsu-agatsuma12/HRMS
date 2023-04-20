@@ -18,12 +18,5 @@ namespace HRMS.Models
         [ForeignKey("PositionId")]
         public Position? Position { get; set; }
 
-        public DepartmentPositioncs() { }
-        public DepartmentPositioncs(int no, int departmentId, int positionId)
-        {
-            No = no;
-            DepartmentId = departmentId;
-            PositionId = positionId;
-        }
     }
 }

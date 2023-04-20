@@ -105,6 +105,9 @@ namespace HRMS.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("DeleteStatus")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
@@ -174,8 +177,9 @@ namespace HRMS.Migrations
                     b.Property<int?>("PositionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PostalCode")
-                        .HasColumnType("int");
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SSSNumber")
                         .HasColumnType("nvarchar(max)");
@@ -217,37 +221,39 @@ namespace HRMS.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "68a5effc-4d91-4d07-ac3b-3be05737101d",
+                            Id = "917160cb-3a3d-45b0-a543-ee402fae0a94",
                             AccessFailedCount = 0,
                             ActiveStatus = true,
-                            Barangay = "Admin",
-                            City = "Admin",
-                            ConcurrencyStamp = "087d2bc2-85a5-4344-9299-e00b22880690",
-                            DateHired = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateOfBirth = new DateTime(2023, 4, 14, 11, 58, 12, 203, DateTimeKind.Local).AddTicks(259),
+                            Barangay = "Barangay",
+                            City = "City",
+                            ConcurrencyStamp = "aae86a60-83e1-44ae-9417-24bb8174c626",
+                            DateHired = new DateTime(2023, 4, 20, 18, 58, 57, 580, DateTimeKind.Local).AddTicks(9945),
+                            DateOfBirth = new DateTime(2023, 4, 20, 18, 58, 57, 580, DateTimeKind.Local).AddTicks(9923),
+                            DeleteStatus = false,
                             DepartmentId = 1,
-                            Email = "CfDJ8O-sYlEO0wlMg3_WlSL3ULewnd6PatMU2QWALFb0c0DBU7Ew88wWVl74YI_nVSF_MDNBt14GGkElPZbwYZ6XTCOFFrMnjtwqlJThphuQqK02-wFa1XPxW6Jj6y5-0k9B9g",
+                            Email = "administrator@pjli.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
                             FullName = "Administrator",
                             Gender = "Male",
-                            LastName = "Admin",
+                            LastName = "trator",
                             LockoutEnabled = false,
-                            MiddleName = "Admin",
-                            NormalizedEmail = "ADMIN@ADMIN.COM",
-                            NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PagIbigId = "111111111111",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGTRQU90vKGSR4lkVvsxQgOyD3WD9pKes0J2y2jUXKucfBDPaaQ+aTuUqKuJleHb5g==",
-                            PhilHealthId = "111111111111",
-                            Phone = "09111111111",
+                            MiddleName = "is",
+                            NormalizedEmail = "ADMINISTRATOR@PJLI.COM",
+                            NormalizedUserName = "ADMINISTRATOR@PJLI.COM",
+                            PagIbigId = "0000-0000-0000",
+                            PasswordHash = "AQAAAAEAACcQAAAAEP+0/AHXdHlkY5nQhqGzRbg+PYXJm2170M1TtJZQJstL48+1oAgsgmGjSGumLv4Zfw==",
+                            PhilHealthId = "00-000000000-0",
+                            Phone = "09236253623",
                             PhoneNumberConfirmed = false,
-                            PostalCode = 1,
-                            SSSNumber = "1111111111111",
+                            PositionId = 1,
+                            PostalCode = "1234",
+                            SSSNumber = "00-0000000-0",
                             SecurityStamp = "",
-                            State = "Admin",
-                            Street = "Admin",
+                            State = "State",
+                            Street = "Street",
                             TwoFactorEnabled = false,
-                            UserName = "admin@admin.com"
+                            UserName = "administrator@pjli.com"
                         });
                 });
 
@@ -387,77 +393,6 @@ namespace HRMS.Migrations
                     b.HasIndex("PositionId");
 
                     b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            EmpId = 1,
-                            ActiveStatus = true,
-                            Barangay = "Sabang",
-                            City = "Lipa City",
-                            DateHired = new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9955),
-                            DateOfBirth = new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9945),
-                            DepartmentId = 2,
-                            Email = "alvin@gmail.com",
-                            EmployeeType = "Regular",
-                            FirstName = "Alvin",
-                            Gender = "Male",
-                            LastName = "Root",
-                            MiddleName = "Eleuterio",
-                            Password = "alvin",
-                            Phone = "09952610728",
-                            PositionId = 2,
-                            PostalCode = 4217,
-                            State = "Batangas",
-                            Street = "P. Laygo St.",
-                            UserName = "alvin"
-                        },
-                        new
-                        {
-                            EmpId = 2,
-                            ActiveStatus = true,
-                            Barangay = "Sabang",
-                            City = "Lipa City",
-                            DateHired = new DateTime(2023, 4, 16, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9967),
-                            DateOfBirth = new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9966),
-                            DepartmentId = 2,
-                            Email = "earl@gmail.com",
-                            EmployeeType = "Regular",
-                            FirstName = "Earl Joseph",
-                            Gender = "Male",
-                            LastName = "Ferran",
-                            MiddleName = "Litong",
-                            Password = "earl",
-                            Phone = "09657610728",
-                            PositionId = 1,
-                            PostalCode = 4217,
-                            State = "Mindoro",
-                            Street = "P. Laygo St.",
-                            UserName = "earl"
-                        },
-                        new
-                        {
-                            EmpId = 3,
-                            ActiveStatus = true,
-                            Barangay = "Sabang",
-                            City = "Lipa City",
-                            DateHired = new DateTime(2023, 4, 17, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9970),
-                            DateOfBirth = new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9969),
-                            DepartmentId = 1,
-                            Email = "cocomama@gmail.com",
-                            EmployeeType = "Regular",
-                            FirstName = "Coco",
-                            Gender = "Male",
-                            LastName = "Martin",
-                            MiddleName = "Mama",
-                            Password = "coco",
-                            Phone = "09127610728",
-                            PositionId = 2,
-                            PostalCode = 4217,
-                            State = "Mindoro",
-                            Street = "P. Laygo St.",
-                            UserName = "coco"
-                        });
                 });
 
             modelBuilder.Entity("HRMS.Models.EmployeePerformance", b =>
@@ -472,8 +407,12 @@ namespace HRMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateReview")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("DateReview")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DeleteStatus")
+                        .HasColumnType("bit");
 
                     b.Property<string>("EmployeeName")
                         .IsRequired()
@@ -520,28 +459,6 @@ namespace HRMS.Migrations
                     b.ToTable("EmploymentTypes");
                 });
 
-            modelBuilder.Entity("HRMS.Models.PagIbig", b =>
-                {
-                    b.Property<string>("PagIbigId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("EmpId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StartDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.HasKey("PagIbigId");
-
-                    b.HasIndex("EmpId");
-
-                    b.ToTable("pagIbigs");
-                });
-
             modelBuilder.Entity("HRMS.Models.PagIbigPayment", b =>
                 {
                     b.Property<int>("No")
@@ -568,31 +485,12 @@ namespace HRMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("status")
+                        .HasColumnType("bit");
+
                     b.HasKey("No");
 
                     b.ToTable("PagIbigPayments");
-                });
-
-            modelBuilder.Entity("HRMS.Models.PhilHealth", b =>
-                {
-                    b.Property<string>("PhilHealthId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("EmpId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StartDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.HasKey("PhilHealthId");
-
-                    b.HasIndex("EmpId");
-
-                    b.ToTable("PhilHealths");
                 });
 
             modelBuilder.Entity("HRMS.Models.PhilHealthPayment", b =>
@@ -621,6 +519,9 @@ namespace HRMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("status")
+                        .HasColumnType("bit");
+
                     b.HasKey("No");
 
                     b.ToTable("PhilHealthPayments");
@@ -646,7 +547,7 @@ namespace HRMS.Migrations
                         new
                         {
                             PosId = 1,
-                            Name = "Administrative Assistant"
+                            Name = "Manager"
                         },
                         new
                         {
@@ -658,28 +559,6 @@ namespace HRMS.Migrations
                             PosId = 3,
                             Name = "Associate"
                         });
-                });
-
-            modelBuilder.Entity("HRMS.Models.SSS", b =>
-                {
-                    b.Property<string>("SSSNumber")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("EmpId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StartDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.HasKey("SSSNumber");
-
-                    b.HasIndex("EmpId");
-
-                    b.ToTable("SSSs");
                 });
 
             modelBuilder.Entity("HRMS.Models.SSSPayment", b =>
@@ -705,6 +584,9 @@ namespace HRMS.Migrations
 
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("bit");
 
                     b.HasKey("No");
 
@@ -740,22 +622,22 @@ namespace HRMS.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3d4576c5-4e44-434e-8178-d43514bff0a1",
-                            ConcurrencyStamp = "8699e7cc-a770-4b08-acb7-92d3512eef3d",
+                            Id = "b85745a4-5f10-4ec1-b256-af1667fe4b96",
+                            ConcurrencyStamp = "c4c0a50f-53f3-4988-a429-cd6705468cec",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "cfeb45c6-72fb-4945-a4d9-95e61a86856f",
-                            ConcurrencyStamp = "ea3540ee-d4e1-4c2c-9e08-08f9ed3131b7",
+                            Id = "b2108c42-6b69-4e0b-8dee-6d9ef7052b89",
+                            ConcurrencyStamp = "de0b3f9c-7f61-447b-8537-3bca2b8bd241",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "381379e2-9d10-4cc8-9377-43f4f6d46739",
-                            ConcurrencyStamp = "e110d2ed-7c12-4565-ada1-8d857e748828",
+                            Id = "e0aa1ed0-efa2-44b4-8943-1f79c4376dd8",
+                            ConcurrencyStamp = "8db2f4ca-c6a6-4f42-a9d3-76d3d0446fdf",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });
@@ -850,8 +732,8 @@ namespace HRMS.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "68a5effc-4d91-4d07-ac3b-3be05737101d",
-                            RoleId = "3d4576c5-4e44-434e-8178-d43514bff0a1"
+                            UserId = "917160cb-3a3d-45b0-a543-ee402fae0a94",
+                            RoleId = "b85745a4-5f10-4ec1-b256-af1667fe4b96"
                         });
                 });
 
@@ -932,33 +814,6 @@ namespace HRMS.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("Position");
-                });
-
-            modelBuilder.Entity("HRMS.Models.PagIbig", b =>
-                {
-                    b.HasOne("HRMS.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmpId");
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("HRMS.Models.PhilHealth", b =>
-                {
-                    b.HasOne("HRMS.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmpId");
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("HRMS.Models.SSS", b =>
-                {
-                    b.HasOne("HRMS.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmpId");
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

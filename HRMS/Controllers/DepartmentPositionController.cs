@@ -13,7 +13,7 @@ namespace HRMS.Controllers
     {
 
         IDepartmentPositionRepository _repo ;
-       // HRMSDBContext _dbcontext;
+
         public DepartmentPositionController(IDepartmentPositionRepository repo)
         {
             _repo = repo;
@@ -29,7 +29,7 @@ namespace HRMS.Controllers
         public IActionResult Create()
         {
             ViewBag.DepartmentId = _repo.GetDepartmentList();
-            ViewBag.PositionId = _repo.GetPosition();
+            ViewBag.PositionId = _repo.GetPositionList();
             return View();
         }
         [HttpPost]
@@ -37,15 +37,59 @@ namespace HRMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repo.AddDepartmentPositioncs(newDepartmentPositioncs);
+                var newdesignation = _repo.AddDepartmentPositioncs(newDepartmentPositioncs);
+                if(newdesignation == null)
+                {
+                    TempData["DesignationAlert"] = "This designation already exists.";
+                    return RedirectToAction("Create");
+                }
+                TempData["DesignationAlert"] = "The designation is successfully added.";
                 return RedirectToAction("List");
             }
-            ViewData["Message"] = "Data is not valid to create the DepartmentPosition";
+            TempData["DesignationAlert"] = "Data is not valid to create the DepartmentPosition";
             return View();
         }
-        public IActionResult Index()
+        
+        //Update Designation
+        [HttpGet]
+        public IActionResult Update(int No)
         {
-            return View();
+            ViewBag.DepartmentId = _repo.GetDepartmentList();
+            ViewBag.PositionId = _repo.GetPositionList();
+            DepartmentPositioncs departmentPositioncs = _repo.GetDepartmentPositionById(No);
+            return View(departmentPositioncs);
+        }
+        [HttpPost]
+        public  IActionResult Update(int No, DepartmentPositioncs departmentPositioncs)
+        {
+            ViewBag.DepartmentId = _repo.GetDepartmentList();
+            ViewBag.PositionId = _repo.GetPositionList();
+            
+            var newdesignation = _repo.UpdateDepartmentPosition(No, departmentPositioncs);
+            if (newdesignation == null)
+            {
+                TempData["DesignationAlert"] = "This Designation already exists.";
+                return RedirectToAction("List");
+            }
+            TempData["DesignationAlert"] = "The Designation is Successfully Updated!";
+            return RedirectToAction("List");
+        }
+
+        //Delete Desigantion
+        public IActionResult Delete(int No)
+        {
+            var department = _repo.GetDepartmentPositionById(No);
+            try
+            {
+                TempData["DesignationAlert"] = "The Designation is Successfully Deleted!";
+                _repo.DeleteDepartmentPosition(No);
+                return RedirectToAction("List");
+            }
+            catch
+            {
+                TempData["DesignationAlert"] = "It is not possible to delete this designation while there is an Employee assigned to it.";
+                return RedirectToAction("List");
+            }
         }
     }
 }

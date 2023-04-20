@@ -8,6 +8,7 @@ namespace HRMS.Repository
         // Add Employee
         EmployeePerformance AddEmployeePerformance(EmployeePerformance newEmployeePerformance);
         // GetAllEmployeePerformance
+        List<EmployeePerformance> SearchListOfEmployeePerformance(string employeeID, string searchValue);
         List<EmployeePerformance> ListOfEmployeePerformance(string employeeID);
         List<EmployeePerformance> ListOfEmployeePerformanceReviewBy(string employeeID);
         // GetId

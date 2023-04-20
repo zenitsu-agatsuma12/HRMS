@@ -6,9 +6,9 @@
 
 <main id="main" class="main">
     <section class="section">
-        <h1>Create</h1>
+        <h1>Edit</h1>
 
-        <h4>SSSPayment</h4>
+        <h4>SSS Payment</h4>
         <hr />
         <div class="row">
             <div class="col-md-4">
@@ -19,12 +19,12 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="FullName" class="control-label"></label>
-                        <input asp-for="FullName" class="form-control" />
+                        <input asp-for="FullName" class="form-control" readonly/>
                         <span asp-validation-for="FullName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="SSSNumber" class="control-label"></label>
-                        <input asp-for="SSSNumber" class="form-control" />
+                        <input asp-for="SSSNumber" class="form-control" readonly/>
                         <span asp-validation-for="SSSNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -42,6 +42,7 @@
                         <input asp-for="Year" class="form-control" value="@DateTime.Now.ToString("yyyy")" readonly />
                         <span asp-validation-for="Year" class="text-danger"></span>
                     </div>
+                    <br />
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />
                     </div>

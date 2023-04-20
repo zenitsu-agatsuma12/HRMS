@@ -8,7 +8,7 @@ namespace HRMS.Repository
         // Add PhilHealthPayment
         PhilHealthPayment AddPhilHealthPayment(PhilHealthPayment newPhilHealthPayment);
         // GetAllPhilHealthPayment
-        List <PhilHealthPayment> ListOfPhilHealthPayment();
+        List <PhilHealthPayment> ListOfPhilHealthPayment(string searchValue);
         // GetId
         PhilHealthPayment GetPhilHealthPaymentById(int No);
         // Update

@@ -73,19 +73,19 @@
         
                   </div>
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label">PagIbig</div>
+                    <div class="col-lg-3 col-md-4 label">Pag-Ibig</div>
                     <div class="col-lg-9 col-md-8">@Model.PagIbigId</div>
                 
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Date Of Birth</div>
-                    <div class="col-lg-9 col-md-8">@Model.DateOfBirth</div>
+                    <div class="col-lg-9 col-md-8">@Model.DateOfBirth.ToString("MM-dd-yyyy")</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Address</div>
-                    <div class="col-lg-9 col-md-8">@Model.Street @Model.Barangay @Model.City</div>
+                    <div class="col-lg-9 col-md-8">@Model.Street,  @Model.Barangay, @Model.City, @Model.State</div>
                   </div>
 
                   <div class="row">
@@ -139,19 +139,19 @@
                         <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                     </div>
                     <div class="col-md-4">
-                        <label for="inputName5" class="form-label">Department</label>
-                        <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentList"></select>
+                        <label for="DepartmentId" class="form-label">Department</label>
+                        <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentList" id="departmentId" onchange="FillPosition(this, 'positionId');" required></select>
                         <span asp-validation-for="DepartmentId" class="text-danger"></span>
                     </div>
                     <div class="col-md-4">
-                        <label for="inputName5" class="form-label">Position</label>
-                        <select asp-for="PositionId" class="form-control" asp-items="ViewBag.PositionList"></select>
+                        <label for="PositionId" class="form-label">Position</label>
+                        <select asp-for="PositionId" class="form-select" asp-items="ViewBag.PositionList" id="positionId" required></select>
                         <span asp-validation-for="PositionId" class="text-danger"></span>
                     </div>
                     <div class="col-md-4">
                         <label for="inputName5" class="form-label">Employment Type</label>
                         <select asp-for="EmployeeType" name="EmployeeType" class="form-control">
-                            <option value="" disabled>Employment Type</option>
+                            <option value="">Employment Type</option>
                             <option value="Regular">Regular</option>
                             <option value="Partime">Partime</option>
                             <option value="Job Order">Job Order</option>
@@ -169,12 +169,12 @@
                         <span asp-validation-for="PhilHealthId" class="text-danger"></span>
                     </div>
                     <div class="col-md-4">
-                        <label for="inputName5" class="form-label">PagIbig</label>
+                        <label for="inputName5" class="form-label">Pag-Ibig</label>
                         <input asp-for="PagIbigId" class="form-control" />
                         <span asp-validation-for="PagIbigId" class="text-danger"></span>
                     </div>
                     <div class="col-md-3">
-                        <label for="inputName5" class="form-label">Street</label>
+                        <label for="inputName5" class="form-label">House No. / Street</label>
                         <input asp-for="Street" class="form-control" />
                         <span asp-validation-for="Street" class="text-danger"></span>
                     </div>
@@ -184,7 +184,7 @@
                         <span asp-validation-for="Barangay" class="text-danger"></span>
                     </div>
                     <div class="col-md-4">
-                        <label for="inputName5" class="form-label">City</label>
+                        <label for="inputName5" class="form-label">Municipality / City</label>
                         <input asp-for="City" class="form-control" />
                         <span asp-validation-for="City" class="text-danger"></span>
                     </div>
@@ -220,16 +220,16 @@
                   <!-- Change Benefits Form -->
                   <form>
 
-                       <div class="col-md-3">
+                       <div class="text-center">
                         <a class="btn btn-primary form-control" role="button" asp-controller="SSSPayment" asp-action="Create" asp-route-employeeName="@Model.FullName" asp-route-sss="@Model.SSSNumber"><i class="bi bi-person-vcard-fill float-left"></i> Add SSS Payment</a>
                       </div>
                       </br>
-                        <div class="col-md-3">
+                        <div class="text-center">
                        <a class="btn btn-primary form-control" role="button" asp-controller="PhilhealthPayment" asp-action="Create" asp-route-employeeName="@Model.FullName" asp-route-philhealth="@Model.PhilHealthId"><i class="bi bi-person-vcard-fill"></i> Add Philhealth Payment</a>
                       </div>
                       </br>
-                        <div class="col-md-3">
-                        <a class="btn btn-primary form-control" role="button" asp-controller="PagIbigPayment" asp-action="Create" asp-route-employeeName="@Model.FullName" asp-route-pagibig="@Model.PagIbigId"><i class="bi bi-person-vcard-fill"></i> Add PagIbig Payment</a>
+                        <div class="text-center">
+                        <a class="btn btn-primary form-control" role="button" asp-controller="PagIbigPayment" asp-action="Create" asp-route-employeeName="@Model.FullName" asp-route-pagibig="@Model.PagIbigId"><i class="bi bi-person-vcard-fill"></i> Add Pag-Ibig Payment</a>
                       </div>
                   </form><!-- End Benefits Form -->
 
@@ -277,4 +277,5 @@
     </section>
       
 </main>
+
  

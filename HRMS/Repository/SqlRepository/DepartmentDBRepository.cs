@@ -1,5 +1,6 @@
 ﻿using HRMS.Data;
 using HRMS.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRMS.Repository.SqlRepository
@@ -60,6 +61,24 @@ namespace HRMS.Repository.SqlRepository
             _dbcontext.Departments.Update(newDepartment);
             _dbcontext.SaveChanges();
             return newDepartment;
+        }
+        public List<SelectListItem> GetDepartmentList()
+        {
+            var listDept = new List<SelectListItem>();
+            List<Department> departments = _dbcontext.Departments.ToList();
+            listDept = departments.Select(dept => new SelectListItem
+            {
+                Value = (dept.DeptId).ToString(),
+                Text = dept.DeptName
+            }).ToList();
+
+            var defItem = new SelectListItem()
+            {
+                Value = "",
+                Text = "Select Department"
+            };
+            listDept.Insert(0, defItem);
+            return listDept;
         }
     }
 }

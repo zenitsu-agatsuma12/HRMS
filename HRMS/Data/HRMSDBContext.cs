@@ -1,5 +1,4 @@
 ﻿using HRMS.Models;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,18 +10,42 @@ namespace HRMS.Data
     {
         public IConfiguration _appConfig { get; }
         public ILogger _logger { get; }
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        public IWebHostEnvironment _env { get; }
 
-        public HRMSDBContext(IConfiguration appConfig, ILogger<HRMSDBContext> logger, IDataProtectionProvider dataProtectionProvider)
+        public HRMSDBContext(IConfiguration appConfig, ILogger<HRMSDBContext> logger, IWebHostEnvironment env)
         {
             _appConfig = appConfig;
             _logger = logger;
-            _dataProtectionProvider = dataProtectionProvider;
+            _env = env;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string con = "Server = (localdb)\\MSSQLLocalDB; Database = HRMSDB; Integrated Security = true;";
-            optionsBuilder.UseSqlServer(con).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            var server = _appConfig.GetConnectionString("Server");
+            var db = _appConfig.GetConnectionString("DB");
+
+            string connectionString;
+            if (_env.IsDevelopment())
+            {
+                connectionString = $"Server={server};Database={db};MultipleActiveResultSets=true;Integrated Security=false;TrustServerCertificate=true;";
+            }
+            else
+            {
+                var userName = _appConfig.GetConnectionString("UserName");
+                var password = _appConfig.GetConnectionString("Password");
+                connectionString = $"Server={server};Database={db};User Id= {userName};Password={password};MultipleActiveResultSets=true;Integrated Security=false;TrustServerCertificate=true;";
+            }
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException("Connection string is not configured.");
+            }
+
+            optionsBuilder.UseSqlServer(connectionString, builder =>
+            {
+                builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+            })
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -30,9 +53,6 @@ namespace HRMS.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<EmployeePerformance> EmployeePerformances { get; set; }
-        public DbSet<SSS> SSSs { get; set; }
-        public DbSet<PhilHealth> PhilHealths { get; set; }
-        public DbSet<PagIbig> pagIbigs { get; set; }
         public DbSet<EmploymentType> EmploymentTypes { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<AddressType> AddressesTypes { get; set; }
@@ -46,7 +66,7 @@ namespace HRMS.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.SeedDefaultData(_dataProtectionProvider);
+            modelBuilder.SeedDefaultData();
             base.OnModelCreating(modelBuilder);
         }
       

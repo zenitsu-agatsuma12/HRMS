@@ -24,29 +24,29 @@
           <div class="card">
             <div class="card-body">
             </br>  
-            <p>
-                
-            </p>
             <form action="List">
-                <div class="row justify-content-between">
-                    <div class="col-sm-auto">
-                        <a asp-action="Create">Create New</a>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="input-group md-form align-content-sm-around form-2 pl-0">
-                            <label class="mr-2 mt-2">Filter: </label>
-                            <select id="department-filter" name="searchOption" class="form-control" asp-items="ViewBag.Departments"> </select>
-                        </div>
-                    </div>
+              <div class="row justify-content-between">
+                <div class="col-sm-auto">
+                  <a class="btn btn-primary" type="button" asp-action="Create">Create New</a>
                 </div>
+                <div class="col-sm-4">
+                  <div class="input-group md-form align-content-sm-around form-2 pl-0">
+                    <div class="col-sm-2">
+                      <label class="mr-2 mt-2">Filter:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select id="department-filter" name="searchOption" class="form-select" asp-items="ViewBag.Departments"></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </form>
-
 
               <!-- Table with stripped rows -->
               <table id="employee-table" class="table datatable">
                 <thead>
                   <tr>
-                    <th scope="col">ID</th>
+                    <th scope="col">No.</th>
                     <th scope="col">Department Name</th>
                     <th scope="col">Position Name</th>
                     <th></th>
@@ -54,21 +54,41 @@
                   </tr>
                 </thead>
                 <tbody>
+                 @{int no=0;}
                  @foreach (var item in Model) {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.No)
+                                @(++no)
                             </td>
                             <td data-department-id="@item.Department.DeptId">
                                 @Html.DisplayFor(modelItem => item.Department.DeptName)
                             </td>
-
                             <td>
                                 @Html.DisplayFor(modelItem => item.Position.Name)
                             </td>
                             <td>
-                                <a asp-action="Update" asp-route-id="@item.No">Edit</a> |
-                                <a asp-action="Delete" asp-route-id="@item.No">Delete</a>
+                                <a class="btn btn-success" type="button" asp-action="Update" asp-route-No="@item.No"><i class="bi bi-pencil-square"></i></a> 
+                                
+                                <button type="button" class="btn btn-danger" title="Delete Account" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.No" asp-route-No="@item.No">
+                                <i class="bi bi-trash"></i>
+                                </button>
+                                <div class="modal fade" id="deleteModal-@item.No" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" style="font-weight:bold;">Warning</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to Delete this Designation from record?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <a class="btn btn-danger" type="button" asp-action="Delete" asp-route-No="@item.No">Delete</a>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
                             </td>
                         </tr>
                 }
@@ -84,6 +104,21 @@
     </section>
 
   </main><!-- End #main -->
+
+@if(TempData["DesignationAlert"] != null)
+{
+<script>
+    // Show the alert
+    Swal.fire({
+        title: "Alert",
+        text: '@TempData["DesignationAlert"]',
+        icon: "",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+        position: "top",
+    });
+</script>
+}
 
 <script>
     const departmentFilter = document.getElementById('department-filter');

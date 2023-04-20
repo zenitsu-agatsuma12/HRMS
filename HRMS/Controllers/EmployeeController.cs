@@ -14,68 +14,65 @@ namespace HRMS.Controllers
     public class EmployeeController : Controller
     {
         IEmployeeRepository _repo;
+        IDepartmentPositionRepository _departmentPositionRepository;
         private UserManager<ApplicationUser> _userManager { get; }
         public RoleManager<IdentityRole> _roleManager { get; }
         private SignInManager<ApplicationUser> _signInManager { get; }
-        public EmployeeController(UserManager<ApplicationUser> userManager, IEmployeeRepository repo, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
+        public EmployeeController(UserManager<ApplicationUser> userManager, 
+                                   RoleManager<IdentityRole> roleManager, 
+                                   SignInManager<ApplicationUser> signInManager,
+                                   IEmployeeRepository repo,
+                                   IDepartmentPositionRepository departmentPositionRepository)
         {
             _userManager = userManager;
             _repo = repo;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _departmentPositionRepository = departmentPositionRepository;
         }
 
         //Get All the Employee
-
-
-
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> List(int searchOption = 0, string employeeSearch = "")
+        public async Task<IActionResult> List()
         {
-            var employees = _userManager.Users.Include(d => d.Department).Where(status => status.ActiveStatus == true).Include(p => p.Position).ToList();
-            if (searchOption > 0)
-            {
-                employees = _userManager.Users.Where(status => status.Department.DeptId == searchOption).ToList();
-            }
-
-            if (!string.IsNullOrEmpty(employeeSearch))
-            {
-
-                employees = _userManager.Users.Where(e => e.FullName.Contains(employeeSearch)).ToList();
-            }
+            var employees = _userManager.Users.Include(d => d.Department)
+                                              .Include(p => p.Position)
+                                              .ToList()
+                                              .Where(s => s.ActiveStatus == true && 
+                                              _userManager.GetRolesAsync(s).Result.Contains("Employee") || 
+                                              _userManager.GetRolesAsync(s).Result.Contains("Manager"))
+                                              .ToList();
 
             ViewBag.Departments = _repo.GetDepartmentList();
 
             return View(employees.ToList());
         }
 
+        //Return the Inactive Status
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> InactiveList(int searchOption = 0, string employeeSearch = "")
+        public async Task<IActionResult> InactiveList()
         {
-            var inaciveCount = await _userManager.Users.Where(status => status.ActiveStatus==false).CountAsync();
+            var inaciveCount = await _userManager.Users.Where(status => status.ActiveStatus==false)
+                                                       .Where(delete => delete.DeleteStatus==false)
+                                                       .CountAsync();    
+
+            var employees = _userManager.Users.Include(d => d.Department)
+                                              .Where(status => status.ActiveStatus == false)
+                                              .Where(delete => delete.DeleteStatus == false)
+                                              .Include(p => p.Position).ToList();
+
             ViewBag.NumberOfInActive = inaciveCount;
-            var employees = _userManager.Users.Include(d => d.Department).Where(status => status.ActiveStatus == false).Include(p => p.Position).ToList();
-            if (searchOption > 0)
-            {
-                employees = _userManager.Users.Where(status => status.Department.DeptId == searchOption).ToList();
-            }
-
-            if (!string.IsNullOrEmpty(employeeSearch))
-            {
-
-                employees = _userManager.Users.Where(e => e.FullName.Contains(employeeSearch)).ToList();
-            }
-
             ViewBag.Departments = _repo.GetDepartmentList();
 
             return View(employees.ToList());
         }
 
+        // Return the Deatails
         [Authorize(Roles = "Administrator, Employee, Manager")]
         public IActionResult Details(string accountId)
         {
-            ViewBag.DepartmentList = _repo.GetDepartmentList();
-            ViewBag.PositionList = _repo.GetPositionList();
+            ViewBag.DepartmentList = _departmentPositionRepository.GetDepartmentList();
+            ViewBag.PositionList = _departmentPositionRepository.GetPosition();
             var employee = _userManager.Users.Include(d => d.Department).Include(p => p.Position).FirstOrDefault(u => u.Id == accountId);
             EditEmployeeViewModel employeeViewModel = new EditEmployeeViewModel()
             {
@@ -106,14 +103,14 @@ namespace HRMS.Controllers
             return View(employeeViewModel);
         }
 
-        //Update Accout
+        //Update Account
         [Authorize(Roles = "Administrator, Employee, Manager")]
         [HttpGet]
         public async Task<IActionResult> Update(string accountId)
         {
             var employee = _userManager.Users.Include(d => d.Department).Include(p => p.Position).FirstOrDefault(u => u.Id == accountId);
-            ViewBag.DepartmentList = _repo.GetDepartmentList();
-            ViewBag.PositionList = _repo.GetPositionList();
+            ViewBag.DepartmentList = _departmentPositionRepository.GetDepartmentList();
+            ViewBag.PositionList = _departmentPositionRepository.GetPosition();
             //  var roles = await _userManager.GetRolesAsync(user);
             EditEmployeeViewModel employeeViewModel = new EditEmployeeViewModel()
             {
@@ -145,48 +142,52 @@ namespace HRMS.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(EditEmployeeViewModel employee)
         {
-
-            var oldValue = await _userManager.FindByIdAsync(employee.Id.ToString());
+            ViewBag.DepartmentList = _departmentPositionRepository.GetDepartmentList();
+            ViewBag.PositionList = _departmentPositionRepository.GetPosition();
+            if (ModelState.IsValid)
             {
-
-                oldValue.FirstName = employee.FirstName;
-                oldValue.MiddleName = employee.MiddleName;
-                oldValue.LastName = employee.LastName;
-                oldValue.FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName;
-                oldValue.Gender = employee.Gender;
-                oldValue.DateOfBirth = employee.DateOfBirth;
-                oldValue.Phone = employee.Phone;
-                oldValue.DepartmentId = employee.DepartmentId;
-                oldValue.PositionId = employee.PositionId;
-                oldValue.EmployeeType = employee.EmployeeType;
-                oldValue.SSSNumber = employee.SSSNumber;
-                oldValue.PhilHealthId = employee.PhilHealthId;
-                oldValue.PagIbigId = employee.PagIbigId;
-                oldValue.Street = employee.Street;
-                oldValue.Barangay = employee.Barangay;
-                oldValue.City = employee.City;
-                oldValue.State = employee.State;
-                oldValue.PostalCode = employee.PostalCode;
-                oldValue.DateHired = employee.DateHired;
-                //   oldValue.ActiveStatus = employee.ActiveStatus;
-            }
-
-            var result = await _userManager.UpdateAsync(oldValue);
-            if (result.Succeeded)
-            {
-                if (User.IsInRole("Administrator"))
+                var oldValue = await _userManager.FindByIdAsync(employee.Id.ToString());
                 {
-                    return RedirectToAction("List");
+                    oldValue.FirstName = employee.FirstName;
+                    oldValue.MiddleName = employee.MiddleName;
+                    oldValue.LastName = employee.LastName;
+                    oldValue.FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName;
+                    oldValue.Gender = employee.Gender;
+                    oldValue.DateOfBirth = employee.DateOfBirth;
+                    oldValue.Phone = employee.Phone;
+                    oldValue.DepartmentId = employee.DepartmentId;
+                    oldValue.PositionId = employee.PositionId;
+                    oldValue.EmployeeType = employee.EmployeeType;
+                    oldValue.SSSNumber = employee.SSSNumber;
+                    oldValue.PhilHealthId = employee.PhilHealthId;
+                    oldValue.PagIbigId = employee.PagIbigId;
+                    oldValue.Street = employee.Street;
+                    oldValue.Barangay = employee.Barangay;
+                    oldValue.City = employee.City;
+                    oldValue.State = employee.State;
+                    oldValue.PostalCode = employee.PostalCode;
+                    oldValue.DateHired = employee.DateHired;
+                    //   oldValue.ActiveStatus = employee.ActiveStatus;
                 }
-                else
+
+                var result = await _userManager.UpdateAsync(oldValue);
+                if (result.Succeeded)
                 {
-                    return RedirectToAction("Profile","Details");
+                    if (User.IsInRole("Administrator"))
+                    {
+                        TempData["EmployeeAlert"] = oldValue.FullName + " Details is Successfully Updated!";
+                        return RedirectToAction("List");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Profile", "Details");
+                    }
+
                 }
-                
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
             return View();
 
@@ -198,10 +199,15 @@ namespace HRMS.Controllers
         public async Task<IActionResult> Delete(string accountId)
         {
             var oldValue = await _userManager.FindByIdAsync(accountId);
-            var result = await _userManager.DeleteAsync(oldValue);
+            {
+                oldValue.DeleteStatus = true;
+            }
+
+            var result = await _userManager.UpdateAsync(oldValue);
             if (result.Succeeded)
             {
-                return RedirectToAction("InactiveList");
+                TempData["EmployeeAlert"] = oldValue.FullName + " is Successfully Deleted in the Record!";
+                return RedirectToAction("List");
             }
             foreach (var error in result.Errors)
             {
@@ -209,6 +215,8 @@ namespace HRMS.Controllers
             }
             return View();
         }
+
+        // Update the Active status to false
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteFromActive(string accountId)
         {
@@ -220,6 +228,7 @@ namespace HRMS.Controllers
             var result = await _userManager.UpdateAsync(oldValue);
             if (result.Succeeded)
             {
+                TempData["EmployeeAlert"] = oldValue.FullName + " Account is Now Deactivated!";
                 return RedirectToAction("List");
             }
             foreach (var error in result.Errors)
@@ -228,11 +237,14 @@ namespace HRMS.Controllers
             }
             return View();
         }
+
+        // Update the active status to false
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteFormInActive(string accountId)
         {
             var oldValue = await _userManager.FindByIdAsync(accountId);
             {
+                TempData["EmployeeAlert"] = oldValue.FullName + " Account is Now Activated!";
                 oldValue.ActiveStatus = true;
             }
 
@@ -253,14 +265,16 @@ namespace HRMS.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.DepartmentList = _repo.GetDepartmentList();
-            ViewBag.PositionList = _repo.GetPositionList();
+            ViewBag.DepartmentList = _departmentPositionRepository.GetDepartmentList();
+            ViewBag.PositionList = _departmentPositionRepository.GetPosition();
             return View();
         }
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Create(RegisterEmployeeViewModel employeeViewModel)
         {
+            ViewBag.DepartmentList = _departmentPositionRepository.GetDepartmentList();
+            ViewBag.PositionList = _departmentPositionRepository.GetPosition();
             if (ModelState.IsValid)
             {
                 var employeeModel = new ApplicationUser
@@ -275,6 +289,7 @@ namespace HRMS.Controllers
                     DateOfBirth = employeeViewModel.DateOfBirth,
                     Phone = employeeViewModel.Phone,
                     DepartmentId = employeeViewModel.DepartmentId,
+                    PositionId = employeeViewModel.PositionId,
                     EmployeeType = employeeViewModel.EmployeeType,
                     SSSNumber = employeeViewModel.SSSNumber,
                     PhilHealthId = employeeViewModel.PhilHealthId,
@@ -300,9 +315,7 @@ namespace HRMS.Controllers
                             ModelState.AddModelError(String.Empty, "employee Role cannot be assigned");
                         }
                     }
-
-                    // login the employee automatically
-                    await _signInManager.SignInAsync(employeeModel, isPersistent: false);
+                    TempData["EmployeeAlert"] = "New Account is Successfully Added!";
                     return RedirectToAction("List", "Employee");
 
                 }
@@ -318,28 +331,44 @@ namespace HRMS.Controllers
         public async Task<IActionResult> DepartamentalList()
         {
             var email = User.Identity.Name;
-            var employee = _userManager.Users.Include(d => d.Department).FirstOrDefault(e => e.Email == email);
-            var employeeList = _userManager.Users.Include(d => d.Department)
-                                                .Include(p => p.Position)
-                                                .Where(status => status.ActiveStatus == true)
-                                                .Where(e => e.DepartmentId == employee.DepartmentId)
-                                                .ToList();
             var manager = await _userManager.GetUsersInRoleAsync("Manager");
-            var managerName = manager.Where(d => d.DepartmentId == employee.DepartmentId).FirstOrDefault();
-            if(managerName == null)
+            
+
+            var employee = _userManager.Users.Include(d => d.Department)
+                                             .FirstOrDefault(e => e.Email == email);
+
+            var managerName = manager.Where(d => d.DepartmentId == employee.DepartmentId).ToList();
+
+            var employeeList = _userManager.Users.Include(d => d.Department)
+                                                 .Include(p => p.Position)
+                                                 .Where(status => status.ActiveStatus == true)
+                                                 .Where(e => e.DepartmentId == employee.DepartmentId)
+                                                 .ToList() 
+                                                 .Where(e => !_userManager.IsInRoleAsync(e, "Manager").Result)
+                                                 .Where(e => !_userManager.IsInRoleAsync(e, "Administrator").Result)
+                                                 .ToList();
+
+
+            if (User.IsInRole("Manager"))
             {
-                ViewBag.DepartmentHead = "Unassigned";
+                ViewBag.DepartmentHead = manager.Where(d => d.DepartmentId == employee.DepartmentId).Select(f => f.FullName).ToList();
             }
             else
             {
-                ViewBag.DepartmentHead = managerName.FullName;
-            }
-            ViewBag.DepartmentName = employee.Department.DeptName;
-
-            return View(employeeList.ToList());
-           
                 
-              
+                if (managerName == null)
+                {
+                    ViewBag.DepartmentHead = "Unassigned";
+                }
+                else
+                {
+                    //ViewBag.DepartmentHead = managerName.FullName;
+                    ViewBag.DepartmentHead = manager.Where(d => d.DepartmentId == employee.DepartmentId).ToList();
+                }      
+            }
+
+            ViewBag.DepartmentName = employee.Department.DeptName;
+            return View(employeeList.ToList());   
         }
 
     }

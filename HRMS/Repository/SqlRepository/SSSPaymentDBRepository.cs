@@ -37,9 +37,20 @@ namespace HRMS.Repository.SqlRepository
 
         }
 
-        public List<SSSPayment> ListOfSSSPayment()
+        public List<SSSPayment> ListOfSSSPayment(string searchValue)
         {
-            return _dbcontext.SSSPayments.ToList();
+            IQueryable<SSSPayment> payments = _dbcontext.SSSPayments;
+
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                payments = payments.Where(p => p.FullName.Contains(searchValue) ||
+                                                p.Payment.ToString().Contains(searchValue) || 
+                                                p.Month.Contains(searchValue) ||
+                                                p.Year.Contains(searchValue));
+            }
+
+            var model = payments.ToList();
+            return model;
         }
 
         public SSSPayment UpdateSSSPayment( SSSPayment newSSSPayment)

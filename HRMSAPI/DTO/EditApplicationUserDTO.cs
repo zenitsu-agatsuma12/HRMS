@@ -58,7 +58,7 @@ namespace HRMSAPI.DTO
         [Required]
         public string State { get; set; }
         [Required]
-        public int PostalCode { get; set; }
+        public string PostalCode { get; set; }
 
         //Account Status
         [Required]

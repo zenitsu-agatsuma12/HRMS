@@ -45,29 +45,31 @@ namespace HRMS.ViewModel
         public int DepartmentId { get; set; }
         
         [ForeignKey("DepartmentId")]
+        [DisplayName("Department")]
         public Department? Department { get; set; }
         [Required]
         [DisplayName("Position")]
         public int PositionId { get; set; }
         [ForeignKey("PositionId")]
+        [DisplayName("Position")]
         public Position? Position { get; set; }
         public string EmployeeType { get; set; }
 
         //Benefits
         [Required]
-        [RegularExpression("[0-9]{13}", ErrorMessage = "This is not a valid SSS Number")]
         [Display(Name = "SSS Number")]
-        [MaxLength(13)]
+        [MinLength(12)]
+        [MaxLength(12)]
         public string SSSNumber { get; set; }
         [Required]
-        [RegularExpression("[0-9]{12}", ErrorMessage = "This is not a valid PagIbig Number")]
         [Display(Name = "PagIbig Number")]
-        [MaxLength(12)]
+        [MinLength(14)]
+        [MaxLength(14)]
         public string PagIbigId { get; set; }
         [Required]
-        [RegularExpression("[0-9]{12}", ErrorMessage = "This is not a valid PhilHealth Number")]
         [Display(Name = "Philhealth Number")]
-        [MaxLength(12)]
+        [MinLength(14)]
+        [MaxLength(14)]
         public string PhilHealthId { get; set; }
 
 
@@ -81,7 +83,10 @@ namespace HRMS.ViewModel
         [Required]
         public string State { get; set; }
         [Required]
-        public int PostalCode { get; set; }
+        [MinLength(4)]
+        [MaxLength(4)]
+        [RegularExpression("[0-9]{4}", ErrorMessage = "This is not a valid Postal Code")]
+        public string PostalCode { get; set; }
 
         //Account Status
         [Required]
@@ -97,11 +102,13 @@ namespace HRMS.ViewModel
         public string Email { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         [DisplayName("Password")]
         [PasswordPropertyText]
         [MinLength(8)]
         public string Password { get; set; }
 
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Password and confirm password doesnt match")]

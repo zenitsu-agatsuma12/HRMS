@@ -34,6 +34,7 @@ namespace HRMS.Controllers
             if (ModelState.IsValid)
             {
                 var Dept = _repo.AddDepartment(newDept);
+                TempData["DepartmentAlert"] = Dept.DeptName + " Deapartment Successfully Added!";
                 return RedirectToAction("List");
             }
             ViewData["Message"] = "Data is not valid to create the Department";
@@ -50,6 +51,7 @@ namespace HRMS.Controllers
         [HttpPost]
         public IActionResult Update(int DeptId, Department Department)
         {
+            TempData["DepartmentAlert"] = " Update Successfully!";
             _repo.UpdateDepartment(DeptId, Department);
             return RedirectToAction("List");
         }
@@ -61,8 +63,20 @@ namespace HRMS.Controllers
         }
         public IActionResult Delete(int DeptId)
         {
-            _repo.DeleteDepartment(DeptId);
-            return RedirectToAction("List");
+            var department = _repo.GetDepartmentById(DeptId);
+            try
+            {
+                TempData["DepartmentAlert"] = department.DeptName + " is Successfully Deleted!";
+                _repo.DeleteDepartment(DeptId);
+                return RedirectToAction("List");
+            }
+            catch
+            {
+                
+                TempData["DepartmentAlert"] = "It is not possible to delete this department while there is an employee assigned to it.";
+                return RedirectToAction("List");
+            }
+           
         }
     }
 }

@@ -15,5 +15,6 @@ namespace HRMS.Repository
         // Delete
         Department DeleteDepartment(int DepartmentId);
         List<Department> Filter(string a);
+        List<SelectListItem> GetDepartmentList();
     }
 }

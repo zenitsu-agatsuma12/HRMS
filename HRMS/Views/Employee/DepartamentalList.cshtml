@@ -24,22 +24,20 @@
           <div class="card">
             <div class="card-body">
             </br>
-            <p style="font-size:20px;">Manager: <span style="font-weight:bold;">@ViewBag.DepartmentHead</span></p>
-            
-
-            
-            
+            @foreach (var dept in ViewBag.DepartmentHead) {
+                    <p style="font-size:20px;">Manager: <span style="font-weight:bold;">@dept</span></p>
+                }
               <!-- Table with stripped rows -->
               <table id="employee-table" class="table datatable">
                 <thead>
                   <tr>
-                    <th scope="col">No</th>
+                    <th scope="col">No.</th>
                     <th scope="col">Name</th>
                     <th scope="col">Phone</th>
                     <th scope="col">Position</th>
                  @if(User.IsInRole("Manager")){
-                    <th scope="col">Review</th>
-                    <th scope="col">View</th>
+                    <th scope="col"></th>
+                   
                  }
                     
                   </tr>
@@ -64,8 +62,10 @@
                             @Html.DisplayFor(modelItem => item.Position.Name)
                         </td>
                          @if(User.IsInRole("Manager")){
-                            <td>   <a class="btn btn-primary" role="button" asp-controller="EmployeePerformance" asp-action="Create" asp-route-userID="@item.Id" asp-route-employeeName="@item.FullName"> <i class="bi bi-chat-left-text"></i></a> </td>
-                            <td>   <a class="btn btn-primary" role="button" asp-action="Details" asp-route-accountId="@item.Id"><i class="bi bi-folder"></i></a> </td> 
+                            <td>   
+                                <a class="btn btn-primary" role="button" title="Write Reviews" asp-controller="EmployeePerformance" asp-action="Create" asp-route-userID="@item.Id" asp-route-employeeName="@item.FullName"> <i class="bi bi-chat-left-text"></i></a>
+                                <a class="btn btn-primary" role="button" title="View Details" asp-action="Details" asp-route-accountId="@item.Id"><i class="bi bi-folder"></i></a> 
+                            </td> 
                         }      
                     </tr>
                     }

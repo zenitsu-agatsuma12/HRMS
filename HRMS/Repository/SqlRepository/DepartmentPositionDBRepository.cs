@@ -15,6 +15,14 @@ namespace HRMS.Repository.SqlRepository
    
         public DepartmentPositioncs AddDepartmentPositioncs(DepartmentPositioncs newDepartmentPosition)
         {
+            var existingDepartmentPosition = _dbcontext.DepartmentPositions.FirstOrDefault(dp =>
+                            dp.DepartmentId == newDepartmentPosition.DepartmentId &&
+                            dp.PositionId == newDepartmentPosition.PositionId);
+
+            if (existingDepartmentPosition != null)
+            {
+                return null;
+            }
             _dbcontext.Add(newDepartmentPosition);
             _dbcontext.SaveChanges();
             return newDepartmentPosition;
@@ -25,7 +33,7 @@ namespace HRMS.Repository.SqlRepository
             var Emp = GetDepartmentPositionById(DepartmentPositionId);
             if (Emp != null)
             {
-                _dbcontext.DepartmentPositions.UpdateRange(Emp);
+                _dbcontext.DepartmentPositions.Remove(Emp);
                 _dbcontext.SaveChanges();
             }
             return Emp;
@@ -33,7 +41,7 @@ namespace HRMS.Repository.SqlRepository
 
         public DepartmentPositioncs GetDepartmentPositionById(int Id)
         {
-            return _dbcontext.DepartmentPositions.Include(d => d.Department).AsNoTracking().ToList().FirstOrDefault(x => x.No == Id);
+            return _dbcontext.DepartmentPositions.Include(d => d.Department).Include(p=>p.Position).AsNoTracking().ToList().FirstOrDefault(x => x.No == Id);
         }
 
         public List<DepartmentPositioncs> ListOfDepartmentPosition()
@@ -43,6 +51,14 @@ namespace HRMS.Repository.SqlRepository
 
         public DepartmentPositioncs UpdateDepartmentPosition(int DepartmentPositionId, DepartmentPositioncs newDepartmentPosition)
         {
+            var existingDepartmentPosition = _dbcontext.DepartmentPositions.FirstOrDefault(dp =>
+                            dp.DepartmentId == newDepartmentPosition.DepartmentId &&
+                            dp.PositionId == newDepartmentPosition.PositionId);
+
+            if (existingDepartmentPosition != null)
+            {
+                return null;
+            }
             _dbcontext.DepartmentPositions.Update(newDepartmentPosition);
             _dbcontext.SaveChanges();
             return newDepartmentPosition;
@@ -66,15 +82,38 @@ namespace HRMS.Repository.SqlRepository
             return listDept;
         }
 
-        public List<SelectListItem> GetPosition()
+        public List<SelectListItem> GetPositionList()
         {
             var listPosition = new List<SelectListItem>();
-            List<Position> departments = _dbcontext.Positions.ToList();
-            listPosition = departments.Select(dept => new SelectListItem
+            List<Position> positions = _dbcontext.Positions.ToList();
+            listPosition = positions.Select(pos => new SelectListItem
             {
-                Value = (dept.PosId).ToString(),
-                Text = dept.Name
+                Value = (pos.PosId).ToString(),
+                Text = pos.Name
             }).ToList();
+
+            var defItem = new SelectListItem()
+            {
+                Value = "",
+                Text = "Select Position"
+            };
+            listPosition.Insert(0, defItem);
+            return listPosition;
+        }
+
+        public List<SelectListItem> GetPosition(int deptID = 1)
+        {
+            var listPosition = new List<SelectListItem>();
+            List<DepartmentPositioncs> departmentPostion = _dbcontext.DepartmentPositions.Include(d => d.Department)
+                                                                                         .Include(p => p.Position)
+                                                                                         .ToList();
+            listPosition = departmentPostion
+                .Where(d => d.DepartmentId == deptID)
+                .Select(pos => new SelectListItem
+                {
+                    Value = (pos.Position.PosId).ToString(),
+                    Text = pos.Position.Name
+                }).ToList();
 
             var defItem = new SelectListItem()
             {

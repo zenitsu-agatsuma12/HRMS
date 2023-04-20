@@ -73,7 +73,7 @@ namespace HRMSAPI.Models
         [Required]
         public string State { get; set; }
         [Required]
-        public int PostalCode { get; set; }
+        public string PostalCode { get; set; }
 
         //Account Status
         [Required]
@@ -87,7 +87,7 @@ namespace HRMSAPI.Models
         {
         }
 
-        public ApplicationUser(string firstName, string middleName, string lastName, string? fullName, string gender, DateTime dateOfBirth, string phone, string email, int? departmentId, Department? department, int? positionId, Position? position, string? employeeType, string? sSSNumber, string? pagIbigId, string? philHealthId, string street, string barangay, string city, string state, int postalCode, DateTime dateHired, bool activeStatus)
+        public ApplicationUser(string firstName, string middleName, string lastName, string? fullName, string gender, DateTime dateOfBirth, string phone, string email, int? departmentId, Department? department, int? positionId, Position? position, string? employeeType, string? sSSNumber, string? pagIbigId, string? philHealthId, string street, string barangay, string city, string state, string postalCode, DateTime dateHired, bool activeStatus)
         {
             FirstName = firstName;
             MiddleName = middleName;

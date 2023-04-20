@@ -7,7 +7,7 @@
     <section class="section">
         <h1>Edit</h1>
 
-        <h4>Philhealth Payment</h4>
+        <h4>PhilHealth Payment</h4>
         <hr />
         <div class="row">
             <div class="col-md-4">
@@ -19,12 +19,12 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="FullName" class="control-label"></label>
-                        <input asp-for="FullName" class="form-control" />
+                        <input asp-for="FullName" class="form-control" readonly/>
                         <span asp-validation-for="FullName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="PhilHealthNumber" class="control-label"></label>
-                        <input asp-for="PhilHealthNumber" class="form-control" />
+                        <input asp-for="PhilHealthNumber" class="form-control" readonly/>
                         <span asp-validation-for="PhilHealthNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -34,14 +34,15 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Month" class="control-label"></label>
-                        <input asp-for="Month" class="form-control" />
+                        <input asp-for="Month" class="form-control" readonly/>
                         <span asp-validation-for="Month" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Year" class="control-label"></label>
-                        <input asp-for="Year" class="form-control" />
+                        <input asp-for="Year" class="form-control" readonly/>
                         <span asp-validation-for="Year" class="text-danger"></span>
                     </div>
+                    <br />
                     <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>

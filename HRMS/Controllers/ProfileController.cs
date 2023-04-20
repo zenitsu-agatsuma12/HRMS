@@ -20,12 +20,18 @@ namespace HRMS.Controllers
             _roleManager = roleManager;
             _signInManager = signInManager;
         }
-        public IActionResult Details()
+        public async Task<IActionResult> DetailsAsync()
         {
             ViewBag.DepartmentList = _repo.GetDepartmentList();
             ViewBag.PositionList = _repo.GetPositionList();
+            
             var email = User.Identity.Name;
             var employee = _userManager.Users.Include(d => d.Department).Include(p => p.Position).FirstOrDefault(e => e.Email == email);
+            var roles = await _userManager.GetRolesAsync(employee);
+
+            // assuming the employee has only one role
+            ViewBag.UserRole = roles.FirstOrDefault();
+
             EditEmployeeViewModel employeeViewModel = new EditEmployeeViewModel()
             {
                 Id = employee.Id,
@@ -92,40 +98,43 @@ namespace HRMS.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(EditEmployeeViewModel employee)
         {
-
-            var oldValue = await _userManager.FindByIdAsync(employee.Id.ToString());
+            ViewBag.DepartmentList = _repo.GetDepartmentList();
+            ViewBag.PositionList = _repo.GetPositionList();
+            if (ModelState.IsValid)
             {
+                var oldValue = await _userManager.FindByIdAsync(employee.Id.ToString());
+                {
+                    oldValue.FirstName = employee.FirstName;
+                    oldValue.MiddleName = employee.MiddleName;
+                    oldValue.LastName = employee.LastName;
+                    oldValue.FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName;
+                    oldValue.Gender = employee.Gender;
+                    oldValue.DateOfBirth = employee.DateOfBirth;
+                    oldValue.Phone = employee.Phone;
+                    oldValue.DepartmentId = employee.DepartmentId;
+                    oldValue.PositionId = employee.PositionId;
+                    oldValue.EmployeeType = employee.EmployeeType;
+                    oldValue.SSSNumber = employee.SSSNumber;
+                    oldValue.PhilHealthId = employee.PhilHealthId;
+                    oldValue.PagIbigId = employee.PagIbigId;
+                    oldValue.Street = employee.Street;
+                    oldValue.Barangay = employee.Barangay;
+                    oldValue.City = employee.City;
+                    oldValue.State = employee.State;
+                    oldValue.PostalCode = employee.PostalCode;
+                    oldValue.DateHired = employee.DateHired;
+                    //   oldValue.ActiveStatus = employee.ActiveStatus;
+                }
 
-                oldValue.FirstName = employee.FirstName;
-                oldValue.MiddleName = employee.MiddleName;
-                oldValue.LastName = employee.LastName;
-                oldValue.FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName;
-                oldValue.Gender = employee.Gender;
-                oldValue.DateOfBirth = employee.DateOfBirth;
-                oldValue.Phone = employee.Phone;
-                oldValue.DepartmentId = employee.DepartmentId;
-                oldValue.PositionId = employee.PositionId;
-                oldValue.EmployeeType = employee.EmployeeType;
-                oldValue.SSSNumber = employee.SSSNumber;
-                oldValue.PhilHealthId = employee.PhilHealthId;
-                oldValue.PagIbigId = employee.PagIbigId;
-                oldValue.Street = employee.Street;
-                oldValue.Barangay = employee.Barangay;
-                oldValue.City = employee.City;
-                oldValue.State = employee.State;
-                oldValue.PostalCode = employee.PostalCode;
-                oldValue.DateHired = employee.DateHired;
-                //   oldValue.ActiveStatus = employee.ActiveStatus;
-            }
-
-            var result = await _userManager.UpdateAsync(oldValue);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Details");
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
+                var result = await _userManager.UpdateAsync(oldValue);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Details");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
             return View();
 

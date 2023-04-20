@@ -1,4 +1,4 @@
-﻿@model RegisterEmployeeViewModel
+﻿@model EditEmployeeViewModel
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,12 +10,16 @@
     <section class="section">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Register Form</h5>
+              <h5 class="card-title">Update Form</h5>
 
               <!-- Multi Columns Form -->
               
-              <form asp-controller="Account" asp-action="Register" method="post" class="row g-3">
-                  
+              <form asp-controller="Profile" asp-action="Update" method="post" class="row g-3">
+                  <div asp-validation-summary="All" class="text-danger" >
+                  </div>
+                  <div>
+                    <input asp-for="Id" class="form-control" hidden/>
+                </div>
                 <div class="col-md-4">
                   <label for="inputEmail5" class="form-label">First Name</label>
                   <input asp-for="FirstName" class="form-control" />
@@ -32,14 +36,13 @@
                   <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
                 <div class="col-md-2">
-                  <label for="inputPassword5" class="form-label">Gender</label>
-                  <select  asp-for="Gender" name="Gender" class="form-select">
+                  <label for="inputName5" class="form-label">Gender</label>
+                  <select asp-for="Gender" name="Gender" class="form-select">
                         <option value="">Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Others">Others</option>
                     </select>
-                    <span asp-validation-for="Gender" class="text-danger"></span>
                 </div>
                 <div class="col-md-5">
                   <label for="inputName5" class="form-label">Phone</label>
@@ -48,29 +51,28 @@
                 </div>
                 <div class="col-md-5">
                   <label for="inputName5" class="form-label">Date Of Birth</label>
-                  <input asp-for="DateOfBirth" class="form-control" type="date"/>
+                  <input asp-for="DateOfBirth" class="form-control" />
                   <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
-                    <label for="DepartmentId" class="form-label">Department</label>
-                    <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentList" id="departmentId" onchange="FillPosition(this, 'positionId');"></select>
-                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                  <label for="inputName5" class="form-label">Department</label>
+                  <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentList"></select>
+                  <span asp-validation-for="DepartmentId" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
-                    <label for="PositionId" class="form-label">Position</label>
-                    <select asp-for="PositionId" class="form-select" asp-items="ViewBag.PositionList" id="positionId"></select>
-                    <span asp-validation-for="PositionId" class="text-danger"></span>
+                  <label for="inputName5" class="form-label">Position</label>
+                  <select asp-for="PositionId" class="form-select" asp-items="ViewBag.PositionList"></select>
+                  <span asp-validation-for="PositionId" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                   <label for="inputName5" class="form-label">Employment Type</label>
-                    <select  asp-for="EmployeeType" name="EmployeeType" class="form-select">
-                        <option value="">Employment Type</option>
+                    <select asp-for="EmployeeType" name="EmployeeType" class="form-select">
+                        <option value="" disabled>Employment Type</option>
                         <option value="Regular">Regular</option>
                         <option value="Partime">Partime</option>
                         <option value="Job Order">Job Order</option>
                         <option value="Contract Of Service">Contract Of Service</option>
                     </select>
-                     <span asp-validation-for="EmployeeType" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                   <label for="inputName5" class="form-label">SSS</label>
@@ -79,7 +81,7 @@
                 </div>
                 <div class="col-md-4">
                   <label for="inputName5" class="form-label">Philhealth</label>
-                  <input asp-for="PhilHealthId" type="text" class="form-control" id="PhilHealthId" name="PhilHealthId" pattern="\d{2}-\d{9}-\d{1}" placeholder="XX-XXXXXXXXX-X">
+                 <input asp-for="PhilHealthId" type="text" class="form-control" id="PhilHealthId" name="PhilHealthId" pattern="\d{2}-\d{9}-\d{1}" placeholder="XX-XXXXXXXXX-X">
                   <span asp-validation-for="PhilHealthId" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
@@ -88,7 +90,7 @@
                   <span asp-validation-for="PagIbigId" class="text-danger"></span>
                 </div>
                 <div class="col-md-3">
-                  <label for="inputName5" class="form-label">House No. / Street</label>
+                  <label for="inputName5" class="form-label">Street</label>
                   <input asp-for="Street" class="form-control" />
                   <span asp-validation-for="Street" class="text-danger"></span>
                 </div>
@@ -98,7 +100,7 @@
                   <span asp-validation-for="Barangay" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
-                  <label for="inputName5" class="form-label">Municipality / City</label>
+                  <label for="inputName5" class="form-label">City</label>
                   <input asp-for="City" class="form-control" />
                   <span asp-validation-for="City" class="text-danger"></span>
                 </div>
@@ -117,25 +119,7 @@
                   <input asp-for="DateHired" class="form-control" />
                   <span asp-validation-for="DateHired" class="text-danger"></span>
                 </div>
-                 <div class="col-md-4">
-                  <label for="inputName5" class="form-label">Email</label>
-                   <input asp-for="Email" class="form-control"/>
-                   <span asp-validation-for="Email" class="text-danger"></span>
-                   
-                </div>
-                <div class="col-md-4">
-                  <label for="inputName5" class="form-label">Password</label>
-                   <input asp-for="Password" class="form-control"/>
-                   <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="col-md-4">
-                  <label for="inputName5" class="form-label">Confirm Password</label>
-                   <input asp-for="ConfirmPassword" class="form-control"/>
-                   <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                </div>
-                
                 <div class="text-center">
-                  <div asp-validation-summary="ModelOnly" class="text-danger" ></div>
                   <button type="submit" class="btn btn-primary">Submit</button>
                   <button type="reset" class="btn btn-secondary">Reset</button>
                 </div>
@@ -145,3 +129,28 @@
           </div>
     </section>
 </main>
+
+
+<script>
+    const sssNumberInput = document.getElementById('SSSNumber');
+    sssNumberInput.addEventListener('input', function(e) {
+        const input = e.target.value;
+        const formattedInput = input.replace(/\D/g, '').replace(/(\d{2})(\d{7})(\d{1})/, '$1-$2-$3');
+        e.target.value = formattedInput;
+    });
+
+    const philHealthIdInput = document.getElementById('PhilHealthId');
+    philHealthIdInput.addEventListener('input', function(e) {
+        const input = e.target.value;
+        const formattedInput = input.replace(/\D/g, '').replace(/(\d{2})(\d{9})(\d{1})/, '$1-$2-$3');
+        e.target.value = formattedInput;
+    });
+
+     const pagIbigIdInput = document.getElementById('PagIbigId');
+    pagIbigIdInput.addEventListener('input', function(e) {
+        const input = e.target.value;
+        const formattedInput = input.replace(/\D/g, '').replace(/(\d{4})(\d{4})(\d{4})/, '$1-$2-$3');
+        e.target.value = formattedInput;
+    });
+
+</script>

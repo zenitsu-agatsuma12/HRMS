@@ -16,9 +16,7 @@
 
     <meta content="" name="description">
     <meta content="" name="keywords">
-    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HRMS.styles.css" asp-append-version="true" />*@
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
@@ -42,6 +40,13 @@
 
     <!-- Template Main CSS File -->
     <link href="~/css/style.css" rel="stylesheet">
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+
+    <!-- SweetAlert2 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
 </head>
 @if (!_signInManager.IsSignedIn(User))
 {
@@ -76,7 +81,7 @@ else if (_signInManager.IsSignedIn(User))
 @if (User.IsInRole("Administrator"))
     {
         //return the number of new SignIn and Register
-        var inaciveCount = await _userManager.Users.Where(status => status.ActiveStatus == false).CountAsync();
+        var inaciveCount = await _userManager.Users.Where(status => status.ActiveStatus == false).Where(delete => delete.DeleteStatus==false).CountAsync();
         ViewBag.NumberOfInActive = inaciveCount;
         if(ViewBag.NumberOfInActive!=0){
              <li class="nav-item dropdown">
@@ -86,21 +91,24 @@ else if (_signInManager.IsSignedIn(User))
                 </a>
              </li>
           }
-
-
+     }
+else if(!User.IsInRole("Administrator") && _signInManager.IsSignedIn(User))
+    {
         //return the number Of Message
-
-        var countMessage = _repo.ListOfEmployeePerformance(null).Where(e => e.Status == true).Count();
+        var email = User.Identity.Name;
+        var employee = _userManager.Users.FirstOrDefault(x => x.Email == email);
+        var countMessage = _repo.ListOfEmployeePerformance(null).Where(e => e.Status == true).Where(u => u.userID == employee.Id).Count();
         ViewBag.countMessage=countMessage;
         if(ViewBag.countMessage!=0){
             <li class="nav-item dropdown">
-                <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="List">
+                <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="ProfileList">
                 <i class="bi bi-chat-left-text"></i>
                 <span class="badge bg-success badge-number">@ViewBag.countMessage</span>
               </a>
             </li>
         }
     }
+    
         <li class="nav-item dropdown pe-3">
         @if (_signInManager.IsSignedIn(User))
         {
@@ -110,7 +118,8 @@ else if (_signInManager.IsSignedIn(User))
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li>
-                        <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Change Password</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Details">Profile</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
                         <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                     </li>
                 </ul>
@@ -137,7 +146,8 @@ else if (_signInManager.IsSignedIn(User))
   <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
-         @if (_signInManager.IsSignedIn(User))
+         @{var account = _userManager.Users.FirstOrDefault(e => e.Email == User.Identity.Name);}
+         @if (_signInManager.IsSignedIn(User) && account.ActiveStatus==true)
             {
                 @if (User.IsInRole("Administrator"))
                 {
@@ -146,7 +156,7 @@ else if (_signInManager.IsSignedIn(User))
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link collapsed" asp-area="" asp-controller="Employee" asp-action="List"><i class="bi bi-people-fill"></i> Employees</a>
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Employee" asp-action="List"><i class="bi bi-people-fill"></i> Employee</a>
                     </li>
 
                     <li class="nav-item">
@@ -164,7 +174,7 @@ else if (_signInManager.IsSignedIn(User))
                         <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="List"><i class="bi bi-bar-chart-fill"></i> Performance</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link collapsed" asp-area="" asp-controller="Role" asp-action="List"><i class="bi bi-gem"></i> Roles</a>
+                        <a class="nav-link collapsed" asp-area="" asp-controller="Role" asp-action="List"><i class="bi bi-gem"></i> Account and Role</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
@@ -178,7 +188,7 @@ else if (_signInManager.IsSignedIn(User))
                                 <a class="nav-link collapsed" asp-area="" asp-controller="PhilHealthPayment" asp-action="List">PhilHealth Payment</a>
                             </li>
                             <li>
-                                <a class="nav-link collapsed" asp-area="" asp-controller="PagIbigPayment" asp-action="List">PagIbig Payment</a>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="PagIbigPayment" asp-action="List">Pag-Ibig Payment</a>
                             </li>
                         </ul>
                     </li>
@@ -194,7 +204,11 @@ else if (_signInManager.IsSignedIn(User))
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="List" ><i class="bi bi-bar-chart-fill"></i> Write Review</a>
+                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="ProfileList" ><i class="bi bi-bar-chart-fill"></i> Performance Reviews</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="List" ><i class="bi bi-clipboard-data-fill"></i> Written Reviews</a>
                     </li>
 
                     <li class="nav-item">
@@ -209,7 +223,7 @@ else if (_signInManager.IsSignedIn(User))
                                 <a class="nav-link collapsed" asp-area="" asp-controller="PhilHealthPayment" asp-action="List">PhilHealth Payment</a>
                             </li>
                             <li>
-                                <a class="nav-link collapsed" asp-area="" asp-controller="PagIbigPayment" asp-action="List">PagIbig Payment</a>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="PagIbigPayment" asp-action="List">Pag-Ibig Payment</a>
                             </li>
                         </ul>
                     </li>
@@ -221,12 +235,8 @@ else if (_signInManager.IsSignedIn(User))
                     <li class="nav-item">
                         <a class="nav-link collapsed" asp-area="" asp-controller="Profile" asp-action="Details"><i class="bi bi-person-circle"></i> Profile</a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link collapsed" asp-area="" asp-controller="Employee" asp-action="DepartamentalList"><i class="bi bi-people-fill"></i> Department</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="ProfileList"><i class="bi bi-bar-chart-fill"></i> Reviews</a>
+                        <a class="nav-link collapsed" asp-area="" asp-controller="EmployeePerformance" asp-action="ProfileList"><i class="bi bi-bar-chart-fill"></i> Performance Reviews</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
@@ -240,7 +250,7 @@ else if (_signInManager.IsSignedIn(User))
                                 <a class="nav-link collapsed" asp-area="" asp-controller="PhilHealthPayment" asp-action="List">PhilHealth Payment</a>
                             </li>
                             <li>
-                                <a class="nav-link collapsed" asp-area="" asp-controller="PagIbigPayment" asp-action="List">PagIbig Payment</a>
+                                <a class="nav-link collapsed" asp-area="" asp-controller="PagIbigPayment" asp-action="List">Pag-Ibig Payment</a>
                             </li>
                         </ul>
                     </li>

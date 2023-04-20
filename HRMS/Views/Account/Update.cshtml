@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-md-2">
                   <label for="inputPassword5" class="form-label">Gender</label>
-                  <select name="Gender" class="form-control">
+                  <select name="Gender" class="form-select">
                         <option value="">Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
@@ -56,17 +56,17 @@
                 </div>
                 <div class="col-md-4">
                   <label for="inputName5" class="form-label">Department</label>
-                  <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentList"></select>
+                  <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentList"></select>
                   <span asp-validation-for="DepartmentId" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                   <label for="inputName5" class="form-label">Position</label>
-                  <select asp-for="PositionId" class="form-control" asp-items="ViewBag.PositionList"></select>
+                  <select asp-for="PositionId" class="form-select" asp-items="ViewBag.PositionList"></select>
                   <span asp-validation-for="PositionId" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                   <label for="inputName5" class="form-label">Employment Type</label>
-                    <select name="EmployeeType" class="form-control">
+                    <select name="EmployeeType" class="form-select">
                         <option value="" disabled>Employment Type</option>
                         <option value="Regular">Regular</option>
                         <option value="Partime">Partime</option>
@@ -76,21 +76,21 @@
                 </div>
                 <div class="col-md-4">
                   <label for="inputName5" class="form-label">SSS</label>
-                  <input asp-for="SSSNumber" class="form-control" />
-                  <span asp-validation-for="PhilHealthId" class="text-danger"></span>
+                  <input asp-for="SSSNumber" type="text" class="form-control" id="SSSNumber" name="SSSNumber" pattern="\d{2}-\d{7}-\d{1}" placeholder="XX-XXXXXXX-X">
+                  <span asp-validation-for="SSSNumber" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                   <label for="inputName5" class="form-label">Philhealth</label>
-                  <input asp-for="PhilHealthId" class="form-control" />
+                  <input asp-for="PhilHealthId" type="text" class="form-control" id="PhilHealthId" name="PhilHealthId" pattern="\d{2}-\d{9}-\d{1}" placeholder="XX-XXXXXXXXX-X">
                   <span asp-validation-for="PhilHealthId" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                   <label for="inputName5" class="form-label">PagIbig</label>
-                  <input asp-for="PagIbigId" class="form-control" />
+                  <input asp-for="PagIbigId" type="text" class="form-control" id="PagIbigId" name="PagIbigId" pattern="\d{4}-\d{4}-\d{4}" placeholder="XXXX-XXXX-XXXX">
                   <span asp-validation-for="PagIbigId" class="text-danger"></span>
                 </div>
                 <div class="col-md-3">
-                  <label for="inputName5" class="form-label">Street</label>
+                  <label for="inputName5" class="form-label">House No. / Street</label>
                   <input asp-for="Street" class="form-control" />
                   <span asp-validation-for="Street" class="text-danger"></span>
                 </div>
@@ -100,7 +100,7 @@
                   <span asp-validation-for="Barangay" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
-                  <label for="inputName5" class="form-label">City</label>
+                  <label for="inputName5" class="form-label">Municipality / City</label>
                   <input asp-for="City" class="form-control" />
                   <span asp-validation-for="City" class="text-danger"></span>
                 </div>
@@ -131,3 +131,27 @@
           </div>
     </section>
 </main>
+
+
+<script>
+    const sssNumberInput = document.getElementById('SSSNumber');
+    sssNumberInput.addEventListener('input', function(e) {
+        const input = e.target.value;
+        const formattedInput = input.replace(/\D/g, '').replace(/(\d{2})(\d{7})(\d{1})/, '$1-$2-$3');
+        e.target.value = formattedInput;
+    });
+
+    const philHealthIdInput = document.getElementById('PhilHealthId');
+    philHealthIdInput.addEventListener('input', function(e) {
+        const input = e.target.value;
+        const formattedInput = input.replace(/\D/g, '').replace(/(\d{2})(\d{9})(\d{1})/, '$1-$2-$3');
+        e.target.value = formattedInput;
+    });
+
+     const pagIbigIdInput = document.getElementById('PagIbigId');
+    pagIbigIdInput.addEventListener('input', function(e) {
+        const input = e.target.value;
+        const formattedInput = input.replace(/\D/g, '').replace(/(\d{4})(\d{4})(\d{4})/, '$1-$2-$3');
+        e.target.value = formattedInput;
+    });
+</script>

@@ -7,7 +7,7 @@ namespace HRMS.Repository
         // Add PagIbigPayment
         PagIbigPayment AddPagIbigPayment(PagIbigPayment newPagIbigPayment);
         // GetAllPagIbigPayment
-        List<PagIbigPayment> ListOfPagIbigPayment();
+        List<PagIbigPayment> ListOfPagIbigPayment(string searchValue);
         // GetId
         PagIbigPayment GetPagIbigPaymentById(int No);
         // Update

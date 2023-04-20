@@ -61,7 +61,8 @@ namespace HRMS.Migrations
                     PerformanceReview = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReviewBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    DateReview = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DateReview = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeleteStatus = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,7 +93,8 @@ namespace HRMS.Migrations
                     PagIbigNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Payment = table.Column<int>(type: "int", nullable: false),
                     Month = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Year = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Year = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,7 +111,8 @@ namespace HRMS.Migrations
                     PhilHealthNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Payment = table.Column<int>(type: "int", nullable: false),
                     Month = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Year = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Year = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -139,7 +142,8 @@ namespace HRMS.Migrations
                     SSSNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Payment = table.Column<int>(type: "int", nullable: false),
                     Month = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Year = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Year = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -214,9 +218,10 @@ namespace HRMS.Migrations
                     Barangay = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<int>(type: "int", nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateHired = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ActiveStatus = table.Column<bool>(type: "bit", nullable: false),
+                    DeleteStatus = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -398,71 +403,14 @@ namespace HRMS.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "pagIbigs",
-                columns: table => new
-                {
-                    PagIbigId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EmpId = table.Column<int>(type: "int", nullable: true),
-                    StartDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_pagIbigs", x => x.PagIbigId);
-                    table.ForeignKey(
-                        name: "FK_pagIbigs_Employees_EmpId",
-                        column: x => x.EmpId,
-                        principalTable: "Employees",
-                        principalColumn: "EmpId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PhilHealths",
-                columns: table => new
-                {
-                    PhilHealthId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EmpId = table.Column<int>(type: "int", nullable: true),
-                    StartDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PhilHealths", x => x.PhilHealthId);
-                    table.ForeignKey(
-                        name: "FK_PhilHealths_Employees_EmpId",
-                        column: x => x.EmpId,
-                        principalTable: "Employees",
-                        principalColumn: "EmpId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SSSs",
-                columns: table => new
-                {
-                    SSSNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EmpId = table.Column<int>(type: "int", nullable: true),
-                    StartDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SSSs", x => x.SSSNumber);
-                    table.ForeignKey(
-                        name: "FK_SSSs_Employees_EmpId",
-                        column: x => x.EmpId,
-                        principalTable: "Employees",
-                        principalColumn: "EmpId");
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "381379e2-9d10-4cc8-9377-43f4f6d46739", "e110d2ed-7c12-4565-ada1-8d857e748828", "Manager", "MANAGER" },
-                    { "3d4576c5-4e44-434e-8178-d43514bff0a1", "8699e7cc-a770-4b08-acb7-92d3512eef3d", "Administrator", "ADMINISTRATOR" },
-                    { "cfeb45c6-72fb-4945-a4d9-95e61a86856f", "ea3540ee-d4e1-4c2c-9e08-08f9ed3131b7", "Employee", "EMPLOYEE" }
+                    { "b2108c42-6b69-4e0b-8dee-6d9ef7052b89", "de0b3f9c-7f61-447b-8537-3bca2b8bd241", "Employee", "EMPLOYEE" },
+                    { "b85745a4-5f10-4ec1-b256-af1667fe4b96", "c4c0a50f-53f3-4988-a429-cd6705468cec", "Administrator", "ADMINISTRATOR" },
+                    { "e0aa1ed0-efa2-44b4-8943-1f79c4376dd8", "8db2f4ca-c6a6-4f42-a9d3-76d3d0446fdf", "Manager", "MANAGER" }
                 });
 
             migrationBuilder.InsertData(
@@ -479,30 +427,20 @@ namespace HRMS.Migrations
                 columns: new[] { "PosId", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Administrative Assistant" },
+                    { 1, "Manager" },
                     { 2, "Team Leader" },
                     { 3, "Associate" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ActiveStatus", "Barangay", "City", "ConcurrencyStamp", "DateHired", "DateOfBirth", "DepartmentId", "Email", "EmailConfirmed", "EmployeeType", "FirstName", "FullName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "MiddleName", "NormalizedEmail", "NormalizedUserName", "PagIbigId", "PasswordHash", "PhilHealthId", "Phone", "PhoneNumber", "PhoneNumberConfirmed", "PositionId", "PostalCode", "SSSNumber", "SecurityStamp", "State", "Street", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "68a5effc-4d91-4d07-ac3b-3be05737101d", 0, true, "Admin", "Admin", "087d2bc2-85a5-4344-9299-e00b22880690", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 4, 14, 11, 58, 12, 203, DateTimeKind.Local).AddTicks(259), 1, "CfDJ8O-sYlEO0wlMg3_WlSL3ULewnd6PatMU2QWALFb0c0DBU7Ew88wWVl74YI_nVSF_MDNBt14GGkElPZbwYZ6XTCOFFrMnjtwqlJThphuQqK02-wFa1XPxW6Jj6y5-0k9B9g", true, null, "Admin", "Administrator", "Male", "Admin", false, null, "Admin", "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "111111111111", "AQAAAAEAACcQAAAAEGTRQU90vKGSR4lkVvsxQgOyD3WD9pKes0J2y2jUXKucfBDPaaQ+aTuUqKuJleHb5g==", "111111111111", "09111111111", null, false, null, 1, "1111111111111", "", "Admin", "Admin", false, "admin@admin.com" });
-
-            migrationBuilder.InsertData(
-                table: "Employees",
-                columns: new[] { "EmpId", "ActiveStatus", "Barangay", "City", "DateHired", "DateOfBirth", "DepartmentId", "Email", "EmployeeType", "FirstName", "Gender", "LastName", "MiddleName", "Password", "Phone", "PositionId", "PostalCode", "State", "Street", "UserName" },
-                values: new object[,]
-                {
-                    { 1, true, "Sabang", "Lipa City", new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9955), new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9945), 2, "alvin@gmail.com", "Regular", "Alvin", "Male", "Root", "Eleuterio", "alvin", "09952610728", 2, 4217, "Batangas", "P. Laygo St.", "alvin" },
-                    { 2, true, "Sabang", "Lipa City", new DateTime(2023, 4, 16, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9967), new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9966), 2, "earl@gmail.com", "Regular", "Earl Joseph", "Male", "Ferran", "Litong", "earl", "09657610728", 1, 4217, "Mindoro", "P. Laygo St.", "earl" },
-                    { 3, true, "Sabang", "Lipa City", new DateTime(2023, 4, 17, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9970), new DateTime(2023, 4, 15, 11, 58, 12, 202, DateTimeKind.Local).AddTicks(9969), 1, "cocomama@gmail.com", "Regular", "Coco", "Male", "Martin", "Mama", "coco", "09127610728", 2, 4217, "Mindoro", "P. Laygo St.", "coco" }
-                });
+                columns: new[] { "Id", "AccessFailedCount", "ActiveStatus", "Barangay", "City", "ConcurrencyStamp", "DateHired", "DateOfBirth", "DeleteStatus", "DepartmentId", "Email", "EmailConfirmed", "EmployeeType", "FirstName", "FullName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "MiddleName", "NormalizedEmail", "NormalizedUserName", "PagIbigId", "PasswordHash", "PhilHealthId", "Phone", "PhoneNumber", "PhoneNumberConfirmed", "PositionId", "PostalCode", "SSSNumber", "SecurityStamp", "State", "Street", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "917160cb-3a3d-45b0-a543-ee402fae0a94", 0, true, "Barangay", "City", "aae86a60-83e1-44ae-9417-24bb8174c626", new DateTime(2023, 4, 20, 18, 58, 57, 580, DateTimeKind.Local).AddTicks(9945), new DateTime(2023, 4, 20, 18, 58, 57, 580, DateTimeKind.Local).AddTicks(9923), false, 1, "administrator@pjli.com", true, null, "Admin", "Administrator", "Male", "trator", false, null, "is", "ADMINISTRATOR@PJLI.COM", "ADMINISTRATOR@PJLI.COM", "0000-0000-0000", "AQAAAAEAACcQAAAAEP+0/AHXdHlkY5nQhqGzRbg+PYXJm2170M1TtJZQJstL48+1oAgsgmGjSGumLv4Zfw==", "00-000000000-0", "09236253623", null, false, 1, "1234", "00-0000000-0", "", "State", "Street", false, "administrator@pjli.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "3d4576c5-4e44-434e-8178-d43514bff0a1", "68a5effc-4d91-4d07-ac3b-3be05737101d" });
+                values: new object[] { "b85745a4-5f10-4ec1-b256-af1667fe4b96", "917160cb-3a3d-45b0-a543-ee402fae0a94" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_AddressTypeId",
@@ -577,21 +515,6 @@ namespace HRMS.Migrations
                 name: "IX_Employees_PositionId",
                 table: "Employees",
                 column: "PositionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_pagIbigs_EmpId",
-                table: "pagIbigs",
-                column: "EmpId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PhilHealths_EmpId",
-                table: "PhilHealths",
-                column: "EmpId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SSSs_EmpId",
-                table: "SSSs",
-                column: "EmpId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -621,25 +544,19 @@ namespace HRMS.Migrations
                 name: "EmployeePerformances");
 
             migrationBuilder.DropTable(
+                name: "Employees");
+
+            migrationBuilder.DropTable(
                 name: "EmploymentTypes");
 
             migrationBuilder.DropTable(
                 name: "PagIbigPayments");
 
             migrationBuilder.DropTable(
-                name: "pagIbigs");
-
-            migrationBuilder.DropTable(
                 name: "PhilHealthPayments");
 
             migrationBuilder.DropTable(
-                name: "PhilHealths");
-
-            migrationBuilder.DropTable(
                 name: "SSSPayments");
-
-            migrationBuilder.DropTable(
-                name: "SSSs");
 
             migrationBuilder.DropTable(
                 name: "AddressesTypes");
@@ -649,9 +566,6 @@ namespace HRMS.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "Departments");

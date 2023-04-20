@@ -6,7 +6,7 @@ namespace HRMS.Repository
     public interface ISSSPaymentRepository
     {
         // GetAllSSSPayment
-        List<SSSPayment> ListOfSSSPayment();
+        List<SSSPayment> ListOfSSSPayment(string searchValue);
         // AddSSSPayment
         SSSPayment AddSSSPayment(SSSPayment newSSSPayment);
         // GetId

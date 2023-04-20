@@ -31,7 +31,6 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentDBRepository>();
 builder.Services.AddScoped<IEmployeePerformanceDBRepository, EmployeePerformanceDBRepository>();
 builder.Services.AddScoped<IPositionRepository, PositionDBRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeDBRepository>();
-builder.Services.AddScoped<IPhilHealthRepository, PhilHealthDBRepository>();
 builder.Services.AddScoped<IPhilHealthPaymentDBRepository, PhilHealthPaymentDBRepository>();
 builder.Services.AddScoped<IPagIbigPaymentRepository, PagIbigPaymentDBRepository>();
 builder.Services.AddScoped<ISSSPaymentRepository, SSSPaymentDBRepository>();
@@ -115,7 +114,6 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.Automigrate();
 app.UseAuthentication();
 
 app.UseRouting();

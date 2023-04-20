@@ -21,13 +21,12 @@ namespace HRMSAPI.Controllers
         public IConfiguration _appConfig { get; }
         public IDataProtectionProvider _dataProtectionProvider { get; }
 
-        public AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IConfiguration appConfig, IDataProtectionProvider dataProtectionProvider)
+        public AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IConfiguration appConfig)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _appConfig = appConfig;
-            _dataProtectionProvider = dataProtectionProvider;
         }
 
 
@@ -67,7 +66,7 @@ namespace HRMSAPI.Controllers
                         return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) }); // token 
                     }
                 }
-                return BadRequest("Invalid Credentialsss!");
+                return BadRequest("Invalid Credentials!");
             }
             return BadRequest(ModelState);
         }

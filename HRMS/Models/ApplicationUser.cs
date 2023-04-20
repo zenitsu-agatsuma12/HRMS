@@ -73,7 +73,8 @@ namespace HRMS.Models
         [Required]
         public string State { get; set; }
         [Required]
-        public int PostalCode { get; set; }
+        [RegularExpression("[0-9]{4}", ErrorMessage = "This is not a valid Postal Code")]
+        public string PostalCode { get; set; }
 
         //Account Status
         [Required]
@@ -81,37 +82,7 @@ namespace HRMS.Models
         public DateTime DateHired { get; set; }
 
         public bool ActiveStatus { get; set; }
+        public bool DeleteStatus { get; set; }
 
-
-        public ApplicationUser()
-        {
-        }
-
-        public ApplicationUser(string firstName, string middleName, string lastName, string? fullName, string gender, DateTime dateOfBirth, string phone, string email, int? departmentId, Department? department, int? positionId, Position? position, string? employeeType, string? sSSNumber, string? pagIbigId, string? philHealthId, string street, string barangay, string city, string state, int postalCode, DateTime dateHired, bool activeStatus)
-        {
-            FirstName = firstName;
-            MiddleName = middleName;
-            LastName = lastName;
-            FullName = fullName;
-            Gender = gender;
-            DateOfBirth = dateOfBirth;
-            Phone = phone;
-            Email = email;
-            DepartmentId = departmentId;
-            Department = department;
-            PositionId = positionId;
-            Position = position;
-            EmployeeType = employeeType;
-            SSSNumber = sSSNumber;
-            PagIbigId = pagIbigId;
-            PhilHealthId = philHealthId;
-            Street = street;
-            Barangay = barangay;
-            City = city;
-            State = state;
-            PostalCode = postalCode;
-            DateHired = dateHired;
-            ActiveStatus = activeStatus;
-        }
     }
 }

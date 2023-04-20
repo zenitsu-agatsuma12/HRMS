@@ -33,10 +33,11 @@ namespace HRMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var Dept = _repo.AddPosition(newDept);
+                var pos = _repo.AddPosition(newDept);
+                TempData["PositionAlert"] = pos.Name + " Successfully Added!";
                 return RedirectToAction("List");
             }
-            ViewData["Message"] = "Data is not valid to create the Position";
+            ViewData["PositionAlert"] = "Data is not valid to create the Position";
             return View();
         }
 
@@ -44,12 +45,12 @@ namespace HRMS.Controllers
         public IActionResult Update(int PosId)
         {
             Position Position = _repo.GetPositionById(PosId); ;
-            //ViewBag.PositionId = _repo.GetPositionList(Deptid);
             return View(Position);
         }
         [HttpPost]
         public IActionResult Update(int PosId, Position Position)
         {
+            TempData["PositionAlert"] ="Update Successfully!";
             _repo.UpdatePosition(PosId, Position);
             return RedirectToAction("List");
         }
@@ -61,8 +62,19 @@ namespace HRMS.Controllers
         }
         public IActionResult Delete(int PosId)
         {
-            _repo.DeletePosition(PosId);
-            return RedirectToAction("List");
+            var position = _repo.GetPositionById(PosId);
+            try
+            {
+                _repo.DeletePosition(PosId);
+                TempData["PositionAlert"] = position.Name + " is Successfully Deleted!";
+                return RedirectToAction("List");
+            }
+            catch
+            {
+                TempData["PositionAlert"] = "It is not possible to delete this position while there is an employee assigned to it.";
+                return RedirectToAction("List");
+            }
+           
         }
     }
 }

@@ -36,9 +36,20 @@ namespace HRMS.Repository.SqlRepository
             return _dbcontext.PhilHealthPayments.AsNoTracking().ToList().FirstOrDefault(x => x.No == No);
         }
 
-        public List<PhilHealthPayment> ListOfPhilHealthPayment()
+        public List<PhilHealthPayment> ListOfPhilHealthPayment(string searchValue)
         {
-           return _dbcontext.PhilHealthPayments.ToList();
+            IQueryable<PhilHealthPayment> payments = _dbcontext.PhilHealthPayments;
+
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                payments = payments.Where(p => p.FullName.Contains(searchValue) ||
+                                                p.Payment.ToString().Contains(searchValue) ||
+                                                p.Month.Contains(searchValue) ||
+                                                p.Year.Contains(searchValue));
+            }
+
+            var model = payments.ToList();
+            return model;
         }
 
         public PhilHealthPayment UpdatePhilHealthPayment(PhilHealthPayment newPhilHealthPayment)

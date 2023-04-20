@@ -24,14 +24,14 @@
             <div class="card-body">
             </br>
             <p class="d-flex justify-content-between">
-                <a class="btn btn-primary" role="button" asp-controller="Employee" asp-action="Create"><i class="fa fa-plus"></i> Add Employee</a>
-                <a class="btn btn-success float-right" role="button" asp-controller="Employee" asp-action="List"><i class="bi bi-check-circle"></i> Show Active</a>
+                <a class="btn btn-success ms-auto" role="button" asp-controller="Employee" asp-action="List"><i class="bi bi-check-circle"></i> Show Active</a>
             </p>
+
             <form action="List">
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="input-group md-form align-content-sm-around form-2 pl-0">
-                            <select id="department-filter" name="searchOption" class="form-control" asp-items="ViewBag.Departments"></select>
+                            <select id="department-filter" name="searchOption" class="form-select" asp-items="ViewBag.Departments"></select>
                         </div>
                     </div>
                     <div class="col-sm-8">
@@ -49,15 +49,12 @@
               <table id="employee-table" class="table datatable">
                 <thead>
                   <tr>
-                    <th scope="col">No</th>
+                    <th scope="col">No.</th>
                     <th scope="col">Full Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Department</th>
                     <th scope="col">Position</th>
-                    <th scope="col">Edit</th>
-                    <th scope="col">View</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Delete</th>
+                    <th scope="col"></th>
                     
                   </tr>
                 </thead>
@@ -73,7 +70,7 @@
                                     @item.FullName
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Email)
+                                    @item.Email
                                 </td>
        
                                 <td data-department-id="@item.Department.DeptId">
@@ -84,15 +81,57 @@
                                     @Html.DisplayFor(modelItem => item.Position.Name)
                                 </td>
 
-                                 <td>   <a class="btn btn-primary" role="button" asp-action="Update" asp-route-accountId="@item.Id"><i class="fa fa-edit"></i> </a> </td>
-                                 <td>   <a class="btn btn-primary" role="button"asp-action="Details" asp-route-accountId="@item.Id"><i class="bi bi-folder"></i></a> </td>
-                                 <td>   <a class="btn btn-danger" role="button"asp-action="DeleteFormInActive" asp-route-accountId="@item.Id"><i class="bi bi-exclamation-octagon"></i></a></td>
-                                 <td>   <a class="btn btn-danger" role="button"asp-action="Delete" asp-route-accountId="@item.Id"><i class="bi bi-trash"></i></a></td>
+                                 <td>   
+                                    <a class="btn btn-primary" role="button" title="View Details" asp-action="Details" asp-route-accountId="@item.Id"><i class="bi bi-folder"></i></a> 
+                                   
+                                     <!--Activate Message Box -->
+                                    <button type="button" class="btn btn-danger" title="Activate Account" data-bs-toggle="modal" data-bs-target="#activateModal-@item.Id" asp-route-accountId="@item.Id">
+                                    <i class="bi bi-exclamation-octagon"></i>
+                                    </button>
+                                    <div class="modal fade" id="activateModal-@item.Id" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                           <h5 class="modal-title" style="font-weight:bold;">Warning</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to Activate this Account?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <a class="btn btn-success" role="button"asp-action="DeleteFormInActive" asp-route-accountId="@item.Id">Activate</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                  
+                                    <!--Delete Message Box -->
+                                    <button type="button" class="btn btn-danger" title="Delete Account" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.Id" asp-route-accountId="@item.Id">
+                                    <i class="bi bi-trash"></i>
+                                    </button>
+                                    <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" style="font-weight:bold;">Warning</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to Delete @item.FullName from record?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <a class="btn btn-danger" role="button"asp-action="Delete" asp-route-accountId="@item.Id">Delete</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                 </td>
                             </tr>
                     }
                 </tbody>
               </table>
-              <!-- End Table with stripped rows -->
 
             </div>
           </div>
@@ -105,7 +144,7 @@
 
 
 <script>
-     const departmentFilter = document.getElementById('department-filter');
+    const departmentFilter = document.getElementById('department-filter');
     const employeeTable = document.getElementById('employee-table');
     const searchBox = document.getElementById('search-box');
 
@@ -154,8 +193,6 @@
         }
       });
     });
-
-
 </script>
 
 

@@ -14,21 +14,22 @@
 
               <!-- Floating Labels Form -->
               <form asp-controller="EmployeePerformance" asp-action="Create" method="post" class="row g-3">
-                  <div asp-validation-summary="All" class="text-danger">
-                       <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="Status" hidden>
-                  </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="userID" readonly>
-                    <label for="floatingName">UserID</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
+
+
+                 <div class="col-md-6">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="EmployeeName" readonly>
                     <label for="floatingName">Employee Name</label>
                   </div>
                 </div>
+
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="DateReview" value="@DateTime.Now.ToString("MM/dd/yyyy")" readonly>
+                    <label for="floatingName">Date Review</label>
+                  </div>
+                </div>
+
                 <div class="col-md-8">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="floatingEmail" placeholder="About" asp-for="About" >
@@ -38,7 +39,7 @@
                 
                 <div class="col-12">
                   <div class="form-floating">
-                    <textarea class="form-control" placeholder="Write a Review" id="floatingTextarea" style="height: 100px;" asp-for="PerformanceReview" ></textarea>
+                    <textarea class="form-control" placeholder="Write a Review" id="floatingTextarea" style="height: 100px;" asp-for="PerformanceReview" maxlength="350"></textarea>
                     <label for="floatingTextarea">Review</label>
                   </div>
                 </div>
@@ -48,6 +49,11 @@
                     <label for="floatingEmail">Review By:</label>
                   </div>
                 </div>
+
+                  <div asp-validation-summary="All" class="text-danger">
+                       <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="Status" hidden>
+                       <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="userID" hidden>
+                  </div>
                 <div class="text-center">
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

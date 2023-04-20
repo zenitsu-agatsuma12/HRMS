@@ -17,9 +17,16 @@ namespace HRMS.Controllers
         }
 
         [Authorize(Roles = "Administrator, Employee, Manager")]
-        public IActionResult List()
+        public IActionResult List(string searchValue)
         {
-            var list = _repo.ListOfPagIbigPayment();
+            if (!User.IsInRole("Administrator"))
+            {
+                var email = User.Identity.Name;
+                var employee = _userManager.Users.FirstOrDefault(e => e.Email == email);
+                var employeeList = _repo.ListOfPagIbigPayment(searchValue).Where(e => e.FullName == employee.FullName);
+                return View(employeeList);
+            }
+            var list = _repo.ListOfPagIbigPayment(searchValue);
             return View(list);
         }
         [HttpGet]
@@ -43,7 +50,8 @@ namespace HRMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repo.AddPagIbigPayment(pagIbigPayment);
+                var payment = _repo.AddPagIbigPayment(pagIbigPayment);
+                TempData["PagibigAlert"] = "Payment is Added to " + payment.FullName + " Account";
                 return RedirectToAction("List");
             }
             return View();
@@ -61,12 +69,14 @@ namespace HRMS.Controllers
         public IActionResult Edit(PagIbigPayment pagIbigPayment)
         {
             _repo.UpdatePagIbigPayment(pagIbigPayment);
+            TempData["PagibigAlert"] = "Payment is Updated Successfully";
             return RedirectToAction("List");
         }
         [Authorize(Roles = "Administrator")]
         public IActionResult Delete(int No)
         {
             _repo.DeletePagIbigPayment(No);
+            TempData["PagibigAlert"] = "Payment is Deleted Successfully";
             return RedirectToAction("List");
         }
     }
