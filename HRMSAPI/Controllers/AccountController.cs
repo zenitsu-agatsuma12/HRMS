@@ -1,6 +1,5 @@
 ﻿using HRMSAPI.DTO;
 using HRMSAPI.Models;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,6 @@ namespace HRMSAPI.Controllers
         private RoleManager<IdentityRole> _roleManager;
         private SignInManager<ApplicationUser> _signInManager;
         public IConfiguration _appConfig { get; }
-        public IDataProtectionProvider _dataProtectionProvider { get; }
 
         public AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IConfiguration appConfig)
         {

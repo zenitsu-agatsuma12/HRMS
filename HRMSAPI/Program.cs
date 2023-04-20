@@ -1,16 +1,12 @@
-using HRMS.Data;
 using HRMSAPI.Data;
 using HRMSAPI.Models;
 using HRMSAPI.Repository;
 using HRMSAPI.Repository.SqlRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,15 +31,6 @@ builder.Services.AddScoped<IPhilHealthPaymentDBRepository, PhilHealthPaymentDBRe
 builder.Services.AddScoped<IPagIbigPaymentRepository, PagIbigPaymentDBRepository>();
 builder.Services.AddScoped<ISSSPaymentRepository, SSSPaymentDBRepository>();
 
-
-builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(@"c:\keys\"))
-    .ProtectKeysWithDpapi()
-    .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
-    {
-        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
-        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
-    });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
