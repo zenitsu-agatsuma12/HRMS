@@ -31,19 +31,6 @@ namespace HRMSAPI.Repository.SqlRepository
             return Dept;
         }
 
-        public List<Department> Filter(string searchValue)
-        {
-         if (!string.IsNullOrEmpty(searchValue))
-            {
-             List<Department> departments = _dbcontext.Departments
-                       .Where(e => e.DeptName.Contains(searchValue))
-                       .ToList();
-
-                return departments;
-            }
-              List<Department> Departments = _dbcontext.Departments.ToList();
-                return Departments;
-        }
 
         public Department GetDepartmentById(int Id)
         {

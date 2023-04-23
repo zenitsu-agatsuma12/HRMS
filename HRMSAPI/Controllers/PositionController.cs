@@ -56,15 +56,22 @@ namespace HRMSAPI.Controllers
 
         // Edit or Update Position
         [HttpPut("{id}")]
-        public IActionResult UpdatePosition([FromBody]Position position, [FromRoute] int id)
+        public IActionResult UpdatePosition([FromBody]AddPositionDTO editpositionDTO, [FromRoute] int id)
         {
+            var position = _repo.GetPositionById(id);
             if (position == null)
-                return BadRequest("No Resource Found!");
-            if (ModelState.IsValid)
             {
-                Ok(_repo.UpdatePosition(id, position));
+                return BadRequest("No Resource Found!");
             }
-            return Ok(position);
+                position.PosId = id;
+                position.Name = editpositionDTO.Name;
+                var result = _repo.UpdatePosition(id, position);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+                return BadRequest(ModelState);
+            
         }
 
         // Delete Position

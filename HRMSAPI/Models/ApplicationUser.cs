@@ -82,12 +82,14 @@ namespace HRMSAPI.Models
 
         public bool ActiveStatus { get; set; }
 
+        public bool DeleteStatus { get; set; }
+
 
         public ApplicationUser()
         {
         }
 
-        public ApplicationUser(string firstName, string middleName, string lastName, string? fullName, string gender, DateTime dateOfBirth, string phone, string email, int? departmentId, Department? department, int? positionId, Position? position, string? employeeType, string? sSSNumber, string? pagIbigId, string? philHealthId, string street, string barangay, string city, string state, string postalCode, DateTime dateHired, bool activeStatus)
+        public ApplicationUser(string firstName, string middleName, string lastName, string? fullName, string gender, DateTime dateOfBirth, string phone, string email, int? departmentId, Department? department, int? positionId, Position? position, string? employeeType, string? sSSNumber, string? pagIbigId, string? philHealthId, string street, string barangay, string city, string state, string postalCode, DateTime dateHired, bool activeStatus, bool deleteStatus)
         {
             FirstName = firstName;
             MiddleName = middleName;
@@ -112,6 +114,7 @@ namespace HRMSAPI.Models
             PostalCode = postalCode;
             DateHired = dateHired;
             ActiveStatus = activeStatus;
+            DeleteStatus = deleteStatus;
         }
     }
 }

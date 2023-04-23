@@ -54,15 +54,22 @@ namespace HRMSAPI.Controllers
 
         [HttpPut("{id}")]
 
-        public IActionResult Update([FromBody]Department department,[FromRoute] int id)
+        public IActionResult Update([FromBody]AddDepartmentDTO editDTO,[FromRoute] int id)
         {
+            var department = _repo.GetDepartmentById(id);
             if (department == null)
-                return BadRequest("No resource found");
-            if (ModelState.IsValid)
             {
-                Ok(_repo.UpdateDepartment(id, department));
+               return BadRequest("No resource found");
             }
-            return Ok(department);
+            department.DeptId = id;
+            department.DeptName = editDTO.DeptName;
+
+            var result = _repo.UpdateDepartment(id, department);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+                return BadRequest("Data Failed to Update!");
 
         }
 

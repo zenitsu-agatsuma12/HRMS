@@ -62,6 +62,7 @@ namespace HRMSAPI.Controllers
                         PerformanceReview = addDTO.PerformanceReview,
                         ReviewBy = "Admin",
                         Status = true,
+                        DeleteStatus = false,
                         DateReview = addDTO.DateReview      
                     };
                     var newData = _repo.AddEmployeePerformance(addEmpPer);
@@ -87,6 +88,7 @@ namespace HRMSAPI.Controllers
                 empPerId.DateReview = editDTO.DateReview;
                 empPerId.userID = empUser.Id;
                 empPerId.Status = false;
+                empPerId.DeleteStatus = false;
                 empPerId.ReviewBy = "Admin";
             }
             var result =  _repo.UpdateEmployeePerformance(no, empPerId);

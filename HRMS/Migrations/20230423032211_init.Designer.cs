@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMS.Migrations
 {
     [DbContext(typeof(HRMSDBContext))]
-    [Migration("20230420105857_init")]
+    [Migration("20230423032211_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -223,14 +223,14 @@ namespace HRMS.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "917160cb-3a3d-45b0-a543-ee402fae0a94",
+                            Id = "55dc1552-67e3-456f-8897-da49bb23d595",
                             AccessFailedCount = 0,
                             ActiveStatus = true,
                             Barangay = "Barangay",
                             City = "City",
-                            ConcurrencyStamp = "aae86a60-83e1-44ae-9417-24bb8174c626",
-                            DateHired = new DateTime(2023, 4, 20, 18, 58, 57, 580, DateTimeKind.Local).AddTicks(9945),
-                            DateOfBirth = new DateTime(2023, 4, 20, 18, 58, 57, 580, DateTimeKind.Local).AddTicks(9923),
+                            ConcurrencyStamp = "dfcbb34d-a3f3-4408-8980-99d1b2ea8504",
+                            DateHired = new DateTime(2023, 4, 23, 11, 22, 10, 921, DateTimeKind.Local).AddTicks(1579),
+                            DateOfBirth = new DateTime(2023, 4, 23, 11, 22, 10, 921, DateTimeKind.Local).AddTicks(1564),
                             DeleteStatus = false,
                             DepartmentId = 1,
                             Email = "administrator@pjli.com",
@@ -244,7 +244,7 @@ namespace HRMS.Migrations
                             NormalizedEmail = "ADMINISTRATOR@PJLI.COM",
                             NormalizedUserName = "ADMINISTRATOR@PJLI.COM",
                             PagIbigId = "0000-0000-0000",
-                            PasswordHash = "AQAAAAEAACcQAAAAEP+0/AHXdHlkY5nQhqGzRbg+PYXJm2170M1TtJZQJstL48+1oAgsgmGjSGumLv4Zfw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELvKjvfdmfLKWpYofyIYOY5jFQNMsX0AXcDJu6mn0ljNtVSmsOp2AtcXghDYH77iAw==",
                             PhilHealthId = "00-000000000-0",
                             Phone = "09236253623",
                             PhoneNumberConfirmed = false,
@@ -624,22 +624,22 @@ namespace HRMS.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b85745a4-5f10-4ec1-b256-af1667fe4b96",
-                            ConcurrencyStamp = "c4c0a50f-53f3-4988-a429-cd6705468cec",
+                            Id = "9840911b-ba45-4ba8-a3ff-2bc569e898eb",
+                            ConcurrencyStamp = "612af351-45db-4fe8-9c28-0fd4847271be",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "b2108c42-6b69-4e0b-8dee-6d9ef7052b89",
-                            ConcurrencyStamp = "de0b3f9c-7f61-447b-8537-3bca2b8bd241",
+                            Id = "e5078932-3fb0-44c6-a8d8-bec42e188cb0",
+                            ConcurrencyStamp = "18534bbd-0e6e-42ec-aaa9-3acf20b09ab8",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "e0aa1ed0-efa2-44b4-8943-1f79c4376dd8",
-                            ConcurrencyStamp = "8db2f4ca-c6a6-4f42-a9d3-76d3d0446fdf",
+                            Id = "365cff9d-ac5e-4a3a-8107-16ad42ff8762",
+                            ConcurrencyStamp = "88779703-08e8-457e-a13a-3c9b312ab2fb",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });
@@ -734,8 +734,8 @@ namespace HRMS.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "917160cb-3a3d-45b0-a543-ee402fae0a94",
-                            RoleId = "b85745a4-5f10-4ec1-b256-af1667fe4b96"
+                            UserId = "55dc1552-67e3-456f-8897-da49bb23d595",
+                            RoleId = "9840911b-ba45-4ba8-a3ff-2bc569e898eb"
                         });
                 });
 

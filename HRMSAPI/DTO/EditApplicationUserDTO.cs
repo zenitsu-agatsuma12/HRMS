@@ -6,7 +6,6 @@ namespace HRMSAPI.DTO
 {
     public class EditApplicationUserDTO
     {
-        public string Guid { get; set; }
         [Required]
         [MinLength(2)]
         [DisplayName("First Name")]

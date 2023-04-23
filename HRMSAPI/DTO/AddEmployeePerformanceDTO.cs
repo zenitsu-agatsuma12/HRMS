@@ -14,6 +14,6 @@ namespace HRMSAPI.DTO
         [MinLength(5)]
         [DisplayName("Performance Review")]
         public string PerformanceReview { get; set; }
-        public DateTime DateReview { get; set; }
+        public string DateReview { get; set; }
     }
 }

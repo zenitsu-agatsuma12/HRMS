@@ -17,6 +17,5 @@ namespace HRMSAPI.Repository
         List<SelectListItem> GetDepartmentList();
         List<SelectListItem> GetPosition();
         List<DepartmentPositioncs> ListDepartmentPositioncs();
-        List<DepartmentPositioncs> GetFilter(string a, string b);
     }
 }

@@ -37,7 +37,11 @@ namespace HRMSAPI.Controllers
         public IActionResult GetById([FromRoute] int no)
         {
             var paymentId = _repo.GetPagIbigPaymentById(no);
-            return Ok(paymentId);
+            if (paymentId == null)
+            {
+                return BadRequest("No Resource Found!");
+            }
+                return Ok(paymentId);
         }
 
         //Add Payment
@@ -61,7 +65,8 @@ namespace HRMSAPI.Controllers
                         FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName,
                         Payment = addDTO.Payment,
                         Month = addDTO.Month,
-                        Year = addDTO.Year
+                        Year = addDTO.Year,
+                        status = true,
                     };
                     var result = _repo.AddPagIbigPayment(addPayment);
                     return Ok(result);
@@ -98,6 +103,7 @@ namespace HRMSAPI.Controllers
                     payment.Payment = editPagIbigPaymentDTO.Payment;
                     payment.Month = editPagIbigPaymentDTO.Month;
                     payment.Year = editPagIbigPaymentDTO.Year;
+                    payment.status = true;
                     
                     _repo.UpdatePagIbigPayment(payment , no);
                     return Ok(payment);

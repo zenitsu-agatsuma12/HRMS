@@ -86,7 +86,8 @@ namespace HRMSAPI.Controllers
                     State = appDTO.State,
                     PostalCode = appDTO.PostalCode,
                     DateHired = appDTO.DateHired,
-                    ActiveStatus = false
+                    ActiveStatus = true,
+                    DeleteStatus = false
                 };
 
             var result = await _userManager.CreateAsync(emp, appDTO.Password);
@@ -132,7 +133,7 @@ namespace HRMSAPI.Controllers
             {
                 return NotFound();
             }
-            modeltoupdate.Id = editDTO.Guid;
+            modeltoupdate.Id = id;
             modeltoupdate.FirstName = editDTO.FirstName;
             modeltoupdate.MiddleName = editDTO.MiddleName;
             modeltoupdate.LastName = editDTO.LastName;

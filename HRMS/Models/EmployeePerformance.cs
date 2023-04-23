@@ -22,7 +22,7 @@ namespace HRMS.Models
         public string PerformanceReview { get; set; }
         public string ReviewBy { get; set; }
         public bool Status { get; set; }
-        public string DateReview { get; set; }
+        public datet DateReview { get; set; }
         public bool DeleteStatus { get; set; }
 
         public EmployeePerformance() { }

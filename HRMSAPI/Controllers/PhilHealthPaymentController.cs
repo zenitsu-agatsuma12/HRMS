@@ -36,7 +36,11 @@ namespace HRMSAPI.Controllers
         public IActionResult GetById([FromRoute]int no)
         {
             var paymentId = _repo.GetPhilHealthPaymentById(no);
-            return Ok(paymentId);
+            if (paymentId == null)
+            {
+                return BadRequest("No Resource Found!");
+            }
+                return Ok(paymentId);
         }
 
         //Add Payment
@@ -61,7 +65,8 @@ namespace HRMSAPI.Controllers
                         FullName = employee.FirstName + " " + employee.MiddleName + " " + employee.LastName,
                         Payment = addDTO.Payment,
                         Month = addDTO.Month,
-                        Year = addDTO.Year
+                        Year = addDTO.Year,
+                        status = true
                     };
                     var result = _repo.AddPhilHealthPayment(addPayment);
                     return Ok(result);
@@ -100,6 +105,7 @@ namespace HRMSAPI.Controllers
                     payment.Payment = editPhilHealthPaymentDTO.Payment;
                     payment.Month = editPhilHealthPaymentDTO.Month;
                     payment.Year = editPhilHealthPaymentDTO.Year;
+                    payment.status = true;
 
                     _repo.UpdatePhilHealthPayment(payment, no);
                     return Ok(payment);

@@ -94,46 +94,5 @@ namespace HRMSAPI.Repository.SqlRepository
             return departmentPositions;
         }
 
-        public List<DepartmentPositioncs> GetFilter(string searchOption, string searchValue)
-        {
-            if (!string.IsNullOrEmpty(searchOption) && !string.IsNullOrEmpty(searchValue))
-            {
-                List<DepartmentPositioncs> departmentPositioncs = _dbcontext.DepartmentPositions
-                    .Include(d => d.Department)
-                    .Include(p => p.Position)
-                    .Where(e => (e.DepartmentId.ToString().Contains(searchOption))
-                             && e.Position.Name.Contains(searchValue))
-                                 .ToList();
-                return departmentPositioncs;
-            }
-            else if (!string.IsNullOrEmpty(searchOption) && string.IsNullOrEmpty(searchValue))
-            {
-                List<DepartmentPositioncs> departmentPositioncs = _dbcontext.DepartmentPositions
-                    .Include(d => d.Department)
-                    .Include(p => p.Position)
-                    .Where(e => e.DepartmentId.ToString().Contains(searchOption))
-                                 .ToList();
-                return departmentPositioncs;
-            }
-            else if (string.IsNullOrEmpty(searchOption) && !string.IsNullOrEmpty(searchValue))
-            {
-                List<DepartmentPositioncs> departmentPositioncs = _dbcontext.DepartmentPositions
-                    .Include(d => d.Department)
-                    .Include(p => p.Position)
-                    .Where(e => (e.PositionId.ToString().Contains(searchValue)))
-                                 .ToList();
-                return departmentPositioncs;
-            }
-            else
-            {
-                //Return All
-                List<DepartmentPositioncs> departmentPositioncs = _dbcontext.DepartmentPositions
-                    .Include(d => d.Department)
-                    .Include(p => p.Position)
-                    .ToList();
-                return departmentPositioncs;
-
-            }
-        }
     }
 }

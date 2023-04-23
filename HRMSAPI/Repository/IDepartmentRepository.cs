@@ -14,6 +14,5 @@ namespace HRMSAPI.Repository
         Department UpdateDepartment(int DepartmentId, Department newDepartment);
         // Delete
         Department DeleteDepartment(int DepartmentId);
-        List<Department> Filter(string a);
     }
 }
