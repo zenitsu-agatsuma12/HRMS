@@ -169,6 +169,10 @@ namespace HRMSAPI.Controllers
             {
                 return NotFound();
             }
+            if (empToDelete.FullName == "Administrator")
+            {
+                return BadRequest("Unable to delete the Admin Account!");
+            }
             var result = await _userManager.DeleteAsync(empToDelete);
             if (result.Succeeded)
             {
